@@ -35,48 +35,98 @@
 
 
 <!-- Header -->
-<nav class="navbar navbar-expand-lg navbar-light shadow" style="background-color: #dff9fb;">
-    <div class="container d-flex justify-content-between align-items-center">
-
-        <a class="navbar-brand text-success logo h1 align-self-center" href="index.html" style="color: #6ab04c;">
-            Gluehand
-        </a>
-
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg bg-light" style="background-color: #dff9fb !important;">
+    <div class="container">
+        <a href="index.html" style="color: #6ab04c;" class="navbar-brand text-success logo h1 ">Gluehand</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+                    <% if (session.getAttribute("acc") == null) { %>
+        <div id="navbarNavDropdown" class="collapse navbar-collapse">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About us</a>
+                </li>
+                <li>
+                    <a class="nav-link text-bold" href="#" data-bs-toggle="modal" data-bs-target="#sisuModal">Join Us</a>
+                </li>
+            </ul>
 
-        <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
-            <div class="flex-fill">
-                <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html">Start Auction</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.html">Contact</a>
-                    </li>
+                    <% } else {%>
+                <div id="navbarNavDropdown" class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav mb-2 mb-lg-0 ">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false"><i
+                            class="fa fa-fw fa-user text-dark mr-3"></i></a>
+                    <ul aria-labelledby="navbarDarkDropdownMenuLink"
+                        class="dropdown-menu dropdown-menu-start dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
                 </ul>
-            </div>
-            <div class="navbar align-self-center d-flex">
+                    <% } %>
 
-                <a class="nav-icon position-relative text-decoration-none" href="#">
-                    <i class="fa fa-fw fa-bell text-dark mr-1"></i>
-
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">7</span>
-                </a>
-                <a class="nav-icon position-relative text-decoration-none" href="#">
-                    <i class="fa fa-fw fa-user text-dark mr-3"></i>
-                    <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">+99</span>
-                </a>
-            </div>
         </div>
-
     </div>
 </nav>
+<div id="sisuModal" tabindex="-1" aria-labelledby="sisuModal"
+     style="display: none;" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button
+                        type="button"
+                        class="btn btn-outline-success active"
+                        id="siBtn"
+                >
+                    Sign In
+                </button>
+                <button type="button" class="btn btn-outline-danger" id="suBtn">
+                    Register
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="f1" action="#">
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="siUname" type="text" placeholder="Username">
+                        <label for="siUname">Username</label>
+
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="siPass" type="password" placeholder="Password">
+                        <label for="siPass">Password</label>
+                    </div>
+
+                    <button onclick="event.preventDefault();" class="btn btn-primary ">Let GO!</button>
+                </form>
+                <form id="f2" style="display: none">
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="suUname" type="text" placeholder="Username">
+                        <label for="siUname">Username</label>
+
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="suPass" type="password" placeholder="Password">
+                        <label for="siPass">Password</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="suCPass" type="password" placeholder="Confirm Password">
+                        <label for="suCPass">Confirm Password</label>
+                    </div>
+
+                    <button onclick="event.preventDefault();" class="btn btn-primary ">Sign up!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Close Header -->
 
 <!-- Modal -->
@@ -277,6 +327,26 @@
 <script src="${pageContext.request.contextPath}/resources/assets/js/templatemo.js"></script>
 <script src="${pageContext.request.contextPath}/resources/assets/js/custom.js"></script>
 <!-- End Script -->
+<script>
+    $(document).ready(function () {
+        $('#suBtn').click(function () {
+            $('#siBtn').removeClass('active');
+            $('#suBtn').addClass('active');
+            $("#f1").css("display", "none");
+            $("#f2").css("display", "block");
+
+        });
+
+        $('#siBtn').click(function () {
+            $('#suBtn').removeClass('active');
+            $('#siBtn').addClass('active');
+            $("#f2").css("display", "none");
+            $("#f1").css("display", "block");
+
+        });
+    });
+
+</script>
 </body>
 
 </html>
