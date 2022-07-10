@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"  isELIgnored="false" %>
 <%@taglib prefix="mt" tagdir="/WEB-INF/tags" %>
+
 <mt:template>
     <jsp:attribute name="content">
 <!-- Start Banner Hero -->
@@ -77,17 +78,17 @@
                         <div class="row p-5">
                             <div class="col col-md-4 p-5 mt-3">
                                 <a href="#"><img src="${pageContext.request.contextPath}/resources/assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
-                                <h5 class="text-center mt-3 mb-3">Watches</h5>
+                                <h5 class="text-center mt-3 mb-3 text-white text-bold">Watches</h5>
                                 <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
                             </div>
                             <div class="col col-md-4 p-5 mt-3">
                                 <a href="#"><img src="${pageContext.request.contextPath}/resources/assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
-                                <h2 class="h5 text-center mt-3 mb-3">Shoes</h2>
+                                <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Shoes</h2>
                                 <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
                             </div>
                             <div class="col col-md-4 p-5 mt-3">
                                 <a href="#"><img src="${pageContext.request.contextPath}/resources/assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
-                                <h2 class="h5 text-center mt-3 mb-3">Accessories</h2>
+                                <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Accessories</h2>
                                 <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
                             </div>
                         </div>
@@ -113,3 +114,7 @@
 
     </jsp:attribute>
 </mt:template>
+
+<mt:footer>
+    <jsp:attribute name="footer"></jsp:attribute>
+</mt:footer>
