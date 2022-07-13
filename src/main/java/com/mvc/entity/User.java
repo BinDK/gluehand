@@ -34,7 +34,7 @@ public class User {
     private String phone;
 
     @Column(name = "is_admin", nullable = false)
-    private Integer isAdmin;
+    private Boolean isAdmin;
 
     @OneToMany(mappedBy = "user")
     private Set<Wallet> wallets = new LinkedHashSet<>();
@@ -80,11 +80,11 @@ public class User {
         this.wallets = wallets;
     }
 
-    public Integer getIsAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(Integer isAdmin) {
+    public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
