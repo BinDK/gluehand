@@ -16,16 +16,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/templatemo.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/custom.css">
 
-    <!-- Load fonts style after rendering the layout styles -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/fontawesome.min.css">
-    <!--
 
-    TemplateMo 559 Zay Shop
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.css">
 
-    https://templatemo.com/tm-559-zay-shop
-
-    -->
 </head>
 
 
@@ -416,10 +411,6 @@
 </div>
 <!-- End ACC Balance Modal -->
 
-
-<jsp:invoke fragment="content"></jsp:invoke>
-
-
 <style>
     @keyframes slidebg {
         to {
@@ -450,9 +441,24 @@
 <script src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.bundle.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/assets/js/templatemo.js"></script>
 <script src="${pageContext.request.contextPath}/resources/assets/js/custom.js"></script>
+<script src="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.js"></script>
+
 <!-- End Script -->
 <script>
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+    function makeBotcode(){
+        var valx = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById("botCode").innerHTML = valx;
+        $("#ipBotcode").val("");
+
+    }
     $(document).ready(function () {
+
         $('#accPass').keyup(function () {
             var passCF = $('#accCPass').val();
             var pass = $('#accPass').val();
@@ -522,6 +528,10 @@
     });
 
 </script>
+
+<jsp:invoke fragment="content"></jsp:invoke>
+
+
 </body>
 
 </html>

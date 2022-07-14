@@ -14,13 +14,21 @@ public class Home {
     public String Index(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());
 //        session.setAttribute("acc",12);
-        return "demo/index";
+        return "user/index";
     }
 
+    @RequestMapping(value = {"center"},method = RequestMethod.GET)
+    public String Center(ModelMap modelMap, HttpSession session){
+//        modelMap.put("prods",productServ.findAll());
+//        session.setAttribute("acc",12);
+        return "user/center";
+    }
     @RequestMapping(value = {"auction"},method = RequestMethod.GET)
     public String Auction(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());
 //        session.setAttribute("acc",12);
-        return "demo/auction";
+        return "user/auction";
     }
+
+
 }
