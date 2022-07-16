@@ -1,4 +1,4 @@
-package com.mvc.controllers;
+package com.mvc.rest;
 
 import com.mvc.helper.FileHelper;
 import org.springframework.http.HttpStatus;

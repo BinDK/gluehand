@@ -12,8 +12,6 @@ import javax.servlet.http.HttpSession;
 public class AdminHome {
     @RequestMapping(value = {"index",""},method = RequestMethod.GET)
     public String Index(ModelMap modelMap, HttpSession session){
-//        modelMap.put("prods",productServ.findAll());
-//        session.setAttribute("acc",12);
         return "admin/index";
     }
 
