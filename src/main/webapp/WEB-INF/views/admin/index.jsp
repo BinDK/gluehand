@@ -143,7 +143,7 @@
 </script>
 
 <style>
-    .rotate {
+    .rotatex {
         animation: rotation 4s;
     }
     @keyframes rotation {
