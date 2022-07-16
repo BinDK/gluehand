@@ -11,7 +11,9 @@ import com.mvc.repository.UserRepository;
 import com.mvc.response.ResponseUser;
 import com.mvc.service.AdminService;
 import com.mvc.service.UserService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
@@ -51,12 +53,12 @@ public class AdminServiceImpl implements AdminService {
 	 * Check error
 	 */
 	public void validAdmin(Optional<User> u, ResponseUser res) {
-		if(u.isEmpty()) {
+		if(!u.isPresent()) {
 			res.setHasError(true);
 			res.setError(ErrorEnum.NOT_FIND_ADMIN.getName());
 		}
 			
-		if(u.get().getIsAdmin()) {
+		if(!u.get().getIsAdmin()) {
 			res.setHasError(true);;
 			res.setError(ErrorEnum.NOT_ADMIN.getName());
 		}
