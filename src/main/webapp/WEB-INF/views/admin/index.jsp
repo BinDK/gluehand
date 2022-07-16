@@ -5,12 +5,15 @@
   Time: 5:50 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Title</title>
-</head>
-<body>
+<%@ page contentType="text/html;charset=UTF-8" language="java"  isELIgnored="false" %>
+<%@taglib prefix="mt" tagdir="/WEB-INF/tags" %>
 
-</body>
-</html>
+
+<mt:template_admin>
+    <jsp:attribute name="content">
+    </jsp:attribute>
+</mt:template_admin>
+
+<mt:footer>
+    <jsp:attribute name="footer"></jsp:attribute>
+</mt:footer>

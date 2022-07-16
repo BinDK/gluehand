@@ -2,6 +2,7 @@ package com.mvc.rest;
 
 import java.util.List;
 
+import com.mvc.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,10 +20,14 @@ public class TestRest {
 
 	@Autowired
 	ProductService productService;
+
+    @Autowired
+    AdminService adminService;
 	
     @RequestMapping(value = {"test"},method = RequestMethod.GET)
     public List<Product> Index(){
 //        modelMap.put("prods",productServ.findAll());
-        return productService.listProductFilterStatus(ProductStatusEnum.ALL);
+        List<Product> list = productService.listProductFilterStatus(ProductStatusEnum.ALL);
+        return list;
     }
 }
