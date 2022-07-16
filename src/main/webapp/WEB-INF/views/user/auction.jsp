@@ -8,7 +8,7 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-5 mt-1 d-flex">
-            <a class="text-decoration-none text-black" href="${pageContext.request.contextPath}/center" id="backBtn" onmouseover="clear()">
+            <a class="text-decoration-none text-black" href="${pageContext.request.contextPath}/user/center" id="backBtn" onmouseover="clear()">
                 <i  class="fa-solid fa-angles-left fs-3 me-3"></i>
             </a>
             <h4 id="backText">Back to Center</h4>
@@ -18,7 +18,28 @@
 
         <div class="col-lg-5 mt-5">
             <div class="card mb-3 rounded-5 border-0">
-                <img class="card-img img-fluid rounded-5" src="https://avatars.dicebear.com/api/pixel-art/product_single_10.svg?b=%2375507b" alt="Card image cap" id="product-detail">
+                <div id="caroItemIMG" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+
+                        <c:forEach var = "i" begin = "1" end = "3" varStatus="fElement">
+
+                        <div class="carousel-item ${fElement.first ? 'active' : ''}">
+                            <img class="card-img img-fluid rounded-5" src="https://avatars.dicebear.com/api/pixel-art/product_single_1${i}.svg?b=%2375507b" alt="Card image cap" id="product-detail">
+                        </div>
+                        </c:forEach>
+
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#caroItemIMG" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#caroItemIMG" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+
+                </div>
             </div>
             <div class="row">
                 <div id="col col-md-12 col-auto ">
@@ -147,31 +168,14 @@
 
 
 
-                    <!--
-                                                    <div class="row">
-                                                        <div class="col-auto">
-                                                            <ul class="list-inline pb-3">
-                                                                <li class="list-inline-item">Size :
-                                                                    <input type="hidden" name="product-size" id="product-size" value="S">
-                                                                </li>
-                                                                <li class="list-inline-item"><span class="btn btn-success btn-size">S</span></li>
-                                                                <li class="list-inline-item"><span class="btn btn-success btn-size">M</span></li>
-                                                                <li class="list-inline-item"><span class="btn btn-success btn-size">L</span></li>
-                                                                <li class="list-inline-item"><span class="btn btn-success btn-size">XL</span></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-auto">
-                                                            <ul class="list-inline pb-3">
-                                                                <li class="list-inline-item text-right">
-                                                                    Quantity
-                                                                    <input type="hidden" name="product-quanity" id="product-quanity" value="1">
-                                                                </li>
-                                                                <li class="list-inline-item"><span class="btn btn-success" id="btn-minus">-</span></li>
-                                                                <li class="list-inline-item"><span class="badge bg-secondary" id="var-value">1</span></li>
-                                                                <li class="list-inline-item"><span class="btn btn-success" id="btn-plus">+</span></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div> -->
+                    <div class="row">
+                        <div class="col-auto">
+                            <ul class="list-inline pb-3">
+                                <li class="list-inline-item"><h6>Time left: </h6></li><li class="list-inline-item"><span class="btn btn-success btn-size" id="timeleft"></span></li>
+                            </ul>
+                        </div>
+
+                    </div>
                     <div class="row pb-3">
                         <div class="col d-grid justify-content-center">
 
@@ -277,6 +281,39 @@
         else return false;
     }
 
+    var countDownDate = new Date();
+    //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
+    countDownDate.setSeconds(countDownDate.getSeconds() + 20);
+
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Khoảng cách từ ngày đău ra - tgian hiện tại
+        var distance = countDownDate.getTime() - now;
+
+        // đổi số thành ngày giờ
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output thời gian
+        document.getElementById("timeleft").innerHTML = days + "d " + hours + "h "
+            + minutes + "m " + seconds + "s ";
+
+        // Hết thời gian thì làm gì
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("timeleft").innerHTML = "EXPIRED";
+            // $('#btnBidModal').addClass('disabled');
+            // $('#btnBidModal').addClass('btn-secondary');
+        }
+    }, 1000);
 </script>
 </jsp:attribute>
 </mt:template>
+<mt:footer>
+
+</mt:footer>

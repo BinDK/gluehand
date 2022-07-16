@@ -21,6 +21,20 @@
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.css">
 
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/jquery-ui/jquery-ui.css">
+
+    <!-- Start Script -->
+    <%--<script src="${pageContext.request.contextPath}/resources/assets/js/jquery-1.11.0.min.js"></script>--%>
+    <%--<script src="${pageContext.request.contextPath}/resources/assets/js/jquery-migrate-1.2.1.min.js"></script>--%>
+    <script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.min.js"></script>
+
+    <script src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.bundle.min.js"></script>
+    <%--<script src="${pageContext.request.contextPath}/resources/assets/js/templatemo.js"></script>--%>
+    <%--<script src="${pageContext.request.contextPath}/resources/assets/js/custom.js"></script>--%>
+    <script src="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+    <!-- End Script -->
 </head>
 
 
@@ -62,7 +76,8 @@
                             </li>
                             <li><a class="dropdown-item" href="#" onclick="preventDefault()" data-bs-toggle="modal"
                                    data-bs-target="#accBalanceModal">Account Balance</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/manage">Product Management</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/manage" >Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -251,21 +266,10 @@
                     <div class="col-md-4">
                         <div class="form-floating mb-3">
                             <input
-                                    class="
-                      form-control
-                      bg-white
-                      border-bottom
-                      border-top-0
-                      border-start-0
-                      border-end-0
-                      border-danger
-                    "
-                                    value="12"
-                                    id="wTTopup"
-                                    disabled
-                                    type="text"
-                                    placeholder="Total Top up"
-                            />
+                                    class="form-control bg-white border-bottom
+                                        border-top-0 border-start-0 border-end-0 border-danger"
+                                    value="12" id="wTTopup"
+                                    disabled type="text" placeholder="Total Top up"/>
                             <label for="wTTopup">Total Top up</label>
                         </div>
                     </div>
@@ -273,20 +277,10 @@
                     <div class="col-md-4">
                         <div class="form-floating mb-3">
                             <input
-                                    class="
-                      form-control
-                      bg-white
-                      border-bottom
-                      border-top-0
-                      border-start-0
-                      border-end-0
-                      border-danger
-                    "
-                                    value="12"
-                                    id="wTSpent"
-                                    disabled
-                                    type="text"
-                                    placeholder="Spent"
+                                    class=" form-control bg-white border-bottom
+                                    border-top-0 border-start-0 border-end-0 border-danger"
+                                    value="12" id="wTSpent" disabled
+                                    type="text" placeholder="Spent"
                             />
                             <label for="wTSpent">Spent</label>
                         </div>
@@ -294,20 +288,10 @@
                     <div class="col-md-4">
                         <div class="form-floating mb-3">
                             <input
-                                    class="
-                      form-control
-                      bg-white
-                      border-bottom
-                      border-top-0
-                      border-start-0
-                      border-end-0
-                      border-danger
-                    "
-                                    value="12"
-                                    id="wTBalance"
-                                    disabled
-                                    type="text"
-                                    placeholder="Fullname"
+                                    class="form-control bg-white border-bottom border-top-0
+                                     border-start-0 border-end-0 border-danger "
+                                    value="12" id="wTBalance"
+                                    disabled type="text" placeholder="Fullname"
                             />
                             <label for="wTBalance">Balance</label>
                         </div>
@@ -317,18 +301,13 @@
                 <div class="row">
                     <div id="col col-md-12 col-auto ">
                         <div class="card">
-                            <div
-                                    class="card-body table-responsive p-0"
-                                    style="height: 300px"
-                            >
+                            <div class="card-body table-responsive p-0" style="height: 300px">
                                 <table class="table table-striped">
-                                    <thead
-                                            style="
+                                    <thead style="
                           position: sticky;
                           top: 0;
                           background-color: white;
-                        "
-                                    >
+                        ">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col"><small>Type</small></th>
@@ -358,34 +337,18 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="col-md-3">
-                        <div class="card text-center border-success mb-3" style="max-width: 18rem">
-                            <div class="card-header">Top up Tier</div>
-                            <div class="card-body text-success">
-                                <h5 class="card-title">100$</h5>
-                            </div>
-                        </div>
-                    </div>
+                    <c:forEach var="i" begin="1" end="3">
 
                     <div class="col-md-3">
                         <div class="card text-center border-success mb-3" style="max-width: 18rem">
                             <div class="card-header">Top up Tier</div>
                             <div class="card-body text-success">
-                                <h5 class="card-title">300$</h5>
+                                <h5 class="card-title">${i}00$</h5>
                             </div>
                         </div>
                     </div>
+                    </c:forEach>
 
-
-
-                    <div class="col-md-3">
-                        <div class="card text-center border-success mb-3" style="max-width: 18rem">
-                            <div class="card-header">Top up Tier</div>
-                            <div class="card-body text-success">
-                                <h5 class="card-title">300$</h5>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="col-md-3">
                         <div class="card text-center border-success mb-0" style="max-width: 18rem">
@@ -435,16 +398,9 @@
         animation: slidebg 5s linear infinite;
     }
 </style>
-<!-- Start Script -->
-<script src="${pageContext.request.contextPath}/resources/assets/js/jquery-1.11.0.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/assets/js/jquery-migrate-1.2.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/assets/js/templatemo.js"></script>
-<script src="${pageContext.request.contextPath}/resources/assets/js/custom.js"></script>
-<script src="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.js"></script>
 
-<!-- End Script -->
 <script>
+
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : evt.keyCode
         if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -459,7 +415,7 @@
     }
     $(document).ready(function () {
 
-        $('#accPass').keyup(function () {
+            $('#accPass').keyup(function () {
             var passCF = $('#accCPass').val();
             var pass = $('#accPass').val();
             if (pass.length > 4) {
@@ -525,6 +481,8 @@
             $("#f1").css("display", "block");
 
         });
+
+
     });
 
 </script>

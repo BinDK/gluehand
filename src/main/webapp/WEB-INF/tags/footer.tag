@@ -31,8 +31,7 @@
                     <li><a class="text-decoration-none" onclick="event.preventDefault()" role="button">No Scam</a></li>
                     <li><a class="text-decoration-none" onclick="event.preventDefault()" role="button">Look at first
                         rule</a></li>
-                    <li><a class="text-decoration-none" onclick="event.preventDefault()" role="button">PLAY
-                        RESPONSIBLY!</a></li>
+                    <li><a class="text-decoration-none" onclick="event.preventDefault()" role="button">Responsible Play!</a></li>
 
                 </ul>
             </div>
@@ -60,7 +59,7 @@
                     </li>
                     <li class="list-inline-item border border-light rounded-circle text-center">
                         <a class="text-light text-decoration-none mxh mxhIG" data-bs-toggle="modal"
-                           data-bs-target="#simu"><i class="fab fa-instagram fa-lg fa-fw"></i></i></a>
+                           data-bs-target="#simu"><i class="fab fa-instagram fa-lg fa-fw"></i></a>
                     </li>
                     <li class="list-inline-item border border-light rounded-circle text-center">
                         <a class="text-light text-decoration-none mxh mxhTW" data-bs-toggle="modal"

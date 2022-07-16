@@ -17,18 +17,24 @@ public class Home {
         return "user/index";
     }
 
-    @RequestMapping(value = {"center"},method = RequestMethod.GET)
+    @RequestMapping(value = {"user/center"},method = RequestMethod.GET)
     public String Center(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());
 //        session.setAttribute("acc",12);
         return "user/center";
     }
-    @RequestMapping(value = {"auction"},method = RequestMethod.GET)
+    @RequestMapping(value = {"user/auction"},method = RequestMethod.GET)
     public String Auction(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());
 //        session.setAttribute("acc",12);
         return "user/auction";
     }
 
+    @RequestMapping(value = {"user/manage"},method = RequestMethod.GET)
+    public String Manage(ModelMap modelMap, HttpSession session){
+//        modelMap.put("prods",productServ.findAll());
+//        session.setAttribute("acc",12);
+        return "user/manage";
+    }
 
 }
