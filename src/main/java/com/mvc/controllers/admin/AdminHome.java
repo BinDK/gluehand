@@ -15,6 +15,11 @@ public class AdminHome {
         return "admin/index";
     }
 
+    @RequestMapping(value = {"users"},method = RequestMethod.GET)
+    public String Users(ModelMap modelMap, HttpSession session){
+        return "admin/users";
+    }
+
     @RequestMapping(value = {"register"},method = RequestMethod.GET)
     public String register(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());
