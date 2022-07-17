@@ -410,9 +410,10 @@ $.fn.ajaxCancel = function idxc(param) {
                 "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
             ],
             changeMonth: true,changeYear: true,
-            dayNamesMin: [ "CN", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy" ], // For formatting
+            dayNamesMin: [ "CN", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy" ],
+            minDate: new Date()
 
-        });
+    });
     $('#sDate').datepicker({
                 dateFormat: 'yy-mm-dd',
                 yearRange: '2022:'+(new Date).getFullYear(),

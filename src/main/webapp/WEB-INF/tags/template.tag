@@ -299,7 +299,7 @@
                 </div>
 
                 <div class="row">
-                    <div id="col col-md-12 col-auto ">
+                    <div class="col col-md-12 col-auto ">
                         <div class="card">
                             <div class="card-body table-responsive p-0" style="height: 300px">
                                 <table class="table table-striped">

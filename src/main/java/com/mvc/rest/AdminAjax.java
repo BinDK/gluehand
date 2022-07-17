@@ -36,14 +36,14 @@ public class AdminAjax implements ServletContextAware {
     }
 
 
-    @GetMapping(value = "cancelprod")
-    public ResponseEntity<Boolean> cancelProd(@RequestParam("id") int id) {
+    @GetMapping(value = "wallettransaction")
+    public ResponseEntity<Integer> cancelProd(@RequestParam("id") int id) {
 
         try {
             System.out.println(id);
-            return new ResponseEntity<Boolean>(HttpStatus.OK);
+            return new ResponseEntity<Integer>(id,HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
         }
     }
 

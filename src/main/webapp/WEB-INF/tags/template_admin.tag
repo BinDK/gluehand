@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.css">
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/adminlte/css/adminlte.css">
+
     <link rel="stylesheet" href="https://adminlte.io/themes/v3/dist/css/adminlte.min.css?v=3.2.0">
 
     <script src="https://adminlte.io/themes/v3/plugins/jquery/jquery.min.js"></script>
@@ -21,6 +23,7 @@
     <script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/plugins/adminlte/js/adminlte.js"></script>
 
 
 </head>
