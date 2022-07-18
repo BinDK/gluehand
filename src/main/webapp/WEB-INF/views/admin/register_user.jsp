@@ -7,7 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"  isELIgnored="false" %>
 <%@taglib prefix="mt" tagdir="/WEB-INF/tags" %>
-
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page import="" %>
 
 <mt:template_admin>
     <jsp:attribute name="content">
@@ -32,18 +33,19 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-                        <form>
+                        <form:form action="${pageContext.request.contextPath}/createUser" modelAttribute="User">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Username</label>
                                     <input type="text" class="form-control" id="exampleInputUsername" placeholder="Enter username">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Password</label>
+                                    <label for="exampleInputPassword">Password</label>
                                     <input type="password" class="form-control" id="exampleInputPassword" placeholder="Enter password">
                                 </div>
+                        
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Email</label>
+                                    <label for="exampleInputEmail">Email</label>
                                     <input type="email" class="form-control" id="exampleInputEmail" placeholder="Enter email">
                                 </div>
                                 <div class="form-group">
@@ -51,7 +53,7 @@
                                     <input type="text" class="form-control" id="exampleInputAddress" placeholder="Enter address">
                                 </div>
                             </div>
-                        </form>
+                        </form:form>
                     </div>
                     <div class="col-md-6">
                         <form>

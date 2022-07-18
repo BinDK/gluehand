@@ -15,16 +15,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdminServiceImpl implements AdminService {
-	
+
 	@Autowired
 	UserRepository userRepository;
 
 	@Override
 	public ResponseUser createAdmin(User admin) {
 		ResponseUser res = new ResponseUser();
-		res.setUser(userRepository.save(admin));
 		admin.setIsAdmin(true);
-		res.setHasError(userRepository.save(admin) == null ? false : true);
+		admin = userRepository.save(admin);
+		res.setUser(admin);
+		res.setHasError(admin == null);
 		return res;
 	}
 
@@ -33,7 +34,7 @@ public class AdminServiceImpl implements AdminService {
 		ResponseUser res = new ResponseUser();
 		Optional<User> u = userRepository.findById(admin.getId());
 		validAdmin(u,res);
-		
+
 		res.setUser(userRepository.save(admin));
 		return res;
 	}
@@ -43,7 +44,7 @@ public class AdminServiceImpl implements AdminService {
 		ResponseUser res = new ResponseUser();
 		Optional<User> u = userRepository.findById(id);
 		validAdmin(u,res);
-		
+
 		u.get().setUserStatus(UserStatusEnum.DELETE.getId());
 		res.setUser(userRepository.save(u.get()));
 		return res;
@@ -57,11 +58,11 @@ public class AdminServiceImpl implements AdminService {
 			res.setHasError(true);
 			res.setError(ErrorEnum.NOT_FIND_ADMIN.getName());
 		}
-			
+
 		if(!u.get().getIsAdmin()) {
 			res.setHasError(true);;
 			res.setError(ErrorEnum.NOT_ADMIN.getName());
 		}
-		
+
 	}
 }
