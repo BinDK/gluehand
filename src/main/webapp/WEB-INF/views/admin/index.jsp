@@ -70,16 +70,16 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach var="i" begin="1" end="6">
+                                        <c:forEach var="i" items="${products}" varStatus="loop">
 
                                         <tr>
-                                            <td>${i}</td>
-                                            <td>Alexander Pierce</td>
-                                            <td>11-7-2014</td>
-                                            <td><span class="tag tag-warning">Pending</span></td>
-                                            <td>Start Date</td>
-                                            <td>Enddate</td>
-                                            <td>Price</td>
+                                            <td>${loop.index +1}</td>
+                                            <td>${i.product_name}</td>
+                                            <td>${i.fullname}</td>
+                                            <td><span class="tag tag-warning">${i.category}</span></td>
+                                            <td>${i.start_date}</td>
+                                            <td>${i.end_date}</td>
+                                            <td>${i.price_minium}</td>
                                             <td>
                                                 <button class="btn btn-success btnapp" id="app-${i}" >Approve</button>
                                                 <button class="btn btn-danger btndisapp" id="disapp-${i}">Disappove</button>
