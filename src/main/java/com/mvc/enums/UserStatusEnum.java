@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum UserStatusEnum {
 	DELETE(0,"xoa san pham"),
-	
+	ACTIVE(1,"active")
 	;
 	
 	

@@ -3,6 +3,7 @@ package com.mvc.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mvc.entity.User;
@@ -63,6 +64,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAllUser() {
 		return userRepository.findAll();
+	}
+
+	@Override
+	public List<JSONObject> listUserNotBan(UserStatusEnum id) {
+		switch (id)
+		{
+			case ACTIVE:
+				return userRepository.findAllUser(id.getId());
+		}
+		return null;
 	}
 
 

@@ -1,8 +1,10 @@
 package com.mvc.controllers.admin;
 
 import com.mvc.enums.ProductStatusEnum;
+import com.mvc.enums.UserStatusEnum;
 import com.mvc.service.AdminService;
 import com.mvc.service.ProductService;
+import com.mvc.service.UserService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,17 +25,22 @@ public class AdminHome {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    UserService userService;
     @RequestMapping(value = {"index",""},method = RequestMethod.GET)
     public String Index(ModelMap modelMap, HttpSession session){
         List<JSONObject> result = productService.listProductFilterStatus(ProductStatusEnum.NOT_APPROVE);
-//        modelMap.addAttribute("products", result);
         modelMap.put("products",result);
         return "admin/index";
     }
 
     @RequestMapping(value = {"users"},method = RequestMethod.GET)
     public String Users(ModelMap modelMap, HttpSession session){
+        List<JSONObject> result = userService.listUserNotBan(UserStatusEnum.ACTIVE);
+
+        modelMap.put("users",result);
         return "admin/users";
+
     }
 
     @RequestMapping(value = {"register"},method = RequestMethod.GET)

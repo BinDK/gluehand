@@ -81,8 +81,8 @@
                                             <td>${i.end_date}</td>
                                             <td>${i.price_minium}</td>
                                             <td>
-                                                <button class="btn btn-success btnapp" id="app-${i}" >Approve</button>
-                                                <button class="btn btn-danger btndisapp" id="disapp-${i}">Disappove</button>
+                                                <button class="btn btn-success btnapp" id="app-${i.product_id}" >Approve</button>
+                                                <button class="btn btn-danger btndisapp" id="disapp-${i.product_id}">Disappove</button>
                                             </td>
                                         </tr>
                                         </c:forEach>

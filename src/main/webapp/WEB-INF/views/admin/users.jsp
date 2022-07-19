@@ -37,19 +37,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach var="i" begin="1" end="6">
+                                        <c:forEach var="i" varStatus="loop" items="${users}">
 
                                         <tr>
-                                            <td>${i}</td>
-                                            <td>Alexander Pierce</td>
-                                            <td>11-7-2014</td>
-                                            <td>Start Date</td>
+                                            <td>${loop.index + 1}</td>
+                                            <td>${i.fullname}</td>
+                                            <td>${i.user_name}</td>
+                                            <td>${i.money}</td>
                                             <td>
-                                                <button class="btn btn-success btndetail" id="detail-${i}"
+                                                <button class="btn btn-success btndetail" id="detail-${i.user_id}"
                                                         data-toggle="modal" data-target="#uBalance">Detail
                                                 </button>
 
-                                                <button class="btn btn-danger btnban" id="ban-${i}">Ban user</button>
+                                                <button class="btn btn-danger btnban" id="ban-${i.user_id}">Ban user</button>
                                             </td>
                                         </tr>
                                         </c:forEach>
