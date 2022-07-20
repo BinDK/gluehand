@@ -16,4 +16,5 @@ public class HomeRest {
 //        modelMap.put("prods",productServ.findAll());
         return "demo/index";
     }
+
 }

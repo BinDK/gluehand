@@ -18,19 +18,19 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "fullname", nullable = false)
+    @Column(name = "fullname", nullable = true)
     private String fullname;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address", nullable = true)
     private String address;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = true)
     private String email;
 
     @Column(name = "user_status", nullable = false)
     private Integer userStatus;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone", nullable = true)
     private String phone;
 
     @Column(name = "is_admin", nullable = false)

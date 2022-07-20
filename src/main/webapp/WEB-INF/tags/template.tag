@@ -47,7 +47,7 @@
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-            <% if (session.getAttribute("acc") != null) { %>
+            <% if (session.getAttribute("acc") == null) { %>
         <div id="navbarNavDropdown" class="collapse navbar-collapse">
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -62,22 +62,23 @@
             </ul>
 
             <% } else {%>
+            <c:set var="acc" value="${sessionScope.acc}"></c:set>
             <div id="navbarNavDropdown" class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav mb-2 mb-lg-0 ">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="img-fluid img-thumbnail rounded-0 " src="https://avatars.dicebear.com/api/pixel-art/avatar.svg?b=%2375507b&size=64">
+                            <img class="img-fluid img-thumbnail rounded-0 " src="https://avatars.dicebear.com/api/pixel-art/${acc.userName}.svg?b=%2375507b&size=64">
                         </a>
                         <ul aria-labelledby="navbarDarkDropdownMenuLink"
                             class="dropdown-menu dropdown-menu-start dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#" onclick="preventDefault()" data-bs-toggle="modal"
+                            <li><a class="dropdown-item" href="#"  data-bs-toggle="modal"
                                    data-bs-target="#accModal">Your Profile</a>
                             </li>
                             <li><a class="dropdown-item" href="#" onclick="preventDefault()" data-bs-toggle="modal"
                                    data-bs-target="#accBalanceModal">Account Balance</a></li>
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/manage">Product Management</a></li>
-                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/manage" >Logout</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout" >Logout</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -118,24 +119,30 @@
                         <label for="siPass">Password</label>
                     </div>
 
-                    <button onclick="event.preventDefault();" class="btn btn-primary ">Let GO!</button>
+                    <button onclick="event.preventDefault();" class="btn btn-primary " id="si">Let GO!</button>
                 </form>
                 <form id="f2" style="display: none">
                     <div class="form-floating mb-3">
                         <input class="form-control shadow bg-body rounded" id="suUname" type="text" placeholder="Username">
-                        <label for="siUname">Username</label>
+                        <label for="suUname">Username</label>
 
                     </div>
                     <div class="form-floating mb-3">
-                        <input class="form-control shadow bg-body rounded" id="suPass" type="password" placeholder="Password">
-                        <label for="siPass">Password</label>
+                        <input
+                                class="form-control shadow bg-body rounded"
+                                id="suPass" type="password" placeholder="Password"
+                                data-bs-toggle="tooltip" data-bs-placement="right"
+                                data-bs-custom-class="custom-tooltip"
+                                title="Password should have uppercase & lowercase, number and special charater."
+                        >
+                        <label for="suPass">Password</label>
                     </div>
                     <div class="form-floating mb-3">
                         <input class="form-control shadow bg-body rounded" id="suCPass" type="password" placeholder="Confirm Password">
                         <label for="suCPass">Confirm Password</label>
                     </div>
 
-                    <button onclick="event.preventDefault();" class="btn btn-primary ">Sign up!</button>
+                    <button class="btn btn-secondary disabled" id="su" onclick="event.preventDefault();" >Sign up!</button>
                 </form>
             </div>
         </div>
@@ -155,7 +162,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header border-bottom border-success">
-                <p class="h3 mb-0" id="accNameTitle">Account Name</p>
+                <p class="h3 mb-0" id="accNameTitle">${acc.fullname ? acc.fullname : 'No name yet'}</p>
             </div>
 
             <div class="modal-body">
@@ -167,8 +174,9 @@
                                     id="accFname"
                                     type="text"
                                     placeholder="Fullname"
+                                    value="${acc.fullname}"
                             />
-                            <label for="accUname">Fullname</label>
+                            <label for="accFname">Fullname</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input
@@ -177,17 +185,20 @@
                                     type="text"
                                     placeholder="Username"
                                     disabled
+                                    value="${acc.userName}"
                             />
                             <label for="accUname">Username</label>
                         </div>
                         <div class="form-floating mb-3">
                             <input
                                     class="form-control shadow bg-body ountline-success rounded"
-                                    id="accBday"
-                                    type="date"
-                                    placeholder="Birthday"
+                                    id="accEmail"
+                                    type="email"
+                                    placeholder="Email"
+                                    value="${acc.email}"
+
                             />
-                            <label for="accBday">Birthday</label>
+                            <label for="accEmail">Email</label>
                         </div>
                     </div>
 
@@ -199,6 +210,7 @@
                                     onkeypress="return isNumberKey(event)"
                                     type="text"
                                     placeholder="Phone Number"
+                                    value="${acc.phone}"
                             />
                             <label for="accPhone">Phone Number</label>
                         </div>
@@ -221,12 +233,12 @@
                                     id="accCPass"
                                     type="password"
                                     placeholder="Confirm Password"
-                                    aria-describedby="button-addon2"
+                                    aria-describedby="btnChangePass"
                             />
                             <button
                                     class="btn btn-outline-secondary btn-sm"
                                     type="button"
-                                    id="button-addon2"
+                                    id="btnChangePass"
                             >
                                 Change Password
                             </button>
@@ -235,7 +247,7 @@
                         </div>
                     </div>
                 </div>
-                <button onclick="event.preventDefault();" class="btn btn-primary">
+                <button id="btnacUpdate" class="btn btn-primary">
                     Update Profile
                 </button>
             </div>
@@ -380,14 +392,14 @@
             background-position: 20vw;
         }
     }
-    #button-addon2 {
+    #btnChangePass {
         background-color: #343a40;
         border-radius: 4px;
         color: #fff;
         cursor: pointer;
         /* padding: 8px 16px; */
     }
-    #button-addon2:hover {
+    #btnChangePass:hover {
         background-image: linear-gradient(
                 90deg,
                 #6ab04c 0%,
@@ -400,6 +412,8 @@
 </style>
 
 <script>
+    var patter1 = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
+    var patter2 = "^([\\w]*[\\w\\.]*(?!\\.)@gmail.com)";
 
     function isNumberKey(evt){
         var charCode = (evt.which) ? evt.which : evt.keyCode
@@ -414,16 +428,32 @@
 
     }
     $(document).ready(function () {
+        var $input = $('#sisuModal :input,#accModal :input');
+        $input.bind('keyup change paste propertychange', function() {
+            var key = $(this).val();
 
-            $('#accPass').keyup(function () {
+            if (key.indexOf('script') > -1 || key.indexOf('>') > -1) {
+                toastr.error("Wait! No xss bruh!", {
+                    timeOut: 2000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+                $(this).val('');
+            }
+        });
+
+        $('#accPass').keyup(function () {
             var passCF = $('#accCPass').val();
             var pass = $('#accPass').val();
+            var test = new RegExp(patter1);
+
             if (pass.length > 4) {
                 $('#accCPassx').css('display', 'flex');
                 $('#accCPassx').addClass('show');
-                $('#button-addon2').addClass('disabled');
-                if (passCF == pass) {
-                    $('#button-addon2').removeClass('disabled').addClass('bg-success');
+                $('#btnChangePass').addClass('disabled');
+                if (passCF == pass && (test.test(pass) && test.test(passCF))) {
+
+                    $('#btnChangePass').removeClass('disabled').addClass('bg-success');
 
                     $('#accPass')
                         .addClass('border-success')
@@ -431,10 +461,11 @@
                     $('#accCPass')
                         .addClass('border-success')
                         .removeClass('border-danger');
+
                 } else {
                     $('#accPass').addClass('border-danger');
                     $('#accCPass').addClass('border-danger');
-                    $('#button-addon2').removeClass('bg-success').addClass('disabled');
+                    $('#btnChangePass').removeClass('bg-success').addClass('disabled');
                 }
             } else {
                 $('#accCPass').val('');
@@ -445,26 +476,52 @@
         $('#accCPass').keyup(function () {
             var passCF = $('#accCPass').val();
             var pass = $('#accPass').val();
+            var test = new RegExp(patter1);
+
             if (pass.length > 4) {
                 $('#accCPassx').css('display', 'flex');
                 $('#accCPassx').addClass('show');
-                $('#button-addon2').addClass('disabled');
+                $('#btnChangePass').addClass('disabled');
                 if (passCF == pass) {
-                    $('#button-addon2').removeClass('disabled').addClass('bg-success');
+                    if(test.test(pass) && test.test(passCF)) {
 
-                    $('#accPass')
-                        .addClass('border-success')
-                        .removeClass('border-danger');
-                    $('#accCPass')
-                        .addClass('border-success')
-                        .removeClass('border-danger');
+                        $('#btnChangePass').removeClass('disabled').addClass('bg-success');
+
+                        $('#accPass')
+                            .addClass('border-success')
+                            .removeClass('border-danger');
+                        $('#accCPass')
+                            .addClass('border-success')
+                            .removeClass('border-danger');
+                    }
                 } else {
                     $('#accPass').addClass('border-danger');
                     $('#accCPass').addClass('border-danger');
-                    $('#button-addon2').removeClass('bg-success').addClass('disabled');
+                    $('#btnChangePass').removeClass('bg-success').addClass('disabled');
                 }
             }
         });
+        $('#btnacUpdate').click(function () {
+            var $accF =$('#accFname');
+            var $accE =$('#accEmail');
+            var $accP =$('#accPhone');
+
+
+            $.ajax({
+                type: "PUT",
+                url: "${pageContext.request.contextPath}/api/updateacc",
+                data: {
+                    accF : $accF.val(),
+                    accE : $accE.val(),
+                    accP : $accP.val()
+                },
+                done: function(data){
+                    console.log(data);
+                }
+            });
+
+        });
+
 
         $('#suBtn').click(function () {
             $('#siBtn').removeClass('active');
@@ -482,8 +539,143 @@
 
         });
 
+        $("#suUname").keyup(function (){
+            $.get('${pageContext.request.contextPath}/api/matchuname?uname='+$(this).val(), function( data ) {
+                // alert( data );
+                $("#suUname").addClass("border border-2 border-success");
+                if(data == 1){
+                    $("#suUname").addClass("border border-2 border-danger");
+
+                    $("label[for='suUname']").text("Someone using this").addClass("fw-bolder text-danger");
+                }else{
+                    $("#suUname").removeClass("border-danger");
+                    $("#suUname").addClass("border-success");
+                    $("label[for='suUname']").text("Username").removeClass("fw-bolder text-danger");
+
+
+                }
+            });
+
+
+        });
+        $('#suPass').keyup(function () {
+            var pass = $('#suPass').val();
+            var test1 = new RegExp(patter1);
+            if(test1.test(pass)){
+                // $(".tooltip-inner").text("Password Strong");
+                $(this).removeClass("border border-2 border-danger");
+              $(this).addClass("border border-2 border-success");
+
+            }
+            else if(pass == ""){
+                $(this).removeClass("border border-2 border-danger");
+                $(this).addClass("border border-2 border-success");
+
+            }
+            else {
+                // $(".tooltip-inner").text("Password should have uppercase & lowercase, number and special charater.");
+                $(this).removeClass("border border-2 border-success");
+                $(this).addClass("border border-2 border-danger");
+
+                console.log(0);
+            }
+        });
+        $('#suCPass').keyup(function () {
+            var passCF = $('#suPass').val();
+            var pass = $('#suCPass').val();
+            var test1 = new RegExp(patter1);
+
+             if (passCF == pass ) {
+                 if(test1.test(pass) && test1.test(passCF)) {
+                     $('#su').removeClass('disabled').addClass('bg-success');
+
+                     $('#suPass')
+                         .addClass('border-success')
+                         .removeClass('border-danger');
+                     $('#suCPass')
+                         .addClass('border-success')
+                         .removeClass('border-danger');
+                     // if()
+                 }
+                } else {
+                    $('#suPass').addClass('border-danger');
+                    $('#suCPass').addClass('border border-2 border-danger');
+                    $('#su').removeClass('bg-success').addClass(' disabled');
+                }
+
+        });
+
+        $('#si').click(function () {
+            var uname = $('#siUname').val();
+            var pass = $('#siPass').val();
+
+            $.get('${pageContext.request.contextPath}/api/signin?uname='+uname+'&pass='+pass).done(function(data){
+                if(data.id == null){
+                    toastr.error("Wrong username/ password!", {
+                        timeOut: 2000,
+                        progressBar: true,
+                        progressAnimation: 'increasing'
+                    });
+                    $('#siUname').addClass("border-danger");
+                    $('#siPass').val("").addClass("border-danger");
+                } else{
+                    toastr.success("Found You!", {
+                        timeOut: 2000,
+                        progressBar: true,
+                        progressAnimation: 'increasing'
+                    });
+                    sessionStorage.setItem("accid",data.id);
+                    $('#siUname').removeClass("border-danger").addClass("border-success");
+                    $('#siPass').removeClass("border-danger").addClass("border-success")
+                    setTimeout(window.location.replace("${pageContext.request.contextPath}/user/home?id="+data.id),7000);
+                }
+            });
+
+                // console.log(data);
+                // console.log(data.userName);
+            //     sessionStorage.setItem("accid",data.id);
+            // });
+        });
+        $('#su').click(function () {
+            var uname = $('#suUname').val();
+            var pass = $('#suPass').val();
+            var passCF = $('#suCPass').val();
+
+            var test1 = new RegExp(patter1);
+
+            if (test1.test(pass) == test1.test(passCF) ) {
+                $.get('${pageContext.request.contextPath}/api/matchuname?uname='+uname, function( data ) {
+                if(data == 1){
+                    toastr.error("Username has been taken!!", {
+                        timeOut: 2000,
+                        progressBar: true,
+                        progressAnimation: 'increasing'
+                    });
+                }else{
+                    $.post('${pageContext.request.contextPath}/api/createuser?uname='+uname+'&pass='+passCF, function( data ) {
+                        toastr.success("You are all set, let vid", {
+                            timeOut: 3000,
+                            progressBar: true,
+                            progressAnimation: 'increasing'
+                        });
+
+                        // var holdx = data;
+                        // console.log(holdx);
+                        window.location.replace("${pageContext.request.contextPath}/user/home?id="+data);
+
+                        // sessionStorage.setItem("accx",JSON.stringify(holdx));
+                        // setTimeout(location.reload(),4000);
+
+
+                    });
+                    }
+
+                });
+            }
+        });
 
     });
+
 
 </script>
 

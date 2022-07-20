@@ -1,16 +1,24 @@
 package com.mvc.repository;
 
+import com.mvc.ajaxentity.UserJ;
 import com.mvc.entity.ProductStatus;
 import com.mvc.entity.User;
 import org.json.simple.JSONObject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
+    @Query("select count(id) from User where userName = :uname")
+    public int checkuanme(@Param("uname")String uname);
+
+    @Query("select new com.mvc.ajaxentity.UserJ(id,userName,fullname,address,email,userStatus,phone,isAdmin) from User where userName = :uname and password = :pass")
+    public UserJ signin(@Param("uname")String uname, @Param("pass")String pass);
 
     @Query(nativeQuery = true,value = "SELECT  " +
             "user.user_id, user.fullname, user.user_name, wallet.money " +
