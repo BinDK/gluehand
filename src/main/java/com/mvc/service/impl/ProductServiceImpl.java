@@ -1,7 +1,10 @@
 package com.mvc.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.mvc.enums.ErrorEnum;
+import com.mvc.response.ResponseActionProduct;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,6 +38,43 @@ public class ProductServiceImpl implements ProductService {
 			break;
 		}
 		return null;
+	}
+
+	@Override
+	public ResponseActionProduct actionProduct(ProductStatusEnum productStatusEnum,int idProduct) {
+		try {
+			Optional<Product> id = productRepository.findById(idProduct);
+			if(!id.isPresent()){
+				return new ResponseActionProduct(true,ErrorEnum.PRODUCT_NOT_EXIST.getName());
+
+			}
+			else
+				if(id.get().getProduct_status_id() != ProductStatusEnum.NOT_APPROVE.getId())
+					return new ResponseActionProduct(true, ErrorEnum.PRODUCT_NOT_STATUS_NOT_APPROVE.getName());
+
+			switch (productStatusEnum) {
+				case APPROVED:
+					return actionApproveProduct(productStatusEnum,id.get());
+				case DISAPPROVED:
+					return actionDisapproveProduct(productStatusEnum,id.get());
+			}
+		}
+		catch (Exception e){
+			return new ResponseActionProduct(true,e.getMessage());
+		}
+		return null;
+	}
+
+	private ResponseActionProduct actionDisapproveProduct(ProductStatusEnum productStatusEnum, Product product) {
+		product.setProduct_status_id(ProductStatusEnum.DISAPPROVED.getId());
+		productRepository.save(product);
+		return new ResponseActionProduct(false,ErrorEnum.SUCCESS.getName());
+	}
+
+	private ResponseActionProduct actionApproveProduct(ProductStatusEnum productStatusEnum, Product product) {
+		product.setProduct_status_id(ProductStatusEnum.APPROVED.getId());
+		productRepository.save(product);
+		return new ResponseActionProduct(false,ErrorEnum.SUCCESS.getName());
 	}
 
 	@Override
