@@ -15,6 +15,8 @@ public interface UserService {
 	public ResponseUser createUser(User user);
 	public Integer createUser1(User user);
 	public Integer upUser(User user);
+	public boolean changepass(User user);
+
 	public User findID(int id);
 	public UserJ signin(String uname, String pass);
 

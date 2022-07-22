@@ -26,6 +26,37 @@
                     <%--                        </div>--%>
                     <%--                    </div>--%>
                     <%--                </div>--%>
+<%--                <div class="container-fluid">--%>
+<%--                    <div class="row mb-2">--%>
+<%--                        <div class="col-sm-6">--%>
+<%--                            <h1>Waiting for approve Product</h1>--%>
+<%--                        </div>--%>
+<%--                        <div class="col-sm-6">--%>
+<%--                            <ol class="breadcrumb float-sm-right">--%>
+<%--                                <li class="breadcrumb-item active">Home</li>--%>
+<%--                            </ol>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
+<%--                </div>--%>
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1>Category Filter</h1>
+        </div>
+        <div class="col-sm-6 d-flex">
+            <div class="input-group input-group-md mr-3">
+                <input type="text" class="form-control" id="cateName">
+                <span class="input-group-append">
+<button type="button" class="btn btn-info btn-sm" id="btnCate">Add</button>
+</span>
+            </div>
+            <select class="form-control" id="cateList">
+                <option value="0">All</option>
+                <c:forEach items="${cates}" var="cate">
+                <option value="${cate.id}">${cate.name}</option>
+                </c:forEach>
+            </select>
+        </div>
+    </div>
             </section>
 
             <section class="content">
@@ -99,6 +130,9 @@
                     </div>
 
 
+
+
+
                 </div>
             </section>
 
@@ -110,13 +144,71 @@
     // $(".fa-solid").click(function (){
     //    $(this).css("animation","rotation 4s");
     // });
-    $('.btnapp').click(function () {
+window.onload = function() {
+    $('.homeL').addClass("active");
+    $('.homeL').attr("href","#");
+};
+
+//List product theo category
+$('#cateList').change(function () {
+    $('#cateList option:selected').each(function() {
+        // str += $( this ).text() + " ";
+        var s = $(this).val();
+        $.ajax({
+            method: "GET",
+            url: "${pageContext.request.contextPath}/adminapi/productwithcate",
+            data: {
+                cateid : s},
+            success: function(data){
+                var content = '';
+                //content += '<tbody>'; -- **superfluous**
+                for (var i = 0; i < data.length; i++) {
+                    content += '<tr>';
+                    content += '<td>' + data[i].id + '</td>';
+                    content += '<td>' + data[i].product_name + '</td>';
+                    content += '<td>' + data[i].fullname + '</td>';
+                    content += '<td>' + data[i].category + '</td>';
+                    content += '<td>' + data[i].start_date + '</td>';
+                    content += '<td>' + data[i].end_date + '</td>';
+                    content += '<td>' + data[i].price_minium + '</td>';
+                    content += '<td>' +
+                        '<button class="btn btn-success btnapp" id="app-'+data[i].id+'" >Approve</button>' +
+                        '<button class="btn btn-danger btndisapp" id="disapp-'+data[i].id+'">Disappove</button>' +
+                        '</td>';
+                    content += '</tr>';
+                }
+            }
+        });
+    });
+});
+
+
+    $('.btnapp').click(function(){
         var holdid = $(this).attr("id");
         var idx = holdid.split("-")
         console.log(idx[1]);
         $.fn.ajaxApprove(idx[1]);
 
     });
+
+$('#btnCate').click(function (){
+    $.ajax({
+        method: "POST",
+        url: "${pageContext.request.contextPath}/adminapi/createcate",
+        data: {
+            catename : $('#cateName').val()},
+        success: function(data){
+            toastr.success("Successfuly Added Category","",{
+                timeOut: 2900,
+                progressBar: true,
+                progressAnimation: 'increasing'
+            });
+            $('#cateName').val("");
+            $('#cateList').append("<option value='"+data.id+"'>"+data.name+"</option>");
+
+        }
+    });
+});
     $.fn.ajaxApprove = function idxc(param) {
 
         $.ajax({

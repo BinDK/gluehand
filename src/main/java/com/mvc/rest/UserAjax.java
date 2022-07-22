@@ -112,4 +112,17 @@ public class UserAjax implements ServletContextAware {
         }
     }
 
+    @PutMapping(value = "changepass",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Boolean> Update(
+            @RequestParam("pass") String pass, HttpSession session){
+        try {
+            User u = (User) session.getAttribute("acc");
+            User u2 = uservice.findID(u.getId());
+            u2.setPassword(pass);
+            return new ResponseEntity<Boolean>(uservice.changepass(u2),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

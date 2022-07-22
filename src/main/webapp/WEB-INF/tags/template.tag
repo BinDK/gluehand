@@ -15,12 +15,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/templatemo.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/custom.css">
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/fontawesome.min.css">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.css">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/jquery-ui/jquery-ui.css">
 
     <!-- Start Script -->
@@ -68,7 +65,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="img-fluid img-thumbnail rounded-0 " src="https://avatars.dicebear.com/api/pixel-art/${acc.userName}.svg?b=%2375507b&size=64">
+                            <img alt="p" class="img-fluid img-thumbnail rounded-0 " src="https://avatars.dicebear.com/api/pixel-art/${acc.userName}.svg?b=%2375507b&size=64">
                         </a>
                         <ul aria-labelledby="navbarDarkDropdownMenuLink"
                             class="dropdown-menu dropdown-menu-start dropdown-menu-dark">
@@ -508,20 +505,34 @@
 
 
             $.ajax({
-                type: "PUT",
+                medthod: "PUT",
                 url: "${pageContext.request.contextPath}/api/updateacc",
                 data: {
                     accF : $accF.val(),
                     accE : $accE.val(),
                     accP : $accP.val()
                 },
-                done: function(data){
-                    console.log(data);
+                done: function(res){
+                    console.log(res ? "true" : "false");
                 }
             });
 
         });
 
+        $('#btnChangePass').click(function () {
+            var $cpass = $('#accCPass');
+            $.ajax({
+                method: "PUT",
+                url: "${pageContext.request.contextPath}/api/changepass",
+                data: {
+                    pass : $cpass.val()},
+                done: function(data){
+                    $('#accCPass, #accPass').val('');
+                    console.log(data);
+                }
+            });
+
+        });
 
         $('#suBtn').click(function () {
             $('#siBtn').removeClass('active');

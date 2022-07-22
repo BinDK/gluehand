@@ -1,5 +1,6 @@
 package com.mvc.rest;
 
+import com.mvc.entity.Category;
 import com.mvc.enums.ProductStatusEnum;
 import com.mvc.helper.FileHelper;
 import com.mvc.response.ResponseActionProduct;
@@ -13,6 +14,7 @@ import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
+import java.util.List;
 import java.util.Locale;
 
 @RestController
@@ -31,19 +33,18 @@ public class AdminAjax implements ServletContextAware {
     @Autowired
     AdminService adminService;
 
-    @DeleteMapping(value = "upload")
-    public ResponseEntity<Boolean> handleFileUpload(@RequestParam(value = "files",required = false) MultipartFile[] files ) {
+    @PostMapping(value = "createcate")
+    public ResponseEntity<Category> createcate(@RequestParam(value = "catename",required = true) String catename ) {
         try {
-            for(MultipartFile file : files) {
-                System.out.println("file Name: " + file.getName());
-                System.out.println("file Orginal Name: " + file.getOriginalFilename());
-                System.out.println("file size: " + file.getSize());
-                System.out.println("file type: " + file.getContentType());
-                String fileName = FileHelper.upload(servletContext, file);
-            }
-            return new ResponseEntity<Boolean>(HttpStatus.OK);
+            Category cx = productService.createCate(catename);
+                    if(cx != null){
+            return new ResponseEntity<Category>(cx,HttpStatus.OK);
+
+                    }else{
+                        return new ResponseEntity<Category>((Category) null,HttpStatus.BAD_REQUEST);
+                    }
         } catch (Exception e) {
-            return new ResponseEntity<Boolean>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Category>((Category) null,HttpStatus.BAD_REQUEST);
         }
     }
 

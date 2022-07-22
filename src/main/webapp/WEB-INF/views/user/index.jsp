@@ -15,7 +15,7 @@
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class=""   src="${pageContext.request.contextPath}/resources/assets/img/ban1.webp" width="588px" height="588px" alt="">
+                        <img alt="peacock" class=""   src="${pageContext.request.contextPath}/resources/assets/img/ban1.webp" width="588px" height="588px">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left align-self-center">
@@ -33,7 +33,7 @@
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="${pageContext.request.contextPath}/resources/assets/img/banner_img_02.jpg" alt="">
+                        <img alt="peacock" class="img-fluid" src="${pageContext.request.contextPath}/resources/assets/img/banner_img_02.jpg">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
@@ -77,17 +77,17 @@
                     <div class="container">
                         <div class="row p-5">
                             <div class="col col-md-4 p-5 mt-3">
-                                <a href="#"><img src="${pageContext.request.contextPath}/resources/assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
+                                <a href="#"><img alt="peacock" src="${pageContext.request.contextPath}/resources/assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
                                 <h5 class="text-center mt-3 mb-3 text-white text-bold">Watches</h5>
                                 <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
                             </div>
                             <div class="col col-md-4 p-5 mt-3">
-                                <a href="#"><img src="${pageContext.request.contextPath}/resources/assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
+                                <a href="#"><img alt="peacock" src="${pageContext.request.contextPath}/resources/assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
                                 <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Shoes</h2>
                                 <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
                             </div>
                             <div class="col col-md-4 p-5 mt-3">
-                                <a href="#"><img src="${pageContext.request.contextPath}/resources/assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
+                                <a href="#"><img alt="peacock" src="${pageContext.request.contextPath}/resources/assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
                                 <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Accessories</h2>
                                 <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
                             </div>

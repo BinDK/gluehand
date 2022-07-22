@@ -3,7 +3,9 @@ package com.mvc.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.mvc.entity.Category;
 import com.mvc.enums.ErrorEnum;
+import com.mvc.repository.CategoryRepository;
 import com.mvc.response.ResponseActionProduct;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,10 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	ProductRepository productRepository;
+
+	@Autowired
+	CategoryRepository cateRepo;
+
 
 	@Override
 	public List<JSONObject> listProductFilterStatus(ProductStatusEnum status) {
@@ -83,6 +89,21 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.save(product);
 	}
 
+
+	//Của Bình
+@Override
+	public  List<Category> findALlCate(){
+		return cateRepo.findAll();
+}
+	@Override
+	public  Category createCate(String cateName){
+		Category c = new Category();
+		c.setName(cateName);
+		Category c2 = cateRepo.save(c);
+		if(c2 != null){
+		return c2;
+		} else {return null;}
+	}
 
 
 }

@@ -13,10 +13,10 @@ public class Category {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "payment_percentage", nullable = false)
+    @Column(name = "payment_percentage", nullable = true)
     private Double paymentPercentage;
 
-    @Column(name = "fee_percentage", nullable = false)
+    @Column(name = "fee_percentage", nullable = true)
     private Double feePercentage;
 
     public Double getFeePercentage() {

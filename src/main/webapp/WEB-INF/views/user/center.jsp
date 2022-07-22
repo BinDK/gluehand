@@ -81,7 +81,7 @@
 
                         <div class="card rounded-0">
                             <a class="nav-link" href="${pageContext.request.contextPath}/user/auction">
-                                <img class="card-img rounded-0 img-fluid" src="https://avatars.dicebear.com/api/pixel-art/${i}.svg?b=%2375507b">
+                                <img alt="peacock" class="card-img rounded-0 img-fluid" src="https://avatars.dicebear.com/api/pixel-art/${i}.svg?b=%2375507b">
                             </a>
                         <%--<img class="card-img rounded-0 img-fluid" src="${pageContext.request.contextPath}/resources/assets/img/shop_01.jpg">--%>
 <%--                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">--%>
