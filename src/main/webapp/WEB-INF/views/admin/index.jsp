@@ -130,7 +130,7 @@
                 //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
                 // }, 3000);
                 if (result.hasError == false) {
-                    toastr.success(param, 'Successfuly Cancel Product ID: ', {
+                    toastr.success(param, 'Successfuly Approve Product ID: ', {
                         timeOut: 2900,
                         progressBar: true,
                         progressAnimation: 'increasing'
