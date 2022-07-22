@@ -6,14 +6,17 @@ import com.mvc.helper.FileHelper;
 import com.mvc.response.ResponseActionProduct;
 import com.mvc.service.AdminService;
 import com.mvc.service.ProductService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,6 +72,13 @@ public class AdminAjax implements ServletContextAware {
         System.out.println(ProductStatusEnum.valueOf(action));
         ResponseActionProduct list = productService.actionProduct(ProductStatusEnum.valueOf(action.toUpperCase(Locale.ROOT)),id);
         return list;
+    }
+
+    @RequestMapping(value = {"index",""},method = RequestMethod.GET)
+    public List<JSONObject> Index(ModelMap modelMap, HttpSession session, @RequestParam(required = false, defaultValue = "0") int cateid){
+        List<JSONObject> result = productService.listProductFilterStatusHaveCateGory(ProductStatusEnum.NOT_APPROVE,cateid);
+
+        return result;
     }
 
 }

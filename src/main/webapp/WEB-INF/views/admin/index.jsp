@@ -98,7 +98,7 @@
                                             <th>Action</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="body-table">
                                         <c:forEach var="i" items="${products}" varStatus="loop">
 
                                         <tr>
@@ -156,7 +156,7 @@ $('#cateList').change(function () {
         var s = $(this).val();
         $.ajax({
             method: "GET",
-            url: "${pageContext.request.contextPath}/adminapi/productwithcate",
+            url: "${pageContext.request.contextPath}/adminapi/index",
             data: {
                 cateid : s},
             success: function(data){
@@ -164,7 +164,7 @@ $('#cateList').change(function () {
                 //content += '<tbody>'; -- **superfluous**
                 for (var i = 0; i < data.length; i++) {
                     content += '<tr>';
-                    content += '<td>' + data[i].id + '</td>';
+                    content += '<td>' + (i+1) + '</td>';
                     content += '<td>' + data[i].product_name + '</td>';
                     content += '<td>' + data[i].fullname + '</td>';
                     content += '<td>' + data[i].category + '</td>';
@@ -177,6 +177,7 @@ $('#cateList').change(function () {
                         '</td>';
                     content += '</tr>';
                 }
+                $('#body-table').html(content);
             }
         });
     });

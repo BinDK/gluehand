@@ -23,4 +23,6 @@ public interface ProductService {
 	//Của Bình
 	List<Category> findALlCate();
 	Category createCate(String catename);
+
+    List<JSONObject> listProductFilterStatusHaveCateGory(ProductStatusEnum notApprove, int cateid);
 }

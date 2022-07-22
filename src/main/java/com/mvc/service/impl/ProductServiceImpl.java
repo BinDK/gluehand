@@ -105,5 +105,16 @@ public class ProductServiceImpl implements ProductService {
 		} else {return null;}
 	}
 
+	@Override
+	public List<JSONObject> listProductFilterStatusHaveCateGory(ProductStatusEnum status, int cateid) {
+		switch (status) {
+			case NOT_APPROVE:
+				return productRepository.findProductNotApproveFilterCategory(status.getId(),cateid);
+			default:
+				break;
+		}
+		return null;
+	}
+
 
 }

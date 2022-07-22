@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -28,8 +29,8 @@ public class AdminHome {
     @Autowired
     UserService userService;
     @RequestMapping(value = {"index",""},method = RequestMethod.GET)
-    public String Index(ModelMap modelMap, HttpSession session){
-        List<JSONObject> result = productService.listProductFilterStatus(ProductStatusEnum.NOT_APPROVE);
+    public String Index(ModelMap modelMap, HttpSession session, @RequestParam(required = false, defaultValue = "0") int cateid){
+        List<JSONObject> result = productService.listProductFilterStatusHaveCateGory(ProductStatusEnum.NOT_APPROVE,cateid);
         modelMap.put("products",result);
         modelMap.put("cates",productService.findALlCate());
 
