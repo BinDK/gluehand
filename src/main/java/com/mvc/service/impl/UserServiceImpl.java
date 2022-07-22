@@ -75,6 +75,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean changepass(User user) {
+        try {
+            userRepository.save(user).getId();
+            return true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
     public ResponseUser updateUser(User user) {
         ResponseUser res = new ResponseUser();
         Optional<User> u = userRepository.findById(user.getId());

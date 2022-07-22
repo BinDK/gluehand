@@ -31,6 +31,8 @@ public class AdminHome {
     public String Index(ModelMap modelMap, HttpSession session){
         List<JSONObject> result = productService.listProductFilterStatus(ProductStatusEnum.NOT_APPROVE);
         modelMap.put("products",result);
+        modelMap.put("cates",productService.findALlCate());
+
         return "admin/index";
     }
 
