@@ -122,7 +122,7 @@ window.onload = function() {
 
         $.ajax({
             type: "GET",
-            url: "${pageContext.request.contextPath}/adminapi/cancelprod",
+            url: "${pageContext.request.contextPath}/adminapi/action?action=APPROVED",
             data: {id : param},
             cache: true,
             timeOut: 1000,
@@ -130,11 +130,20 @@ window.onload = function() {
                 // setTimeout(function(){
                 //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
                 // }, 3000);
+                if(result.hasError == false){
                 toastr.success(param,'Successfuly Cancel Product ID: ' , {
                     timeOut: 2900,
                     progressBar: true,
                     progressAnimation: 'increasing'
                 });
+                }
+                else{
+                    toastr.error('STOP',result.message, {
+                    timeOut: 3000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+                }
             },
             error:function(){
                 toastr.error('STOP','', {
