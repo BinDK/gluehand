@@ -49,12 +49,19 @@
 <button type="button" class="btn btn-info btn-sm" id="btnCate">Add</button>
 </span>
             </div>
-            <select class="form-control" id="cateList">
-                <option value="0">All</option>
-                <c:forEach items="${cates}" var="cate">
-                <option value="${cate.id}">${cate.name}</option>
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Category
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" id="cateList">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/index">All</a>
+                    <c:forEach items="${cates}" var="cate">
+                         <a class="dropdown-item" href="${pageContext.request.contextPath}/admin/index?cateid=${cate.id}">${cate.name}</a>
                 </c:forEach>
-            </select>
+                </div>
+            </div>
+
         </div>
     </div>
             </section>
@@ -150,38 +157,37 @@ window.onload = function() {
 };
 
 //List product theo category
-$('#cateList').change(function () {
-    $('#cateList option:selected').each(function() {
-        // str += $( this ).text() + " ";
-        var s = $(this).val();
-        $.ajax({
-            method: "GET",
-            url: "${pageContext.request.contextPath}/adminapi/index",
-            data: {
-                cateid : s},
-            success: function(data){
-                var content = '';
-                //content += '<tbody>'; -- **superfluous**
-                for (var i = 0; i < data.length; i++) {
-                    content += '<tr>';
-                    content += '<td>' + (i+1) + '</td>';
-                    content += '<td>' + data[i].product_name + '</td>';
-                    content += '<td>' + data[i].fullname + '</td>';
-                    content += '<td>' + data[i].category + '</td>';
-                    content += '<td>' + data[i].start_date + '</td>';
-                    content += '<td>' + data[i].end_date + '</td>';
-                    content += '<td>' + data[i].price_minium + '</td>';
-                    content += '<td>' +
-                        '<button class="btn btn-success btnapp" id="app-'+data[i].id+'" >Approve</button>' +
-                        '<button class="btn btn-danger btndisapp" id="disapp-'+data[i].id+'">Disappove</button>' +
-                        '</td>';
-                    content += '</tr>';
-                }
-                $('#body-table').html(content);
-            }
-        });
-    });
-});
+<%--$("#cateList").on("change", function () {--%>
+<%--    var s  = $('#cateList option:selected').val();--%>
+
+<%--    $.ajax({--%>
+<%--        method: "GET",--%>
+<%--        url: "${pageContext.request.contextPath}/adminapi/index",--%>
+<%--        data: {--%>
+<%--            cateid : s},--%>
+<%--        success: function(data){--%>
+<%--            var content = '';--%>
+<%--            //content += '<tbody>'; -- **superfluous**--%>
+<%--            for (var i = 0; i < data.length; i++) {--%>
+<%--                content += '<tr>';--%>
+<%--                content += '<td>' + (i+1) + '</td>';--%>
+<%--                content += '<td>' + data[i].product_name + '</td>';--%>
+<%--                content += '<td>' + data[i].fullname + '</td>';--%>
+<%--                content += '<td>' + data[i].category + '</td>';--%>
+<%--                content += '<td>' + data[i].start_date + '</td>';--%>
+<%--                content += '<td>' + data[i].end_date + '</td>';--%>
+<%--                content += '<td>' + data[i].price_minium + '</td>';--%>
+<%--                content += '<td>' +--%>
+<%--                    '<button class="btn btn-success btnapp" id="app-'+data[i].id+'" >Approve</button>' +--%>
+<%--                    '<button class="btn btn-danger btndisapp" id="disapp-'+data[i].id+'">Disappove</button>' +--%>
+<%--                    '</td>';--%>
+<%--                content += '</tr>';--%>
+<%--            }--%>
+<%--            $('#body-table').html(content);--%>
+<%--        }--%>
+<%--    });--%>
+
+<%--});--%>
 
 
     $('.btnapp').click(function(){
@@ -205,7 +211,7 @@ $('#btnCate').click(function (){
                 progressAnimation: 'increasing'
             });
             $('#cateName').val("");
-            $('#cateList').append("<option value='"+data.id+"'>"+data.name+"</option>");
+            $('#cateList').append("<a class='dropdown-item' href=${pageContext.request.contextPath}/admin/index?cateid="+data.id+">"+data.name+"</a>");
 
         }
     });
