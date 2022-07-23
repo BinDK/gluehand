@@ -1,5 +1,6 @@
 package com.mvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,9 +22,9 @@ public class Product {
     private String product_name;
 
     private Double price_minium;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date start_date;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date end_date;
 
     private int product_status_id;
@@ -34,6 +35,7 @@ public class Product {
 
     private int fee;
 
+    @Column(name = "buyer_id", nullable = true)
     private int buyer_id;
 
     public User getSeller() {
@@ -51,6 +53,7 @@ public class Product {
     public void setId(Integer id) {
         this.id = id;
     }
+
 
     //TODO Reverse Engineering! Migrate other columns to the entity
 }

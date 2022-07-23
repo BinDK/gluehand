@@ -3,9 +3,12 @@ package com.mvc.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.mvc.ajaxentity.ProductJ;
 import com.mvc.entity.Category;
+import com.mvc.entity.ImgProduct;
 import com.mvc.enums.ErrorEnum;
 import com.mvc.repository.CategoryRepository;
+import com.mvc.repository.ImgProductRepository;
 import com.mvc.response.ResponseActionProduct;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	CategoryRepository cateRepo;
+
+	@Autowired
+	ImgProductRepository imgRepo;
+
 
 
 	@Override
@@ -44,6 +51,39 @@ public class ProductServiceImpl implements ProductService {
 			break;
 		}
 		return null;
+	}
+
+//	@Override
+//	public List<ProductJ> findProdJ(ProductStatusEnum status, int uidd) {
+//		return productRepository.findProdJ(status.getId(),uidd);
+//	}
+
+
+
+	@Override
+	public List<JSONObject> listProductFilterStatusxx(ProductStatusEnum status, int uidd) {
+		switch (status) {
+			case ALL:
+				return productRepository.findAllProduct(ProductStatusEnum.APPROVED.getId(),ProductStatusEnum.BIDDING.getName());
+			case NOT_APPROVE:
+				return productRepository.findProductNotApprovexx(status.getId(),uidd);
+			case APPROVED:
+				return productRepository.findProductApprovexx(status.getId(),uidd);
+			case BIDDING:
+				return productRepository.findProductBiddingxx(ProductStatusEnum.APPROVED.getId(),uidd);
+			case BIDED:
+				return productRepository.findProductBiddedxx(ProductStatusEnum.APPROVED.getId(),uidd);
+			default:
+				break;
+		}
+		return null;
+	}
+
+	@Override
+	public List<JSONObject> findProductNotApprovexx(int i, int uidd) {
+//		ProductStatusEnum status = new ProductStatus();
+		return productRepository.findProductNotApprovexx(0,uidd);
+
 	}
 
 	@Override
@@ -77,6 +117,17 @@ public class ProductServiceImpl implements ProductService {
 		return new ResponseActionProduct(false,ErrorEnum.SUCCESS.getName());
 	}
 
+	@Override
+	public List<JSONObject> listProductFilterStatusHaveCateGory(ProductStatusEnum status, int cateid) {
+		switch (status) {
+			case NOT_APPROVE:
+				return productRepository.findProductNotApproveFilterCategory(status.getId(),cateid);
+			default:
+				break;
+		}
+		return null;
+	}
+
 	private ResponseActionProduct actionApproveProduct(ProductStatusEnum productStatusEnum, Product product) {
 		product.setProduct_status_id(ProductStatusEnum.APPROVED.getId());
 		productRepository.save(product);
@@ -84,10 +135,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product create(Product product) {
-	
-		return productRepository.save(product);
+	public Integer create(Product product) {
+
+		return productRepository.save(product).getId();
 	}
+
 
 
 	//Của Bình
@@ -105,16 +157,13 @@ public class ProductServiceImpl implements ProductService {
 		} else {return null;}
 	}
 
-	@Override
-	public List<JSONObject> listProductFilterStatusHaveCateGory(ProductStatusEnum status, int cateid) {
-		switch (status) {
-			case NOT_APPROVE:
-				return productRepository.findProductNotApproveFilterCategory(status.getId(),cateid);
-			default:
-				break;
-		}
-		return null;
-	}
 
+
+	@Override
+	public boolean uploadImg(ImgProduct img){
+		if(imgRepo.save(img) != null){
+			return true;
+		}else{return false;}
+	}
 
 }

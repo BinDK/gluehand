@@ -1,5 +1,6 @@
 package com.mvc.controllers;
 
+import com.mvc.service.ProductService;
 import com.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,10 @@ import javax.servlet.http.HttpSession;
 public class Home {
     @Autowired
     UserService service;
+
+    @Autowired
+    ProductService prodservice;
+
 
     @RequestMapping(value = {"index",""},method = RequestMethod.GET)
     public String Index(ModelMap modelMap, HttpSession session){
@@ -44,6 +49,7 @@ public class Home {
 
     @RequestMapping(value = {"user/manage"},method = RequestMethod.GET)
     public String Manage(ModelMap modelMap, HttpSession session){
+        modelMap.put("cates",prodservice.findALlCate());
         return "user/manage";
     }
 

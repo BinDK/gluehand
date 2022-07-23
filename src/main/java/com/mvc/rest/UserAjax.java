@@ -1,11 +1,16 @@
 package com.mvc.rest;
 
+import com.mvc.ajaxentity.ProductJ;
 import com.mvc.ajaxentity.UserJ;
+import com.mvc.entity.ImgProduct;
+import com.mvc.entity.Product;
 import com.mvc.entity.User;
+import com.mvc.enums.ProductStatusEnum;
 import com.mvc.helper.FileHelper;
-import com.mvc.response.ResponseUser;
 import com.mvc.service.GeneralService;
+import com.mvc.service.ProductService;
 import com.mvc.service.UserService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("api")
@@ -32,9 +40,14 @@ public class UserAjax implements ServletContextAware {
     @Autowired
     UserService uservice;
 
+    @Autowired
+    ProductService productService;
 
-    @DeleteMapping(value = "upload")
-    public ResponseEntity<Boolean> handleFileUpload(@RequestParam(value = "files",required = false) MultipartFile[] files ) {
+
+
+//Add , cancel( khi chưa được duyệt), list product theo status chưa duyệt
+    @PostMapping(value = "upload")
+    public ResponseEntity<Boolean> handleFileUpload(@RequestParam(value = "files",required = false) MultipartFile[] files, @RequestParam("prodID") int prodID) {
         try {
             for(MultipartFile file : files) {
                 System.out.println("file Name: " + file.getName());
@@ -42,6 +55,11 @@ public class UserAjax implements ServletContextAware {
                 System.out.println("file size: " + file.getSize());
                 System.out.println("file type: " + file.getContentType());
                 String fileName = FileHelper.upload(servletContext, file);
+                ImgProduct img = new ImgProduct();
+                img.setImg(fileName);
+                Product prod1 = new Product();prod1.setId(prodID);
+                img.setProduct(prod1);
+                productService.uploadImg(img);
             }
             return new ResponseEntity<Boolean>(HttpStatus.OK);
         } catch (Exception e) {
@@ -49,7 +67,38 @@ public class UserAjax implements ServletContextAware {
         }
     }
 
+    @PostMapping(value = "addproduct",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> Addproduct(
+            @RequestParam("prodName") String prodName,
+            @RequestParam("prodPrice") String prodPrice,
+            @RequestParam("prodStep") String prodStep,
+            @RequestParam("prodsDate") String prodsDate,
+            @RequestParam("prodeDate") String prodeDate,
+            @RequestParam("prodCate") String prodCate,
+            @RequestParam("userid") String userid) {
+        try {
+            Product prod = new Product();
+//            LocalDateTime currentDateTime = LocalDateTime.now();
+//            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date s = new java.sql.Date(df.parse(prodsDate).getTime());
+            Date e = new java.sql.Date(df.parse(prodeDate).getTime());
 
+            prod.setProduct_name(prodName);
+            prod.setPrice_minium(Double.parseDouble(prodPrice));
+            prod.setPrice_step(Double.parseDouble(prodStep));
+            prod.setStart_date(s);
+            prod.setEnd_date(e);
+            prod.setCategory_id(Integer.parseInt(prodCate));
+            prod.setSeller(uservice.findID(Integer.parseInt(userid)));
+            prod.setFee(50);
+            prod.setProduct_status_id(0);
+            prod.setBuyer_id(0);
+            return new ResponseEntity<Integer>( productService.create(prod),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+        }
+    }
     @GetMapping(value = "cancelprod")
     public ResponseEntity<Boolean> cancelProd(@RequestParam("id") int id) {
 
@@ -61,6 +110,39 @@ public class UserAjax implements ServletContextAware {
         }
     }
 
+
+//    @GetMapping(value = "prodListseller",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<ProductJ>> WaitingList(@RequestParam("statuss") int statuss,@RequestParam("uidd") int uidd){
+//        try {
+//            if(statuss == 0){
+//                return new ResponseEntity<List<ProductJ>>(productService2.findProdJx(statuss,uidd),HttpStatus.OK);
+//            }else{
+//                return new ResponseEntity<List<ProductJ>>(HttpStatus.BAD_REQUEST);
+//            }
+//
+//        } catch (Exception e) {
+//            return new ResponseEntity<List<ProductJ>>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+        @GetMapping(value = "prodListseller",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<JSONObject>> WaitingList(@RequestParam("statuss") int statuss, @RequestParam("uidd") int uidd){
+        try {
+            if(statuss == 0){
+            return new ResponseEntity<List<JSONObject>>(productService.listProductFilterStatusxx(ProductStatusEnum.NOT_APPROVE,uidd),HttpStatus.OK);
+            } else if(statuss == 1){
+                return new ResponseEntity<List<JSONObject>>(productService.listProductFilterStatusxx(ProductStatusEnum.APPROVED,uidd),HttpStatus.OK);
+            } else{
+                return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //Sign in/ up, match user name
     @GetMapping(value = "matchuname")
     public ResponseEntity<Integer> MatchUname(@RequestParam("uname") String uname) {
         try {

@@ -109,7 +109,7 @@
                                         <c:forEach var="i" items="${products}" varStatus="loop">
 
                                         <tr>
-                                            <td>${loop.index +1}</td>
+                                            <td>${i.product_id}</td>
                                             <td>${i.product_name}</td>
                                             <td>${i.fullname}</td>
                                             <td><span class="tag tag-warning">${i.category}</span></td>

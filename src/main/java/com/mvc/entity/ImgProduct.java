@@ -11,7 +11,7 @@ public class ImgProduct {
     private Integer id;
 
     @Column(name = "img", nullable = false)
-    private Integer img;
+    private String img;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
@@ -25,11 +25,11 @@ public class ImgProduct {
         this.product = product;
     }
 
-    public Integer getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(Integer img) {
+    public void setImg(String img) {
         this.img = img;
     }
 

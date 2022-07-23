@@ -53,10 +53,21 @@
                     <h1 class="h2 text-center">Adding More Product</h1>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-floating mb-3">
-                                <input
-                                        class="form-control shadow bg-body rounded" id="prodName" type="text" placeholder="Product Name"/>
-                                <label for="prodName">Product Name</label>
+
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-floating mb-3">
+                                        <input class="form-control shadow bg-body rounded" id="prodName" type="text" placeholder="Product Name">
+                                        <label for="prodName">Product Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 input-group-lg">
+                                    <select class="form-control catelist">
+                                        <c:forEach  items="${cates}" var="cate">
+                                        <option value="${cate.id}">${cate.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-floating mb-3">
                                 <input
@@ -70,6 +81,7 @@
                                 <label for="prodStep">Price Step</label>
                             </div>
                         </div>
+
 
                         <div class="col-md-6">
 
@@ -183,16 +195,6 @@
                         </thead>
                         <tbody>
 
-                        <c:forEach var="i" begin="1" end="3">
-                        <tr>
-                            <th scope="row">${i}</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>
-                                <button class="btn btn-danger btnxm" id="btnx-${i}">Cancel</button></td>
-                        </tr>
-                        </c:forEach>
 
 
                         </tbody>
@@ -268,8 +270,61 @@
 // function cancelProd(id){
 //     $.ajax()
 // }
+window.onload = function () {
+    $("#ui-datepicker-div").addClass("bg-success bg-opacity-25");
+    $("#sDate").val(new Date().toLocaleDateString("en-CA"));
+    $("#eDate").val(new Date().toLocaleDateString("en-CA"));
+}
+$.fn.loadlist = function idxx(param) {
+
+// category: "Electronics"
+// end_date: "2022-07-30T17:28:00.000+00:00"
+// fullname: "Number Driveway"
+// price_minium: 249.99
+// price_step: 200
+// product_id: 26
+// product_name: "Popeyes Chicken sandwich"
+// start_date: "2022-07-26T17:00:00.000+00:00"
+    $.get(
+        "${pageContext.request.contextPath}/api/prodListseller",
+        {statuss: param,uidd:${acc.id}},          // data
+        function(data) {               // success
+            console.log(data);
+            var cont = "";
+            for (var i = 0; i < data.length; i++) {
+                cont += '<tr>';
+                cont += '<th scope="row">' + data[i].product_id + '</th>';
+                cont += '<td>' + data[i].product_name + '</td>';
+                cont += '<td>' + data[i].start_date.toLocaleString() + ' / '+ data[i].end_date.toLocaleString() +'</td>';
+                cont += '<td>' + data[i].price_minium + ' / '+ data[i].price_step + '</td>';
+                cont += '<td>' +
+                    '<button class="btn btn-success btnapp" id="canWait-'+data[i].id+'" >Cancel</button>' +
+                    '</td>';
+                cont += '</tr>';
+            }
+            $('#tableWaiting tbody').html(cont);
+        },
+        'json'                         // dataType
+    ).fail(function() {
+        console.log( "error" );
+    });
 
 
+
+}
+
+$('input').bind('keyup change paste propertychange', function() {
+    var key = $(this).val();
+
+    if (key.indexOf('script') > -1 || key.indexOf('>') > -1) {
+        toastr.error("Wait! No xss bruh!", {
+            timeOut: 2000,
+            progressBar: true,
+            progressAnimation: 'increasing'
+        });
+        $(this).val('');
+    }
+});
 $('.btnxm').click(function(){
     var holdid = $(this).attr("id");
     var idx = holdid.split("-")
@@ -307,76 +362,113 @@ $.fn.ajaxCancel = function idxc(param) {
 
 }
 
-    $("#addProdBtn").click(function (e){
+$("#addProdBtn").click(function (e){
         // $("#form0").submit(function (e){
             // e.preventDefault();
             var formData = new FormData();
        let prodName = $("#prodName").val();
        let prodPrice = $("#prodPrice").val();
-        let prodStep = $("#prodStep").val();
+        let prodStep = $("#prodStep").val()? $("#prodStep").val(): '50';
         var filesx= document.getElementById('prodImg').files;
+
 
         let prodSHour = $("#sHour").val()? $("#sHour").val(): '0';
         let prodSMin = $("#sMin").val()? $("#sMin").val(): '0';
         let prodEHour = $("#eHour").val()? $("#eHour").val(): '0';
         let prodEMin = $("#eMin").val()? $("#eMin").val(): '0';
 
-        let prodSDate = $("#sDate").val()+" " + prodSHour+":"+prodSMin;
-        let prodEDate = $("#eDate").val()+" " + prodEHour+":"+prodEMin;
+        let SDate = $("#sDate").val()+" " + prodSHour+":"+prodSMin+":00";
+        let EDate = $("#eDate").val()+" " + prodEHour+":"+prodEMin+":00";
         if( (prodName == null || prodName == '') ||
             (prodPrice == null || prodPrice == '') ||
-            (prodStep == null || prodStep == '') ||
-             prodEDate == prodSDate){
-
-            alert(1);
+            (prodStep == null || prodStep == '')){
+            $('#prodName, #prodPrice').addClass("border border-danger");
+            toastr.warning("Missing some information for Product","",{
+                timeOut: 2900,
+                progressBar: true,
+                progressAnimation: 'increasing'
+            });
+            return  false;
+        }
+        else if( Date.parse(EDate) <= Date.parse(SDate)){
+            $('#prodName, #prodPrice').removeClass("border border-danger");
+            // if(Date.parse())
+            toastr.warning("End Date cannot sooner than / the same as Start Date ","",{
+                timeOut: 2900,
+                progressBar: true,
+                progressAnimation: 'increasing'
+            });
             return false;
-        } else{
+        }else{
+            var cataid = $('.catelist option').filter(':selected').val();
 
-            alert(2);
+            $.ajax({
+                method: "POST",
+                dataType: "json",
+                url: "${pageContext.request.contextPath}/api/addproduct",
+                data: {
+                    prodName : prodName,
+                    prodPrice :prodPrice,
+                    prodStep : prodStep,
+                    prodsDate : SDate,
+                    prodeDate : EDate,
+                    prodCate : cataid,
+                    userid : ${acc.id}
+
+                },
+                success: function(res){
+                    console.log(res);
+                    var filesx= document.getElementById('prodImg').files;
+                    // if (filesx.length <= 0 || filesx == null){
+                    //
+                    //     return false;
+                    // } else{
+
+                    for( let ix = 0; ix < filesx.length;ix++){
+                        formData.append('files',filesx[ix]);
+                    }
+                    $.ajax({
+                        method: "POST",
+                        enctype: 'multipart/form-data',
+                        url: "${pageContext.request.contextPath}/api/upload?prodID="+res,
+                        data: formData,
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        // data: $("#loginForm").serialize(),
+                        success: function (result) {
+
+                            toastr.success('UploadED Product Photo', '', {
+                                timeOut: 2900,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                                $('#prodName, #prodPrice').val("");
+                                $('#sHour, #sMin, #eHour, #eMin').val("0")
+                                $('#prodStep').val("50")
+
+                            $('.rowxs .col-md-12').empty();
+
+                        },
+                        error:function(){
+                            toastr.error('Something went wrong', '', {
+                                timeOut: 3000,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                        }
+                    });
+                    // }
+                }
+            });
         }
 
-        alert(3);
 
 
-        var filesx= document.getElementById('prodImg').files;
-        <%--for( let ix = 0; ix < filesx.length;ix++){--%>
-        <%--    formData.append('files',filesx[ix]);--%>
-        <%--}--%>
-        <%--$.ajax({--%>
-        <%--    method: "POST",--%>
-        <%--    // enctype: 'multipart/form-data',--%>
-        <%--    url: "${pageContext.request.contextPath}/api/upload",--%>
-        <%--    data: formData,--%>
-        <%--    contentType: false,--%>
-        <%--    cache: false,--%>
-        <%--    processData: false,--%>
-        <%--    // data: $("#loginForm").serialize(),--%>
-        <%--    success: function (result) {--%>
-
-        <%--        toastr.success('UploadED Product Photo', '', {--%>
-        <%--            timeOut: 2900,--%>
-        <%--            progressBar: true,--%>
-        <%--            progressAnimation: 'increasing'--%>
-        <%--        });--%>
-        <%--            $('#prodImg').val("");--%>
-        <%--        --%>
-        <%--    },--%>
-        <%--    error:function(){--%>
-        <%--        toastr.error('Something went wrong', '', {--%>
-        <%--            timeOut: 3000,--%>
-        <%--            progressBar: true,--%>
-        <%--            progressAnimation: 'increasing'--%>
-        <%--        });--%>
-        <%--    }--%>
-        <%--});--%>
     });
 
-    window.onload = function () {
-        $("#ui-datepicker-div").addClass("bg-success bg-opacity-25");
-        $("#sDate").val(new Date().toLocaleDateString("en-CA"));
-        $("#eDate").val(new Date().toLocaleDateString("en-CA"));
-    }
-    $(function() {
+
+$(function() {
         // Multiple images preview in browser
         var imagesPreview = function(input, placeToInsertImagePreview) {
 
@@ -400,10 +492,10 @@ $.fn.ajaxCancel = function idxc(param) {
             imagesPreview(this, '.rowxs .col-md-12');
         });
     });
-    $('#sDate, #eDate').keydown(function (){
+$('#sDate, #eDate').keydown(function (){
         return false;
-    });
-    $('#eDate').datepicker({
+});
+$('#eDate').datepicker({
             dateFormat: 'yy-mm-dd',
             yearRange: '2022:+10',
             monthNamesShort: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
@@ -414,7 +506,7 @@ $.fn.ajaxCancel = function idxc(param) {
             minDate: new Date()
 
     });
-    $('#sDate').datepicker({
+$('#sDate').datepicker({
                 dateFormat: 'yy-mm-dd',
                 yearRange: '2022:'+(new Date).getFullYear(),
                 // yearRange: '2022:+10',
@@ -423,10 +515,10 @@ $.fn.ajaxCancel = function idxc(param) {
         ],
         changeMonth: true,changeYear: true,
         dayNamesMin: [ "CN", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy" ], // For formatting
-
+        minDate: new Date()
     });
     // });
-        $(".bmnx").click(function () {
+$(".bmnx").click(function () {
 
         if (this.id == "addBtn") {
             $(".popeye").removeClass("show")
@@ -437,7 +529,7 @@ $.fn.ajaxCancel = function idxc(param) {
         } else if (this.id == "waitingBtn") {
             $(".popeye").removeClass("show")
             $(".popeye").css("display", "none");
-
+            $.fn.loadlist(0);
             $("#waitingProd").addClass("show");
             $("#waitingProd").css("display", "block");
         } else if (this.id == "approvedBtn") {
@@ -449,7 +541,7 @@ $.fn.ajaxCancel = function idxc(param) {
         } else if (this.id == "paidBtn") {
             $(".popeye").removeClass("show")
             $(".popeye").css("display", "none");
-
+            $.fn.loadlist(5);
             $("#paidProd").addClass("show");
             $("#paidProd").css("display", "block");
         }
