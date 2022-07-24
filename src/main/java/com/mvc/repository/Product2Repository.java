@@ -11,8 +11,8 @@ import java.util.List;
 
 @Repository
 public interface Product2Repository extends CrudRepository<Product,Integer> {
-//    @Query("select new com.mvc.ajaxentity.ProductJ(id,seller,product_name ,price_minium,start_date, end_date,product_status_id ,price_step,category_id ,fee)from Product where product_status_id = :id")
 
-    @Query("from Product where product_status_id = :id")
-    public Iterable<Product> findProdJx(@Param("id") int id, @Param("uidd")int uidd);
+    @Query("select new com.mvc.ajaxentity.ProductJ(id,seller,product_name ,price_minium,start_date, end_date,product_status_id ,price_step,category_id ,fee)from Product where product_status_id = :id")
+//    @Query("from Product where product_status_id = :id")
+    public List<Product> findProdJx(@Param("id") int id);
 }

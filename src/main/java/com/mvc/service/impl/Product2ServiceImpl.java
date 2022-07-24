@@ -16,7 +16,7 @@ public class Product2ServiceImpl implements Product2Service {
     Product2Repository repo;
 
     @Override
-    public Iterable<Product> findProdJx(int id, int uidd) {
-        return repo.findProdJx(id,uidd);
+    public List<Product> findProdJx(int id) {
+        return repo.findProdJx(id);
     }
 }
