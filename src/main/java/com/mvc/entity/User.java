@@ -45,17 +45,6 @@ public class User {
     @OneToMany(mappedBy = "buyer")
     private Set<BidHistory> bidHistories = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "moneyPurpose")
-    private Set<History> histories = new LinkedHashSet<>();
-
-    public Set<History> getHistories() {
-        return histories;
-    }
-
-    public void setHistories(Set<History> histories) {
-        this.histories = histories;
-    }
-
     public Set<BidHistory> getBidHistories() {
         return bidHistories;
     }

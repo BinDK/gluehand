@@ -12,7 +12,7 @@ import java.util.Date;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id", nullable = false)
+    @Column(name = "product_id", nullable = true)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)

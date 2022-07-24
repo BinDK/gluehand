@@ -1,14 +1,19 @@
 package com.mvc.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "wallet")
+@Data
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
+    @Column(name = "wallet_id", nullable = false)
+    private Integer wallet_id;
 
     @Column(name = "money", nullable = false)
     private Double money;
@@ -22,6 +27,10 @@ public class Wallet {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "wallet")
+    private Set<History> histories = new LinkedHashSet<>();
+
 
     public User getUser() {
         return user;
@@ -55,11 +64,4 @@ public class Wallet {
         this.money = money;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 }
