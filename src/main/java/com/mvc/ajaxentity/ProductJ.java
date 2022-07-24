@@ -2,11 +2,13 @@ package com.mvc.ajaxentity;
 
 import com.mvc.entity.User;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class ProductJ {
     private Integer id;
     private User seller;
@@ -14,10 +16,10 @@ public class ProductJ {
     private Double price_minium;
     private Date start_date;
     private Date end_date;
-    private int product_status_id;
+    private Integer product_status_id;
     private Double price_step;
-    private int category_id;
-    private int fee;
+    private Integer category_id;
+    private Integer fee;
 
 
 }

@@ -16,7 +16,7 @@ public class Product2ServiceImpl implements Product2Service {
     Product2Repository repo;
 
     @Override
-    public List<Product> findProdJx(int id) {
+    public List<ProductJ> findProdJx(int id) {
         return repo.findProdJx(id);
     }
 }

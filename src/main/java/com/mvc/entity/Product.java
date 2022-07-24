@@ -27,16 +27,16 @@ public class Product {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date end_date;
 
-    private int product_status_id;
+    private Integer product_status_id;
 
     private Double price_step;
 
-    private int category_id;
+    private Integer category_id;
 
-    private int fee;
+    private Integer fee;
 
     @Column(name = "buyer_id", nullable = true)
-    private int buyer_id;
+    private Integer buyer_id;
 
     public User getSeller() {
         return seller;

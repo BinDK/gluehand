@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface Product2Service {
 
-    public List<Product> findProdJx(int id);
+    public List<ProductJ> findProdJx(int id);
 
 }

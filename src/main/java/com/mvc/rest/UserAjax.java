@@ -115,16 +115,16 @@ public class UserAjax implements ServletContextAware {
 
 
     @GetMapping(value = "prodListseller",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Product>> WaitingList(@RequestParam("statuss") int statuss){
+    public ResponseEntity<List<ProductJ>> WaitingList(@RequestParam("statuss") int statuss){
         try {
             if(statuss == 0){
-                return new ResponseEntity<List<Product>>(productService2.findProdJx(statuss),HttpStatus.OK);
+                return new ResponseEntity<List<ProductJ>>(productService2.findProdJx(statuss),HttpStatus.OK);
             }else{
-                return new ResponseEntity<List<Product>>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<List<ProductJ>>(HttpStatus.BAD_REQUEST);
             }
 
         } catch (Exception e) {
-            return new ResponseEntity<List<Product>>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<List<ProductJ>>(HttpStatus.BAD_REQUEST);
         }
     }
 
