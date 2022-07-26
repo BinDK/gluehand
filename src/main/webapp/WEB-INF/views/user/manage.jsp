@@ -292,10 +292,13 @@ $.fn.loadlist = function idxx(param) {
             console.log(data);
             var cont = "";
             for (var i = 0; i < data.length; i++) {
+                var s = new Date(data[i].start_date);
+                var e = new Date(data[i].end_date);
+
                 cont += '<tr>';
                 cont += '<th scope="row">' + data[i].product_id + '</th>';
                 cont += '<td>' + data[i].product_name + '</td>';
-                cont += '<td>' + data[i].start_date.toLocaleString() + ' / '+ data[i].end_date.toLocaleString() +'</td>';
+                cont += '<td>' + s.toLocaleString("en-US") + ' / '+ e.toLocaleString("en-US") +'</td>';
                 cont += '<td>' + data[i].price_minium + ' / '+ data[i].price_step + '</td>';
                 cont += '<td>' +
                     '<button class="btn btn-success btnapp" id="canWait-'+data[i].id+'" >Cancel</button>' +

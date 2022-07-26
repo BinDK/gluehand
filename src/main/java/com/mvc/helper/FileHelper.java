@@ -17,7 +17,7 @@ public class FileHelper {
             String fileName = name + ext;
 
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(servletContext.getRealPath("/uploads/imgs/" + fileName));
+            Path path = Paths.get(servletContext.getRealPath("/uploads/images/" + fileName));
             Files.write(path,bytes);
             return fileName;
         } catch (Exception e){

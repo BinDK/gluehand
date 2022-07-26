@@ -12,7 +12,10 @@ import java.util.List;
 @Repository
 public interface Product2Repository extends CrudRepository<Product,Integer> {
 
-    @Query("select new com.mvc.ajaxentity.ProductJ(p.id,p.seller,p.product_name ,p.price_minium,p.start_date, p.end_date,p.product_status_id ,p.price_step,p.category_id ,p.fee)from Product p where p.product_status_id = :id")
+//    @Query("from Product  where Product.id = :statuss ")
+//    public Product findProd(@Param("statuss")int statuss);
+
+//    @Query("select new com.mvc.ajaxentity.ProductJ(p.id,p.seller,p.product_name ,p.price_minium,p.start_date, p.end_date,p.product_status_id ,p.price_step,p.category_id ,p.fee)from Product p where p.product_status_id = :id and p.seller.id = :idd")
 //    @Query("from Product where product_status_id = :id")
-    public List<ProductJ> findProdJx(@Param("id") int id);
+//    public List<ProductJ> findProdJx(@Param("id") int id,@Param("idd") int idd);
 }

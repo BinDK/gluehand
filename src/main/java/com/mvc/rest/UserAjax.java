@@ -43,9 +43,9 @@ public class UserAjax implements ServletContextAware {
 
     @Autowired
     ProductService productService;
-
-    @Autowired
-    Product2Service productService2;
+//
+//    @Autowired
+//    Product2Service productService2;
 
 
 //Add , cancel( khi chưa được duyệt), list product theo status chưa duyệt
@@ -61,7 +61,7 @@ public class UserAjax implements ServletContextAware {
                 ImgProduct img = new ImgProduct();
                 img.setImg(fileName);
                 Product prod1 = new Product();prod1.setId(prodID);
-                img.setProduct(prod1);
+                img.setProductx(prod1);
                 productService.uploadImg(img);
             }
             return new ResponseEntity<Boolean>(HttpStatus.OK);
@@ -114,35 +114,46 @@ public class UserAjax implements ServletContextAware {
     }
 
 
-    @GetMapping(value = "prodListseller",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductJ>> WaitingList(@RequestParam("statuss") int statuss){
-        try {
-            if(statuss == 0){
-                return new ResponseEntity<List<ProductJ>>(productService2.findProdJx(statuss),HttpStatus.OK);
-            }else{
-                return new ResponseEntity<List<ProductJ>>(HttpStatus.BAD_REQUEST);
-            }
-
-        } catch (Exception e) {
-            return new ResponseEntity<List<ProductJ>>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-//        @GetMapping(value = "prodListseller",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<List<JSONObject>> WaitingList(@RequestParam("statuss") int statuss, @RequestParam("uidd") int uidd){
+//    @GetMapping(value = "centerprod",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<JSONObject>> CenterProd(@RequestParam("statuss") int statuss){
 //        try {
-//            if(statuss == 0){
-//            return new ResponseEntity<List<JSONObject>>(productService.listProductFilterStatusxx(ProductStatusEnum.NOT_APPROVE,uidd),HttpStatus.OK);
-//            } else if(statuss == 1){
-//                return new ResponseEntity<List<JSONObject>>(productService.listProductFilterStatusxx(ProductStatusEnum.APPROVED,uidd),HttpStatus.OK);
-//            } else{
-//                return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
-//            }
+//
+//                return new ResponseEntity<List<JSONObject>>(productService.findProdJ(statuss),HttpStatus.OK);
+//
 //
 //        } catch (Exception e) {
 //            return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
 //        }
 //    }
+
+
+    @GetMapping(value = "prodetail",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JSONObject> ProDetail(@RequestParam("statuss") int statuss){
+        try {
+
+            return new ResponseEntity<JSONObject>(productService.findProd(statuss),HttpStatus.OK);
+
+
+        } catch (Exception e) {
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+        @GetMapping(value = "prodListseller",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<JSONObject>> WaitingList(@RequestParam("statuss") int statuss, @RequestParam("uidd") int uidd){
+        try {
+            if(statuss == 0){
+            return new ResponseEntity<List<JSONObject>>(productService.listProductFilterStatusxx(ProductStatusEnum.NOT_APPROVE,uidd),HttpStatus.OK);
+            } else if(statuss == 1){
+                return new ResponseEntity<List<JSONObject>>(productService.listProductFilterStatusxx(ProductStatusEnum.APPROVED,uidd),HttpStatus.OK);
+            } else{
+                return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
     //Sign in/ up, match user name

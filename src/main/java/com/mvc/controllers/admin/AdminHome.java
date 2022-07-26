@@ -1,5 +1,6 @@
 package com.mvc.controllers.admin;
 
+import com.mvc.entity.User;
 import com.mvc.enums.ProductStatusEnum;
 import com.mvc.enums.UserStatusEnum;
 import com.mvc.service.AdminService;
@@ -30,19 +31,48 @@ public class AdminHome {
     UserService userService;
     @RequestMapping(value = {"index",""},method = RequestMethod.GET)
     public String Index(ModelMap modelMap, HttpSession session, @RequestParam(required = false, defaultValue = "0") int cateid){
+        if (session.getAttribute("acc") != null){
+        User u = (User) session.getAttribute("acc");
+        if(u.getIsAdmin() == true){
+            System.out.println(u.getIsAdmin());
+
         List<JSONObject> result = productService.listProductFilterStatusHaveCateGory(ProductStatusEnum.NOT_APPROVE,cateid);
         modelMap.put("products",result);
         modelMap.put("cates",productService.findALlCate());
 
         return "admin/index";
+
+        } else{
+            return "redirect:/index";
+        }
+
+        }else {
+            return "redirect:/index";
+
+        }
+
     }
 
     @RequestMapping(value = {"users"},method = RequestMethod.GET)
     public String Users(ModelMap modelMap, HttpSession session){
-        List<JSONObject> result = userService.listUserNotBan(UserStatusEnum.ACTIVE);
+        if (session.getAttribute("acc") != null){
+            User u = (User) session.getAttribute("acc");
+            if(u.getIsAdmin() == true){
+                System.out.println(u.getIsAdmin());
 
-        modelMap.put("users",result);
-        return "admin/users";
+                List<JSONObject> result = userService.listUserNotBan(UserStatusEnum.ACTIVE);
+
+                modelMap.put("users",result);
+                return "admin/users";
+
+            } else{
+                return "redirect:/index";
+            }
+
+        }else {
+            return "redirect:/index";
+
+        }
 
     }
 

@@ -14,15 +14,16 @@ public class ImgProduct {
     private String img;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "productx_id", nullable = false)
+    private Product productx;
 
-    public Product getProduct() {
-        return product;
+    public Product getProductx() {
+        return productx;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductx
+            (Product product) {
+        this.productx = product;
     }
 
     public String getImg() {

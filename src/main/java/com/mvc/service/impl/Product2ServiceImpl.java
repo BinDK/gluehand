@@ -12,11 +12,11 @@ import java.util.List;
 @Service
 public class Product2ServiceImpl implements Product2Service {
 
-    @Autowired
-    Product2Repository repo;
-
-    @Override
-    public List<ProductJ> findProdJx(int id) {
-        return repo.findProdJx(id);
-    }
+//    @Autowired
+//    Product2Repository repo;
+//
+//    @Override
+//    public Product findProd(int id) {
+//        return repo.findProd(id);
+//    }
 }

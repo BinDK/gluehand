@@ -1,15 +1,19 @@
 package com.mvc.service.impl;
 
+import com.mvc.entity.ImgProduct;
 import com.mvc.entity.User;
 import com.mvc.enums.ErrorEnum;
 import com.mvc.enums.UserStatusEnum;
+import com.mvc.repository.ImgProductRepository;
 import com.mvc.repository.UserRepository;
 import com.mvc.response.ResponseUser;
 import com.mvc.service.AdminService;
 import com.mvc.service.GeneralService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +21,8 @@ public class GeneralServiceImpl implements GeneralService {
 	
 	@Autowired
 	UserRepository repo;
+	@Autowired
+	ImgProductRepository imgrepo;
 
 	@Override
 	public ResponseUser login(User admin) {
@@ -62,5 +68,10 @@ public class GeneralServiceImpl implements GeneralService {
 			res.setError(ErrorEnum.NOT_ADMIN.getName());
 		}
 		
+	}
+
+	@Override
+	public List<JSONObject> ProdIMG(int id) {
+		return imgrepo.productimggg(id);
 	}
 }

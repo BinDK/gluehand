@@ -20,13 +20,23 @@
             <div class="card mb-3 rounded-5 border-0">
                 <div id="caroItemIMG" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
+                        <c:if test = "${imgxs == null}">
+                        <div class="carousel-item ">
+                            <img class="card-img img-fluid rounded-5" src="https://avatars.dicebear.com/api/pixel-art/null-${i.img}.svg?b=%2375507b" alt="Card image cap">
+                        </div>
+                                </c:if>
 
-                        <c:forEach var = "i" begin = "1" end = "3" varStatus="fElement">
+                        <c:if test = "${imgxs != null}">
+
+                                                   <c:forEach var = "i" items= "${imgxs}" varStatus="fElement">
 
                         <div class="carousel-item ${fElement.first ? 'active' : ''}">
-                            <img class="card-img img-fluid rounded-5" src="https://avatars.dicebear.com/api/pixel-art/product_single_1${i}.svg?b=%2375507b" alt="Card image cap" id="product-detail">
+                            <img class="card-img img-fluid rounded-5" src="${pageContext.request.contextPath}/uploads/images/${i.img}" alt="Card image cap" id="product-detail">
                         </div>
                         </c:forEach>
+                                </c:if>
+
+
 
                     </div>
 
@@ -73,54 +83,6 @@
                                 </tr>
 
 
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@Jim Hulper</td>
-                                    <td>@Dwight</td>
-                                </tr>
-
-
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@Jim Hulper</td>
-                                    <td>@Dwight</td>
-                                </tr>
-
-
-                                <tr>
-                                    <th scope="row">4</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@Jim Hulper</td>
-                                    <td>@Dwight</td>
-                                </tr>
-
-
-                                <tr>
-                                    <th scope="row">5</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@Jim Hulper</td>
-                                    <td>@Dwight</td>
-                                </tr>
-
-
-                                <tr>
-                                    <th scope="row">6</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@Jim Hulper</td>
-                                    <td>@Dwight</td>
-                                </tr>
 
                                 </tbody>
                             </table>
