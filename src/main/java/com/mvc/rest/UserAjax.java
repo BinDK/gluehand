@@ -168,9 +168,8 @@ public class UserAjax implements ServletContextAware {
     }
 
     @GetMapping(value = "signin",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserJ> Signin(@RequestParam("uname") String uname, @RequestParam("pass") String pass) {
+    public ResponseEntity<UserJ> Signin(@RequestParam("uname") String uname, @RequestParam("pass") String pass,HttpSession session) {
         try {
-
             return new ResponseEntity<UserJ>(uservice.signin(uname,pass),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<UserJ>(HttpStatus.BAD_REQUEST);

@@ -156,7 +156,7 @@
                                                 <th scope="col"><small>Note</small></th>
                                             </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="histories">
                                             <c:forEach var="i" begin="1" end="6">
 
                                     <tr>
@@ -197,7 +197,25 @@
             });
             $.fn.testget = function id(param){
                 $.get( "${pageContext.request.contextPath}/adminapi/wallettransaction?id="+param, function( data ) {
-                    alert( data );
+
+                    var html = "";
+                    var index = 0;
+                        data["histories"].forEach(x => {
+                            html+= `
+                             <tr>
+                                <th scope="row">`+(++index)+`</th>
+                                <td>`+x.created +`</td>
+                                <td>`+x.total+`</td>
+                                <td>`+x.status_name+`</td>
+                                <td>@Jim Hulper</td>
+                             </tr>
+                            `;
+                        })
+                        $('#histories').html(html);
+                    $('#uTTopup').val(data.total_top_up);
+                    $('#uTSpent').val(data.spent);
+                    $('#uTBalance').val(data.balance);
+
                 });
             };
 
