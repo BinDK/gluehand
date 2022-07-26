@@ -21,9 +21,6 @@ public class Wallet {
     @Column(name = "money_process", nullable = false)
     private Double moneyProcess;
 
-    @Column(name = "money_process_status", nullable = false)
-    private Integer moneyProcessStatus;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -38,14 +35,6 @@ public class Wallet {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Integer getMoneyProcessStatus() {
-        return moneyProcessStatus;
-    }
-
-    public void setMoneyProcessStatus(Integer moneyProcessStatus) {
-        this.moneyProcessStatus = moneyProcessStatus;
     }
 
     public Double getMoneyProcess() {

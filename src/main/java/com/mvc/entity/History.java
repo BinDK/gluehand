@@ -21,7 +21,10 @@ public class History {
     @Column(name = "money", nullable = false)
     private Double money;
 
-    private Integer money_purpose;
+    @ManyToOne
+    @JoinColumn(name = "money_purpose", nullable = false)
+    private MoneyPurpose moneyPurpose;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "wallet_id")

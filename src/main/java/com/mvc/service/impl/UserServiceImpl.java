@@ -54,8 +54,6 @@ public class UserServiceImpl implements UserService {
             Wallet w = new Wallet();
             w.setUser(u2);
             w.setMoney(0.0);
-            w.setMoneyProcess(0.0);
-            w.setMoneyProcessStatus(1);
             walletrepo.save(w);
             return u2.getId();
         } catch (Exception e) {
