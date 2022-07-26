@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import com.mvc.ajaxentity.UserJ;
 import com.mvc.entity.Wallet;
+import com.mvc.enums.MoneyPurposeEnum;
+import com.mvc.repository.HistoryRepository;
 import com.mvc.repository.WalletRepository;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     @Autowired
     WalletRepository walletrepo;
+
+    @Autowired
+    HistoryRepository historyRepository;
 
     @Override
     public UserJ signin(String uname, String pass) {
@@ -128,6 +133,32 @@ public class UserServiceImpl implements UserService {
                 return userRepository.findAllUser(id.getId());
         }
         return null;
+    }
+
+    @Override
+    public JSONObject getListHistoryById(int id) {
+        JSONObject result ;
+        try {
+            result = new JSONObject();
+            Optional<Wallet> wallet = walletrepo.findByIdUser(id);
+            if(!wallet.isPresent())
+                return null;
+
+            List<JSONObject> moneyWalletOfUser = historyRepository.getMoneyWalletOfUser(MoneyPurposeEnum.RECHARGE.getId(),
+                    wallet.get().getWallet_id(), MoneyPurposeEnum.PAYED.getId());
+            //Tong nap tien
+            Optional<JSONObject> money_purpose = moneyWalletOfUser.stream().filter(x -> Integer.parseInt(x.getOrDefault("money_purpose", 0).toString()) == MoneyPurposeEnum.RECHARGE.getId()).findAny();
+            Optional<JSONObject> spent = moneyWalletOfUser.stream().filter(x -> Integer.parseInt(x.getOrDefault("money_purpose", 0).toString()) == MoneyPurposeEnum.PAYED.getId()).findAny();
+            result.put("total_top_up",money_purpose.isPresent()?money_purpose.get().get("total_money"):0);
+            result.put("spent",spent.isPresent()?spent.get().get("total_money"):0);
+            result.put("balance",wallet.get().getMoney());
+            result.put("histories",historyRepository.getListHistoryByUserId(id));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = null;
+        }
+        return result;
     }
 
 

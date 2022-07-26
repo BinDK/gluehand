@@ -27,4 +27,6 @@ public interface UserService {
 	public List<User> findAllUser();
 
 	List<JSONObject> listUserNotBan(UserStatusEnum id);
+
+	JSONObject getListHistoryById(int id);
 }

@@ -1,11 +1,14 @@
 package com.mvc.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "user")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +39,8 @@ public class User {
     @Column(name = "is_admin", nullable = false)
     private Boolean isAdmin;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Wallet> wallets = new LinkedHashSet<>();
+    @OneToOne(mappedBy = "user")
+    private Wallet wallets;
 
     @OneToMany(mappedBy = "seller")
     private Set<Product> products = new LinkedHashSet<>();
@@ -59,14 +62,6 @@ public class User {
 
     public void setProducts(Set<Product> products) {
         this.products = products;
-    }
-
-    public Set<Wallet> getWallets() {
-        return wallets;
-    }
-
-    public void setWallets(Set<Wallet> wallets) {
-        this.wallets = wallets;
     }
 
     public Boolean getIsAdmin() {

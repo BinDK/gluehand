@@ -63,6 +63,7 @@ public class AdminHome {
                 List<JSONObject> result = userService.listUserNotBan(UserStatusEnum.ACTIVE);
 
                 modelMap.put("users",result);
+
                 return "admin/users";
 
             } else{

@@ -10,13 +10,14 @@ import java.util.Date;
 @Table(name = "history")
 @Data
 public class History {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "created", nullable = false)
-    private Date created;
+    private Date created = new Date();
 
     @Column(name = "money", nullable = false)
     private Double money;

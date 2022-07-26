@@ -6,6 +6,7 @@ import com.mvc.helper.FileHelper;
 import com.mvc.response.ResponseActionProduct;
 import com.mvc.service.AdminService;
 import com.mvc.service.ProductService;
+import com.mvc.service.UserService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,9 @@ public class AdminAjax implements ServletContextAware {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping(value = "createcate")
     public ResponseEntity<Category> createcate(@RequestParam(value = "catename",required = true) String catename ) {
         try {
@@ -53,13 +57,13 @@ public class AdminAjax implements ServletContextAware {
 
 
     @GetMapping(value = "wallettransaction")
-    public ResponseEntity<Integer> cancelProd(@RequestParam("id") int id) {
+    public JSONObject wallettransaction(@RequestParam("id") int id) {
 
         try {
             System.out.println(id);
-            return new ResponseEntity<Integer>(id,HttpStatus.OK);
+            return userService.getListHistoryById(id);
         } catch (Exception e) {
-            return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+            return null;
         }
     }
 

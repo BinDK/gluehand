@@ -21,8 +21,8 @@ public class Wallet {
     @Column(name = "money_process", nullable = false)
     private Double moneyProcess;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id",unique = true, nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "wallet")
