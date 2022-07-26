@@ -73,27 +73,38 @@
                 </div>
             </div>
             <div class="row">
-                <c:forEach var = "i" begin = "1" end = "6">
+                <c:forEach var = "i" items= "${prods}">
 
 
                 <div class="col-md-4">
                     <div class="card mb-4 product-wap rounded-0">
 
                         <div class="card rounded-0">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/user/auction">
-                                <img alt="peacock" class="card-img rounded-0 img-fluid" src="https://avatars.dicebear.com/api/pixel-art/${i}.svg?b=%2375507b">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/user/auction?id=${i.product_id}">
+                                <c:set var = "imgg" value ="${i.img}"/>
+                                <c:if test = "${imgg == null}">
+                                <img alt="peacock" class="card-img rounded-0 img-fluid" src="https://avatars.dicebear.com/api/pixel-art/null-${i.img}.svg?b=%2375507b">
+
+                                </c:if>
+
+                                <c:if test = "${imgg != null}">
+                                 <img alt="peacock" class="card-img rounded-0 img-fluid" src="${pageContext.request.contextPath}/uploads/images/${i.img}">
+                                </c:if>
+
+                            <%--                                <c:if test="${i.imgg} == null">--%>
+<%--                                <img alt="peacock" class="card-img rounded-0 img-fluid" src="https://avatars.dicebear.com/api/pixel-art/${i.img}.svg?b=%2375507b">--%>
+
+<%--                                </c:if>--%>
+
+<%--                                <c:if test="${i.imgg != null}">--%>
+<%--                                <img alt="peacock" class="card-img rounded-0 img-fluid" src="${pageContext.request.contextPath}/uploads/imgs/${i.img}">--%>
+
+<%--                                </c:if>--%>
                             </a>
-                        <%--<img class="card-img rounded-0 img-fluid" src="${pageContext.request.contextPath}/resources/assets/img/shop_01.jpg">--%>
-<%--                            <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">--%>
-<%--                                <ul class="list-unstyled">--%>
-<%--                                    <li><a class="btn btn-success text-white" href="shop-single.html"><i class="far fa-heart"></i></a></li>--%>
-<%--                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="far fa-eye"></i></a></li>--%>
-<%--                                    <li><a class="btn btn-success text-white mt-2" href="shop-single.html"><i class="fas fa-cart-plus"></i></a></li>--%>
-<%--                                </ul>--%>
-<%--                            </div>--%>
                         </div>
-                        <div class="card-body">
-                            <a href="shop-single.html" class="h3 text-decoration-none">Oupidatat non</a>
+                        <div class="card-body cardpd">
+                            <a href="shop-single.html" class="h3 text-decoration-none">${i.product_name}</a>
+
                             <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                 <li>M/L/X/XL</li>
                                 <li class="pt-2">
@@ -104,15 +115,7 @@
                                     <span class="product-color-dot color-dot-green float-left rounded-circle ml-1"></span>
                                 </li>
                             </ul>
-                            <ul class="list-unstyled d-flex justify-content-center mb-1">
-                                <li>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-warning fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                    <i class="text-muted fa fa-star"></i>
-                                </li>
-                            </ul>
+                            <p class="text-center mb-0 textcd" id="cd-${i.product_id}"></p>
                             <p class="text-center mb-0">$250.00</p>
                         </div>
                     </div>
@@ -144,6 +147,86 @@
 <style>
     body{background-color: #AAD4D9;}
 </style>
+        <script>
+            window.onload = countt();
+            function countt() {
+        // $('.textcd').each(function (){
+                <c:forEach var="i" items="${prods}">
+            <%--var idCount${i.product_id} = $('.textcd').attr('id');--%>
+                var idCount${i.product_id} = $('#cd-${i.product_id}').attr('id');
+
+                var hold${i.product_id} = idCount${i.product_id}.split("-");
+           // var  idCount = $('.cardpd .list-unstyled li').attr("id");
+           <%-- console.log(hold${i.product_id}[1]);--%>
+            var countDownDate${i.product_id} = new Date("${i.start_date}");
+            //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
+            // countDownDate.setSeconds(countDownDate.getSeconds() + 20);
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+                // Get today's date and time
+                var now = new Date().getTime();
+
+                // Khoảng cách từ ngày đău ra - tgian hiện tại
+                var distance = countDownDate${i.product_id}.getTime() - now;
+
+                // đổi số thành ngày giờ
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Output thời gian
+                document.getElementById("cd-"+hold${i.product_id}[1]).innerHTML = days + "d " + hours + "h "
+                    + minutes + "m " + seconds + "s ";
+
+                // Hết thời gian thì làm gì
+                if (distance < 0) {
+                    clearInterval(x);
+                    document.getElementById("cd-"+hold${i.product_id}[1]).innerHTML = "EXPIRED";
+                    // $('#btnBidModal').addClass('disabled');
+                    // $('#btnBidModal').addClass('btn-secondary');
+                }
+            }, 1000);
+                </c:forEach>
+            // });
+
+            };
+
+        // function conuntx(id){
+        //     var countDownDate = new Date();
+        //     //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
+        //     countDownDate.setSeconds(countDownDate.getSeconds() + 20);
+        //
+        //     // Update the count down every 1 second
+        //     var x = setInterval(function() {
+        //         // Get today's date and time
+        //         var now = new Date().getTime();
+        //
+        //         // Khoảng cách từ ngày đău ra - tgian hiện tại
+        //         var distance = countDownDate.getTime() - now;
+        //
+        //         // đổi số thành ngày giờ
+        //         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        //         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        //         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        //         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        //
+        //         // Output thời gian
+        //         document.getElementById("countdown-"+id).innerHTML = days + "d " + hours + "h "
+        //             + minutes + "m " + seconds + "s ";
+        //
+        //         // Hết thời gian thì làm gì
+        //         if (distance < 0) {
+        //             clearInterval(x);
+        //             document.getElementById("cd-"+id).innerHTML = "EXPIRED";
+        //             // $('#btnBidModal').addClass('disabled');
+        //             // $('#btnBidModal').addClass('btn-secondary');
+        //         }
+        //     }, 1000);
+        // }
+
+        </script>
 
 </jsp:attribute>
 </mt:template>

@@ -40,7 +40,7 @@
                                         <c:forEach var="i" varStatus="loop" items="${users}">
 
                                         <tr>
-                                            <td>${loop.index + 1}</td>
+                                            <td>${i.user_id}</td>
                                             <td>${i.fullname}</td>
                                             <td>${i.user_name}</td>
                                             <td>${i.money}</td>

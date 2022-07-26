@@ -53,12 +53,25 @@ public class ProductServiceImpl implements ProductService {
 		return null;
 	}
 
-//	@Override
-//	public List<ProductJ> findProdJ(ProductStatusEnum status, int uidd) {
-//		return productRepository.findProdJ(status.getId(),uidd);
-//	}
+	@Override
+	public List<JSONObject> findProdJ(int statuss,String datenow) {
+		try {
+			return productRepository.findProdJ(statuss,datenow);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 
-
+	@Override
+	public JSONObject findProd(int statuss) {
+		try {
+			return productRepository.findProd(statuss);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 
 	@Override
 	public List<JSONObject> listProductFilterStatusxx(ProductStatusEnum status, int uidd) {

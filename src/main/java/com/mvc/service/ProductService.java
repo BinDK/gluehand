@@ -29,7 +29,8 @@ public interface ProductService {
 	boolean uploadImg(ImgProduct img);
 	public List<JSONObject> listProductFilterStatusxx(ProductStatusEnum status,int uidd);
 
-//	public List<ProductJ> findProdJ(ProductStatusEnum status,int uidd);
+	public List<JSONObject> findProdJ(int statuss,String datenow);
+	public JSONObject findProd(int statuss);
 
 
 	List<JSONObject> findProductNotApprovexx(int i, int uidd);

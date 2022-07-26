@@ -64,9 +64,23 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
 	//Của BÌnh
-	@Query("from Product where id = :idd")
-	public Iterable<Product> findProdJ(@Param("idd")int idd);
-//	select new com.mvc.ajaxentity.ProductJ(id,seller_id,product_name ,price_minium,start_date, end_date,product_status_id ,price_step,category_id ,fee)
+	@Query(nativeQuery = true,value = "" +
+			"SELECT * FROM product p " +
+			"LEFT JOIN img_product ON img_product.productx_id = p.product_id " +
+			"WHERE p.product_status_id = :statuss and " + "'" +" :datenow " + "'" +" < DATE(p.start_date) " +
+			"GROUP BY p.product_id")
+	public List<JSONObject> findProdJ(@Param("statuss")int statuss,@Param("datenow")String datenow);
+
+	@Query(value = "" +
+			"SELECT * FROM product p " +
+			"LEFT JOIN img_product ON img_product.productx_id = p.product_id " +
+			"WHERE p.product_id = :statuss GROUP BY p.product_id "
+			,nativeQuery = true)
+	public JSONObject findProd(@Param("statuss")int statuss);
+
+//	@Query("from Product left join ImgProduct on ImgProduct.product.id = Product.id where Product.product_status_id = :statuss")
+//	public List<JSONObject> findProdJ(@Param("statuss")int statuss);
+
 
 	@Query(nativeQuery = true,value = "" +
 			"SELECT product.product_id, product.product_name, user.fullname, category.name as category, " +
