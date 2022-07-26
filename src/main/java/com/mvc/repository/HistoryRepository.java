@@ -16,7 +16,8 @@ public interface HistoryRepository extends JpaRepository<History, Integer> {
             "FROM `history` " +
             "INNER JOIN wallet ON wallet.wallet_id = history.wallet_id " +
             "INNER JOIN money_purpose ON money_purpose.money_purpose_id = history.money_purpose " +
-            "WHERE wallet.user_id = :userId ",nativeQuery= true)
+            "WHERE wallet.user_id = :userId " +
+            "ORDER BY history.created DESC",nativeQuery= true)
     public List<JSONObject> getListHistoryByUserId(int userId);
 
 //    @Query(value="",nativeQuery= true)
