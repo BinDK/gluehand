@@ -64,6 +64,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<JSONObject> ProdWithCategory(int statuss,String datenow,int cateid) {
+		try {
+			return productRepository.ProdWithCategory(statuss,datenow,cateid);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+	@Override
 	public JSONObject findProd(int statuss) {
 		try {
 			return productRepository.findProd(statuss);
@@ -76,16 +85,16 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<JSONObject> listProductFilterStatusxx(ProductStatusEnum status, int uidd) {
 		switch (status) {
-			case ALL:
-				return productRepository.findAllProduct(ProductStatusEnum.APPROVED.getId(),ProductStatusEnum.BIDDING.getName());
+//			case ALL:
+//				return productRepository.findAllProduct(ProductStatusEnum.APPROVED.getId(),ProductStatusEnum.BIDDING.getName());
 			case NOT_APPROVE:
 				return productRepository.findProductNotApprovexx(status.getId(),uidd);
 			case APPROVED:
 				return productRepository.findProductApprovexx(status.getId(),uidd);
-			case BIDDING:
-				return productRepository.findProductBiddingxx(ProductStatusEnum.APPROVED.getId(),uidd);
-			case BIDED:
-				return productRepository.findProductBiddedxx(ProductStatusEnum.APPROVED.getId(),uidd);
+//			case BIDDING:
+//				return productRepository.findProductBiddingxx(ProductStatusEnum.APPROVED.getId(),uidd);
+//			case BIDED:
+//				return productRepository.findProductBiddedxx(ProductStatusEnum.APPROVED.getId(),uidd);
 			default:
 				break;
 		}

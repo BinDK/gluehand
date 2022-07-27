@@ -30,6 +30,8 @@ public interface ProductService {
 	public List<JSONObject> listProductFilterStatusxx(ProductStatusEnum status,int uidd);
 
 	public List<JSONObject> findProdJ(int statuss,String datenow);
+	public List<JSONObject> ProdWithCategory(int statuss,String datenow,int cateid);
+
 	public JSONObject findProd(int statuss);
 
 

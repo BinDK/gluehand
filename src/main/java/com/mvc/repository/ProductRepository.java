@@ -66,8 +66,16 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	//Của BÌnh
 	@Query(nativeQuery = true,value = "" +
 			"SELECT * FROM product p " +
-			"LEFT JOIN img_product ON img_product.productx_id = p.product_id " +
-			"WHERE p.product_status_id = :statuss and " + "'" +" :datenow " + "'" +" < DATE(p.start_date) " +
+			"LEFT JOIN img_product ON img_product.productx_id 	= p.product_id " +
+			"WHERE p.product_status_id = :statuss and DATE(:datenow) < DATE(p.start_date) " +
+			"AND (0 = :cateid OR p.category_id = :cateid) " +
+			"GROUP BY p.product_id")
+
+	List<JSONObject> ProdWithCategory(@Param("statuss")int statuss,@Param("datenow")String datenow,@Param("cateid") int cateid);
+	@Query(nativeQuery = true,value = "" +
+			"SELECT * FROM product p " +
+			"LEFT JOIN img_product ON img_product.productx_id 	= p.product_id " +
+			"WHERE p.product_status_id = :statuss and DATE(:datenow) < DATE(p.start_date) " +
 			"GROUP BY p.product_id")
 	public List<JSONObject> findProdJ(@Param("statuss")int statuss,@Param("datenow")String datenow);
 
@@ -93,7 +101,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	List<JSONObject> findProductNotApprovexx(int i, int uidd);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() < start_date AND product.seller_id = :uidd"
+			+ "AND NOW() < start_date AND product.seller_id = :uidd "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductApprovexx(int i,int uidd);
 

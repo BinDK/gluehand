@@ -189,8 +189,6 @@
                             <th scope="col"><small>Product Name</small></th>
                             <th scope="col"><small>Auction start / end</small></th>
                             <th scope="col"><small>Price / Price Step</small></th>
-
-                            <th scope="col"><small>Action</small></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -218,22 +216,9 @@
                             <th scope="col"><small>Product Name</small></th>
                             <th scope="col"><small>Auction start / end</small></th>
                             <th scope="col"><small>Price / Price Step</small></th>
-
-                            <th scope="col"><small>Action</small></th>
                         </tr>
                         </thead>
                         <tbody>
-
-                        <c:forEach var="i" begin="1" end="3">
-                        <tr>
-                            <th scope="row">${i}</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>
-                                <button class="btn btn-danger btnxm" id="btnx-${i}">Cancel</button></td>
-                        </tr>
-                        </c:forEach>
 
 
                         </tbody>
@@ -244,16 +229,40 @@
 
             </div>
         </div>
-        <div id="approvedProd" class="col-md-12 popeye fade">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="h2">Active Wear 3</h1></div>
-            </div>
-        </div>
+
         <div id="paidProd" class="col-md-12 popeye fade">
             <div class="card">
-                <div class="card-body">
-                    <h1 class="h2">Active Wear 4</h1></div>
+                <div class="card-header text-center">Approved List</div>
+                <div class="card-body table-responsive p-0" style="height: 300px">
+                    <table class="table table-striped" id="tablePaid">
+                        <thead style="
+                          position: sticky;
+                          top: 0;
+                          background-color: white;
+                        ">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"><small>Product Name</small></th>
+                            <th scope="col"><small>Your win at price</small></th>
+                            <th scope="col"><small>Action</small></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <c:forEach var="i" begin="1" end="3">
+                        <tr>
+                            <th scope="row">${i}</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>
+                                <button class="btn btn-success btnxm" id="btnx-${i}">Purchase</button></td>
+                        </tr>
+                        </c:forEach>
+
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -276,15 +285,6 @@ window.onload = function () {
     $("#eDate").val(new Date().toLocaleDateString("en-CA"));
 }
 $.fn.loadlist = function idxx(param) {
-
-// category: "Electronics"
-// end_date: "2022-07-30T17:28:00.000+00:00"
-// fullname: "Number Driveway"
-// price_minium: 249.99
-// price_step: 200
-// product_id: 26
-// product_name: "Popeyes Chicken sandwich"
-// start_date: "2022-07-26T17:00:00.000+00:00"
     $.get(
         "${pageContext.request.contextPath}/api/prodListseller",
         {statuss: param,uidd:${acc.id}},          // data
@@ -298,14 +298,16 @@ $.fn.loadlist = function idxx(param) {
                 cont += '<tr>';
                 cont += '<th scope="row">' + data[i].product_id + '</th>';
                 cont += '<td>' + data[i].product_name + '</td>';
-                cont += '<td>' + s.toLocaleString("en-US") + ' / '+ e.toLocaleString("en-US") +'</td>';
-                cont += '<td>' + data[i].price_minium + ' / '+ data[i].price_step + '</td>';
-                cont += '<td>' +
-                    '<button class="btn btn-success btnapp" id="canWait-'+data[i].id+'" >Cancel</button>' +
-                    '</td>';
+                cont += '<td>' + s.toLocaleString("en-US") + ' / ' + e.toLocaleString("en-US") + '</td>';
+                cont += '<td>' + data[i].price_minium + ' / ' + data[i].price_step + '</td>';
                 cont += '</tr>';
             }
-            $('#tableWaiting tbody').html(cont);
+            if (param == 0){
+                $('#tableWaiting tbody').html(cont);
+        }else if(param == 1) {
+                $('#tableApproved tbody').html(cont);
+
+            }
         },
         'json'                         // dataType
     ).fail(function() {
@@ -335,12 +337,13 @@ $('.btnxm').click(function(){
    $.fn.ajaxCancel(idx[1]);
 
 });
-$.fn.ajaxCancel = function idxc(param) {
+//Load paid list
+$.fn.loadPaidlist = function idxc(param) {
 
         $.ajax({
             type: "GET",
             url: "${pageContext.request.contextPath}/api/cancelprod",
-            data: {id : param},
+            data: {statuss: param,uidd:${acc.id}},
             cache: true,
             timeOut: 1000,
             success: function (result) {
@@ -365,6 +368,7 @@ $.fn.ajaxCancel = function idxc(param) {
 
 }
 
+//Add product
 $("#addProdBtn").click(function (e){
         // $("#form0").submit(function (e){
             // e.preventDefault();
@@ -472,7 +476,7 @@ $("#addProdBtn").click(function (e){
 
 
 $(function() {
-        // Multiple images preview in browser
+        // Multiple images preview
         var imagesPreview = function(input, placeToInsertImagePreview) {
 
             if (input.files) {
@@ -495,6 +499,7 @@ $(function() {
             imagesPreview(this, '.rowxs .col-md-12');
         });
     });
+//Date picker
 $('#sDate, #eDate').keydown(function (){
         return false;
 });
@@ -520,7 +525,9 @@ $('#sDate').datepicker({
         dayNamesMin: [ "CN", "Hai", "Ba", "Tư", "Năm", "Sáu", "Bảy" ], // For formatting
         minDate: new Date()
     });
-    // });
+    // end date pidcker
+
+//List product
 $(".bmnx").click(function () {
 
         if (this.id == "addBtn") {
@@ -529,22 +536,23 @@ $(".bmnx").click(function () {
 
             $("#addProd").addClass("show");
             $("#addProd").css("display", "block");
+
         } else if (this.id == "waitingBtn") {
             $(".popeye").removeClass("show")
             $(".popeye").css("display", "none");
             $.fn.loadlist(0);
+            $.fn.loadlist(1);
             $("#waitingProd").addClass("show");
             $("#waitingProd").css("display", "block");
-        } else if (this.id == "approvedBtn") {
+
+        }  else if (this.id == "paidBtn") {
+
             $(".popeye").removeClass("show")
             $(".popeye").css("display", "none");
 
-            $("#approvedProd").addClass("show");
-            $("#approvedProd").css("display", "block");
-        } else if (this.id == "paidBtn") {
-            $(".popeye").removeClass("show")
-            $(".popeye").css("display", "none");
-            $.fn.loadlist(5);
+            $.fn.loadPaidlist(4);
+
+
             $("#paidProd").addClass("show");
             $("#paidProd").css("display", "block");
         }

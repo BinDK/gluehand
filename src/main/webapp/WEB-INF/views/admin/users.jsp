@@ -157,16 +157,6 @@
                                             </tr>
                                             </thead>
                                             <tbody id="histories">
-                                            <c:forEach var="i" begin="1" end="6">
-
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                        <td>@Jim Hulper</td>
-                                    </tr>
-                                    </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>

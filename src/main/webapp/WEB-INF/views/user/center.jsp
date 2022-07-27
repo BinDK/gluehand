@@ -65,9 +65,10 @@
                 <div class="col-md-6 pb-4">
                     <div class="d-flex">
                         <select class="form-control">
-                            <option>Featured</option>
-                            <option>A to Z</option>
-                            <option>Item</option>
+                            <option onclick="window.location.replace('${pageContext.request.contextPath}/user/center')">All Product</option>
+                            <c:forEach items="${cates}" var="cate">
+                                <option onclick="window.location.replace('${pageContext.request.contextPath}/user/center?cateid=${cate.id}')">${cate.name} </option>
+                            </c:forEach>
                         </select>
                     </div>
                 </div>
@@ -148,50 +149,69 @@
     body{background-color: #AAD4D9;}
 </style>
         <script>
+
             window.onload = countt();
-            function countt() {
-        // $('.textcd').each(function (){
-                <c:forEach var="i" items="${prods}">
-            <%--var idCount${i.product_id} = $('.textcd').attr('id');--%>
-                var idCount${i.product_id} = $('#cd-${i.product_id}').attr('id');
+                function countt() {
+                    <c:forEach var="i" items="${prods}">
 
-                var hold${i.product_id} = idCount${i.product_id}.split("-");
-           // var  idCount = $('.cardpd .list-unstyled li').attr("id");
-           <%-- console.log(hold${i.product_id}[1]);--%>
-            var countDownDate${i.product_id} = new Date("${i.start_date}");
-            //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
-            // countDownDate.setSeconds(countDownDate.getSeconds() + 20);
+                    <%--var idCount${i.product_id} = $('#cd-${i.product_id}').attr('id');--%>
+                    <%--var hold${i.product_id} = idCount${i.product_id}.split("-");--%>
 
-            // Update the count down every 1 second
-            var x = setInterval(function() {
-                // Get today's date and time
-                var now = new Date().getTime();
+                    <%--var countDownDate${i.product_id} = new Date("${i.start_date}");--%>
+                    var endTime${i.product_id} = new Date("${i.start_date}");
+                    $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
+                        var $this = $(this).html(event.strftime(''
+                            + '%D days %H:%M:%S'));
+                    })
+                        .on('finish.countdown', function (event) {
+                            // your code goes here
+                            $('#cd-${i.product_id}').html("Timer Finished");
+                        });
+                    </c:forEach>
+                };
+            <%--    function countt() {--%>
+        <%--// $('.textcd').each(function (){--%>
+        <%--        <c:forEach var="i" items="${prods}">--%>
+        <%--    &lt;%&ndash;var idCount${i.product_id} = $('.textcd').attr('id');&ndash;%&gt;--%>
+        <%--        var idCount${i.product_id} = $('#cd-${i.product_id}').attr('id');--%>
 
-                // Khoảng cách từ ngày đău ra - tgian hiện tại
-                var distance = countDownDate${i.product_id}.getTime() - now;
+        <%--        var hold${i.product_id} = idCount${i.product_id}.split("-");--%>
+        <%--   // var  idCount = $('.cardpd .list-unstyled li').attr("id");--%>
+        <%--   &lt;%&ndash; console.log(hold${i.product_id}[1]);&ndash;%&gt;--%>
+        <%--    var countDownDate${i.product_id} = new Date("${i.start_date}");--%>
+        <%--    //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó--%>
+        <%--    // countDownDate.setSeconds(countDownDate.getSeconds() + 20);--%>
 
-                // đổi số thành ngày giờ
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        <%--    // Update the count down every 1 second--%>
+        <%--    var x = setInterval(function() {--%>
+        <%--        // Get today's date and time--%>
+        <%--        var now = new Date().getTime();--%>
 
-                // Output thời gian
-                document.getElementById("cd-"+hold${i.product_id}[1]).innerHTML = days + "d " + hours + "h "
-                    + minutes + "m " + seconds + "s ";
+        <%--        // Khoảng cách từ ngày đău ra - tgian hiện tại--%>
+        <%--        var distance = countDownDate${i.product_id}.getTime() - now;--%>
 
-                // Hết thời gian thì làm gì
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("cd-"+hold${i.product_id}[1]).innerHTML = "EXPIRED";
-                    // $('#btnBidModal').addClass('disabled');
-                    // $('#btnBidModal').addClass('btn-secondary');
-                }
-            }, 1000);
-                </c:forEach>
-            // });
+        <%--        // đổi số thành ngày giờ--%>
+        <%--        var days = Math.floor(distance / (1000 * 60 * 60 * 24));--%>
+        <%--        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));--%>
+        <%--        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));--%>
+        <%--        var seconds = Math.floor((distance % (1000 * 60)) / 1000);--%>
 
-            };
+        <%--        // Output thời gian--%>
+        <%--        document.getElementById("cd-"+hold${i.product_id}[1]).innerHTML = days + "d " + hours + "h "--%>
+        <%--            + minutes + "m " + seconds + "s ";--%>
+
+        <%--        // Hết thời gian thì làm gì--%>
+        <%--        if (distance < 0) {--%>
+        <%--            clearInterval(x);--%>
+        <%--            document.getElementById("cd-"+hold${i.product_id}[1]).innerHTML = "EXPIRED";--%>
+        <%--            // $('#btnBidModal').addClass('disabled');--%>
+        <%--            // $('#btnBidModal').addClass('btn-secondary');--%>
+        <%--        }--%>
+        <%--    }, 1000);--%>
+        <%--        </c:forEach>--%>
+        <%--    // });--%>
+
+        <%--    };--%>
 
         // function conuntx(id){
         //     var countDownDate = new Date();

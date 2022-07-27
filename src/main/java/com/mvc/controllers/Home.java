@@ -54,13 +54,17 @@ public class Home {
     }
 
     @RequestMapping(value = {"user/center"},method = RequestMethod.GET)
-    public String Center(ModelMap modelMap, HttpSession session){
+    public String Center(ModelMap modelMap, HttpSession session,@RequestParam(required = false, defaultValue = "0") int cateid){
 
         SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         System.out.println(formatter.format(date));
-
+        modelMap.put("cates",prodservice.findALlCate());
+        if(cateid == 0){
         modelMap.put("prods",prodservice.findProdJ(1,formatter.format(date)));
+        }else{
+            modelMap.put("prods",prodservice.ProdWithCategory(1,formatter.format(date),cateid));
+        }
         return "user/center";
     }
     @RequestMapping(value = {"user/auction"},method = RequestMethod.GET)

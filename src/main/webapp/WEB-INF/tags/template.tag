@@ -30,6 +30,7 @@
     <%--<script src="${pageContext.request.contextPath}/resources/assets/js/custom.js"></script>--%>
     <script src="${pageContext.request.contextPath}/resources/plugins/toastr/toastr.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/plugins/jquery/jquery.countdown.min.js"></script>
 
     <!-- End Script -->
 </head>
