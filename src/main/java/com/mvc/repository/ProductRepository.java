@@ -22,30 +22,30 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 			"FROM product " +
 			"INNER JOIN user on user.user_id = product.seller_id " +
 			"INNER JOIN category on category.id = product.category_id " +
-			"WHERE product.product_status_id = :i AND NOW() < product.start_date " +
+			"WHERE product.product_status_id = :i AND convert_tz(now(),@@session.time_zone,'+07:00') < product.start_date " +
 			"ORDER BY product.start_date DESC")
 	List<JSONObject> findProductNotApprove(int i);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() < start_date "
+			+ "AND convert_tz(now(),@@session.time_zone,'+07:00') < start_date "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductApprove(int i);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() BETWEEN start_date AND end_date "
+			+ "AND convert_tz(now(),@@session.time_zone,'+07:00') BETWEEN start_date AND end_date "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductBidding(int i);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() > end_date "
+			+ "AND convert_tz(now(),@@session.time_zone,'+07:00') > end_date "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductBidded(int i);
 
 	@Query(nativeQuery = true,value =
 			"SELECT product_id, product_status_id, CASE " +
-			" WHEN NOW() BETWEEN start_date AND end_date AND product_status_id = :statusApprove THEN :nameApprove " +
-			" WHEN NOW() > end_date AND product_status_id = 1 THEN \"ket thuc dau gia\" " +
-			" WHEN NOW() < start_date AND product_status_id = 1 THEN \"da duyet\" " +
+			" WHEN convert_tz(now(),@@session.time_zone,'+07:00') BETWEEN start_date AND end_date AND product_status_id = :statusApprove THEN :nameApprove " +
+			" WHEN convert_tz(now(),@@session.time_zone,'+07:00') > end_date AND product_status_id = 1 THEN \"ket thuc dau gia\" " +
+			" WHEN convert_tz(now(),@@session.time_zone,'+07:00') < start_date AND product_status_id = 1 THEN \"da duyet\" " +
 			" WHEN product_status_id = 0 THEN \"Chua duyet\" " +
 			" ELSE \"da thanh toan\" " +
 			"END AS \"status\" FROM product ")
@@ -57,7 +57,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 			"FROM product " +
 			"INNER JOIN user on user.user_id = product.seller_id " +
 			"INNER JOIN category on category.id = product.category_id " +
-			"WHERE product.product_status_id = :id AND NOW() < product.start_date " +
+			"WHERE product.product_status_id = :id AND convert_tz(now(),@@session.time_zone,'+07:00') < product.start_date " +
 			"AND (0 = :cateid OR product.category_id = :cateid) " +
 			"ORDER BY product.start_date DESC")
 	List<JSONObject> findProductNotApproveFilterCategory(int id, int cateid);
@@ -96,22 +96,22 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 			"FROM product " +
 			"INNER JOIN user on user.user_id = product.seller_id " +
 			"INNER JOIN category on category.id = product.category_id " +
-			"WHERE product.product_status_id = :i AND product.seller_id = :uidd AND NOW() < product.start_date " +
+			"WHERE product.product_status_id = :i AND product.seller_id = :uidd AND convert_tz(now(),@@session.time_zone,'+07:00') < product.start_date " +
 			"ORDER BY product.start_date DESC")
 	List<JSONObject> findProductNotApprovexx(int i, int uidd);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() < start_date AND product.seller_id = :uidd "
+			+ "AND convert_tz(now(),@@session.time_zone,'+07:00') < start_date AND product.seller_id = :uidd "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductApprovexx(int i,int uidd);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() AND product.seller_id = :uidd BETWEEN start_date AND end_date "
+			+ "AND convert_tz(now(),@@session.time_zone,'+07:00') AND product.seller_id = :uidd BETWEEN start_date AND end_date "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductBiddingxx(int i,int uidd);
 
 	@Query(nativeQuery = true,value = "SELECT * FROM product WHERE product_status_id = :i "
-			+ "AND NOW() > end_date AND product.seller_id :uidd "
+			+ "AND convert_tz(now(),@@session.time_zone,'+07:00') > end_date AND product.seller_id :uidd "
 			+ "ORDER BY start_date DESC")
 	List<JSONObject> findProductBiddedxx(int i,int uidd);
 
