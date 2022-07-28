@@ -6,6 +6,7 @@ import com.mvc.entity.ImgProduct;
 import com.mvc.entity.Product;
 import com.mvc.entity.User;
 import com.mvc.enums.ProductStatusEnum;
+import com.mvc.enums.UserStatusEnum;
 import com.mvc.helper.FileHelper;
 import com.mvc.service.GeneralService;
 import com.mvc.service.Product2Service;
@@ -30,6 +31,10 @@ import java.util.List;
 @RequestMapping("api")
 public class UserAjax implements ServletContextAware {
     private ServletContext servletContext;
+
+    @Autowired
+    UserService userService;
+
     @Override
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
@@ -218,6 +223,15 @@ public class UserAjax implements ServletContextAware {
         } catch (Exception e) {
             return new ResponseEntity<Boolean>(false,HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping(value = "banUser")
+    public JSONObject banUser(@RequestParam("id") int id) {
+            System.out.println(id);
+            JSONObject noti = uservice.banUser(id);
+            List<JSONObject> result = userService.listUserNotBan(UserStatusEnum.ACTIVE);
+            noti.put("users",result);
+            return noti;
     }
 
 }

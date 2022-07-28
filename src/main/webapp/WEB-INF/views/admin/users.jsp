@@ -185,6 +185,15 @@
                 $.fn.testget(idx[1]);
 
             });
+
+            $('.btnban').click(function(){
+                var holdid = $(this).attr("id");
+                var idx = holdid.split("-")
+                console.log(idx[1]);
+                $.fn.getUser(idx[1]);
+
+            });
+
             $.fn.testget = function id(param){
                 $.get( "${pageContext.request.contextPath}/adminapi/wallettransaction?id="+param, function( data ) {
 
@@ -212,8 +221,8 @@
             $.fn.getUser = function idxc(param) {
 
                 $.ajax({
-                    type: "GET",
-                    url: "${pageContext.request.contextPath}/adminapi/usertransaction",
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/api/banUser",
                     data: {id: param},
                     cache: true,
                     timeOut: 1000,
@@ -221,6 +230,7 @@
                         // setTimeout(function(){
                         //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
                         // }, 3000);
+                        if(result)
                         toastr.success(param, 'Successfuly get user detail: ', {
                             timeOut: 2900,
                             progressBar: true,

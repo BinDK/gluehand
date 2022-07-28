@@ -3,8 +3,10 @@ package com.mvc.rest;
 import com.mvc.entity.Category;
 import com.mvc.enums.ProductStatusEnum;
 import com.mvc.helper.FileHelper;
+import com.mvc.request.EmailDetails;
 import com.mvc.response.ResponseActionProduct;
 import com.mvc.service.AdminService;
+import com.mvc.service.EmailService;
 import com.mvc.service.ProductService;
 import com.mvc.service.UserService;
 import org.json.simple.JSONObject;
@@ -39,6 +41,9 @@ public class AdminAjax implements ServletContextAware {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EmailService emailService;
 
     @PostMapping(value = "createcate")
     public ResponseEntity<Category> createcate(@RequestParam(value = "catename",required = true) String catename ) {
@@ -83,6 +88,12 @@ public class AdminAjax implements ServletContextAware {
         List<JSONObject> result = productService.listProductFilterStatusHaveCateGory(ProductStatusEnum.NOT_APPROVE,cateid);
 
         return result;
+    }
+
+    @RequestMapping(value = {"email"},method = RequestMethod.GET)
+    public String email(ModelMap modelMap, HttpSession session, EmailDetails emailDetails){
+
+        return emailService.sendSimpleMail(emailDetails);
     }
 
 }

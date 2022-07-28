@@ -29,4 +29,6 @@ public interface UserService {
 	List<JSONObject> listUserNotBan(UserStatusEnum id);
 
 	JSONObject getListHistoryById(int id);
+
+	JSONObject banUser(int id);
 }

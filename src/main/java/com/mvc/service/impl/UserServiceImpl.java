@@ -161,5 +161,25 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public JSONObject banUser(int id) {
+        JSONObject result = new JSONObject();
+        try {
+           Optional<User> user = userRepository.findById(id);
+           if(!user.isPresent()){
+               result.put("message","Id is not exist");
+           }
+           if(user.get().getUserStatus() != UserStatusEnum.ACTIVE.getId()){
+               result.put("message","Status not active");
+           }
+           user.get().setUserStatus(UserStatusEnum.DELETE.getId());
+           result.put("error", userRepository.save(user.get()) == null);
+        } catch (Exception e) {
+            result.put("message",e.getMessage());
+            result.put("error", true);
+        }
+        return result;
+    }
+
 
 }
