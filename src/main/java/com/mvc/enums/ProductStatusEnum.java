@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum ProductStatusEnum {
-	ALL(-1,"list all"),
-	NOT_APPROVE(0,"Chua duyet"),
-	APPROVED(1,"Da duyet"),
+	ALL(-1,"List All Product"),
+	NOT_APPROVE(0,"Not Approve"),
+	APPROVED(1,"Approved"),
 	DISAPPROVED(2,"Disapproved"),
-	BIDDING(3,"Dang dau gia"),
-	BIDED(4,"Da dau gia"),
-	PAID(5,"Da thanh toan"),
+	BIDDING(3,"Bidding"),
+	BIDED(4,"Bided"),
+	PAID(5,"Paid"),
 	;
 	
 	

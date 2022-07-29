@@ -73,7 +73,7 @@
                             <li><a class="dropdown-item" href="#"  data-bs-toggle="modal"
                                    data-bs-target="#accModal">Your Profile</a>
                             </li>
-                            <li><a class="dropdown-item" href="#" onclick="preventDefault()" data-bs-toggle="modal"
+                            <li><a class="dropdown-item" href="#" id="btnAccWallet" data-bs-toggle="modal"
                                    data-bs-target="#accBalanceModal">Account Balance</a></li>
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/user/manage">Product Management</a></li>
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout" >Logout</a></li>
@@ -312,7 +312,7 @@
                     <div class="col col-md-12 col-auto ">
                         <div class="card">
                             <div class="card-body table-responsive p-0" style="height: 300px">
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="tableTrans">
                                     <thead style="
                           position: sticky;
                           top: 0;
@@ -328,17 +328,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach var = "i" begin = "1" end = "6">
 
-                                    <tr>
-                                        <th scope="row">${i}</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                        <td>@Jim Hulper</td>
-                                        <td>@Dwight</td>
-                                    </tr>
-                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -439,6 +429,33 @@
                 $(this).val('');
             }
         });
+$('#btnAccWallet').click(function (){
+    $.fn.userwallet(${acc.id});
+});
+        $.fn.userwallet = function id(param){
+            $.get( "${pageContext.request.contextPath}/api/wallet?id="+param, function( data ) {
+
+                var html = "";
+                var index = 0;
+                data["histories"].forEach(x => {
+                    html+= `
+                             <tr>
+                                <th scope="row">`+(++index)+`</th>
+                                <td>`+x.created +`</td>
+                                <td>`+x.total+`</td>
+                                <td>`+x.status_name+`</td>
+                                <td>@Jim Hulper</td>
+                             </tr>
+                            `;
+                })
+                $('#tableTrans tbody').html(html);
+                // if()
+                $('#wTTopup').val(data.total_top_up);
+                $('#wTSpent').val(data.spent);
+                $('#wTBalance').val(data.balance);
+
+            });
+        };
 
         $('#accPass').keyup(function () {
             var passCF = $('#accCPass').val();

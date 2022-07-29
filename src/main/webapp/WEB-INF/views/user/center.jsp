@@ -78,10 +78,11 @@
 
 
                 <div class="col-md-4">
-                    <div class="card mb-4 product-wap rounded-0">
 
-                        <div class="card rounded-0">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/user/auction?id=${i.product_id}">
+                    <div class="card mb-4 product-wap rounded-0 ">
+
+                            <a class="nav-link prodlink${i.product_id}" href="#">
+                        <div class="card rounded-0 cardmain${i.product_id}">
                                 <c:set var = "imgg" value ="${i.img}"/>
                                 <c:if test = "${imgg == null}">
                                 <img alt="peacock" class="card-img rounded-0 img-fluid" src="https://avatars.dicebear.com/api/pixel-art/null-${i.img}.svg?b=%2375507b">
@@ -101,8 +102,8 @@
 <%--                                <img alt="peacock" class="card-img rounded-0 img-fluid" src="${pageContext.request.contextPath}/uploads/imgs/${i.img}">--%>
 
 <%--                                </c:if>--%>
-                            </a>
                         </div>
+                            </a>
                         <div class="card-body cardpd">
                             <a href="shop-single.html" class="h3 text-decoration-none">${i.product_name}</a>
 
@@ -147,6 +148,134 @@
 </div>
 <style>
     body{background-color: #AAD4D9;}
+
+
+
+    /*.ribbon {*/
+    /*    position: absolute;*/
+    /*    right: -5px;*/
+    /*    top: -5px;*/
+    /*    z-index: 1;*/
+    /*    overflow: hidden;*/
+    /*    width: 93px;*/
+    /*    height: 93px;*/
+    /*    text-align: right;*/
+    /*}*/
+    /*.ribbon span {*/
+    /*    font-size: 0.8rem;*/
+    /*    color: #fff;*/
+    /*    text-transform: uppercase;*/
+    /*    text-align: center;*/
+    /*    font-weight: bold;*/
+    /*    line-height: 32px;*/
+    /*    transform: rotate(45deg);*/
+    /*    width: 125px;*/
+    /*    display: block;*/
+    /*    background: #79a70a;*/
+    /*    background: linear-gradient(#9bc90d 0%, #79a70a 100%);*/
+    /*    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);*/
+    /*    position: absolute;*/
+    /*    top: 17px; // change this, if no border*/
+    /*right: -29px; // change this, if no border*/
+    /*}*/
+
+    /*.ribbon span::before {*/
+    /*    content: '';*/
+    /*    position: absolute;*/
+    /*    left: 0px; top: 100%;*/
+    /*    z-index: -1;*/
+    /*    border-left: 3px solid #79A70A;*/
+    /*    border-right: 3px solid transparent;*/
+    /*    border-bottom: 3px solid transparent;*/
+    /*    border-top: 3px solid #79A70A;*/
+    /*}*/
+    /*.ribbon span::after {*/
+    /*    content: '';*/
+    /*    position: absolute;*/
+    /*    right: 0%; top: 100%;*/
+    /*    z-index: -1;*/
+    /*    border-right: 3px solid #79A70A;*/
+    /*    border-left: 3px solid transparent;*/
+    /*    border-bottom: 3px solid transparent;*/
+    /*    border-top: 3px solid #79A70A;*/
+    /*}*/
+
+    /*.red span {*/
+    /*    background: linear-gradient(#f70505 0%, #8f0808 100%);*/
+    /*}*/
+    /*.red span::before {*/
+    /*    border-left-color: #8f0808;*/
+    /*    border-top-color: #8f0808;*/
+    /*}*/
+    /*.red span::after {*/
+    /*    border-right-color: #8f0808;*/
+    /*    border-top-color: #8f0808;*/
+    /*}*/
+    /*.borderani {*/
+    /*    border:10px solid black;*/
+    /*    !*background: #ffd73e33;*!*/
+    /*    border-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cstyle%3Epath%7Banimation:stroke 5s infinite linear%3B%7D%40keyframes stroke%7Bto%7Bstroke-dashoffset:776%3B%7D%7D%3C/style%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232d3561' /%3E%3Cstop offset='25%25' stop-color='%23c05c7e' /%3E%3Cstop offset='50%25' stop-color='%23f3826f' /%3E%3Cstop offset='100%25' stop-color='%23ffb961' /%3E%3C/linearGradient%3E %3Cpath d='M1.5 1.5 l97 0l0 97l-97 0 l0 -97' stroke-linecap='square' stroke='url(%23g)' stroke-width='3' stroke-dasharray='388'/%3E %3C/svg%3E") 1;*/
+    /*}*/
+    .borderani {
+        position: relative;
+    }
+    .borderani::before, .borderani::after {
+        content: '';
+        box-sizing: border-box;
+        position: absolute;
+        border: 8px solid transparent;
+        width: 0;
+        height: 0;
+    }
+    .borderani::before {
+        top: 0;
+        left: 0;
+        border-top-color: #60daaa;
+        border-right-color: #60daaa;
+        animation: border 2s infinite;
+    }
+    .borderani::after {
+        bottom: 0;
+        right: 0;
+        animation: border 2s 1s infinite, borderColor 2s 1s infinite;
+    }
+
+    @keyframes border {
+        0% {
+            width: 0;
+            height: 0;
+        }
+        25% {
+            width: 100%;
+            height: 0;
+        }
+        50% {
+            width: 100%;
+            height: 100%;
+        }
+        100% {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    @keyframes borderColor {
+        0% {
+            border-bottom-color: #60daaa;
+            border-left-color: #60daaa;
+        }
+        50% {
+            border-bottom-color: #60daaa;
+            border-left-color: #60daaa;
+        }
+        51% {
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+        }
+        100% {
+            border-bottom-color: transparent;
+            border-left-color: transparent;
+        }
+    }
 </style>
         <script>
 
@@ -154,21 +283,91 @@
                 function countt() {
                     <c:forEach var="i" items="${prods}">
 
-                    <%--var idCount${i.product_id} = $('#cd-${i.product_id}').attr('id');--%>
-                    <%--var hold${i.product_id} = idCount${i.product_id}.split("-");--%>
 
-                    <%--var countDownDate${i.product_id} = new Date("${i.start_date}");--%>
-                    var endTime${i.product_id} = new Date("${i.start_date}");
-                    $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
+                    var startTime${i.product_id} = new Date("${i.start_date}");
+                    var eTime${i.product_id} = new Date("${i.end_date}");
+
+                    if( eTime${i.product_id}.getTime() < new Date().getTime() ){
+                        console.log(eTime${i.product_id}.getTime());
+                        $('#cd-${i.product_id}').html("No more bidding");
+                    }
+
+                    else if( startTime${i.product_id}.getTime() < new Date().getTime() ){
+
+                        $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
+                        var endTime${i.product_id} = new Date("${i.end_date}");
+                        $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
+                            var $this = $(this).html(event.strftime(''
+                                + '%D days %H:%M:%S'));
+                            $('.cardmain${i.product_id}').addClass('borderani');
+                        })
+                            .on('finish.countdown', function (event) {
+                                // on finish bidding, what you want to do
+                                $('.prodlink${i.product_id}').attr("href", "");
+                                $('.cardmain${i.product_id}').removeClass('borderani');
+                                $('#cd-${i.product_id}').html("No more bidding");
+                                <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+                            })
+                    }
+                    else {
+
+                    $('#cd-${i.product_id}').countdown(startTime${i.product_id}, function (event) {
                         var $this = $(this).html(event.strftime(''
                             + '%D days %H:%M:%S'));
-                    })
-                        .on('finish.countdown', function (event) {
-                            // your code goes here
-                            $('#cd-${i.product_id}').html("Timer Finished");
+                    }).on('finish.countdown', function (event) {
+
+                            $('#cd-${i.product_id}').html("Timer Finis" +
+                                "hed");
+                        $('.cardmain${i.product_id}').addClass('borderani');
+
+                            <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+
+
+                            $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
+                              var endTime${i.product_id} = new Date("${i.end_date}");
+                            $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
+                                var $this = $(this).html(event.strftime(''
+                                    + '%D days %H:%M:%S'));
+                            })
+                                .on('finish.countdown', function (event) {
+                                    // your code goes here
+                                    $('.prodlink${i.product_id}').attr("href", "");
+                                    $('.cardmain${i.product_id}').removeClass('borderani');
+                                    $('#cd-${i.product_id}').html("No more bidding");
+                                    <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+                                });
                         });
+                    }
                     </c:forEach>
                 };
+
+
+
+            $.fn.productLive = function xxc(param,prodname) {
+
+                $.ajax({
+                    type: "GET",
+                    url: "${pageContext.request.contextPath}/api/changeprod",
+                    data: {action:3,id: param},
+                    cache: true,
+                    success: function (result) {
+                        // setTimeout(function(){
+                        //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
+                        // }, 3000);
+                            toastr.success(param, 'Product name: '+prodname+', go LIVE ', {
+                                timeOut: 5000,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                    }, error: function () {
+                        toastr.error('STOP', '', {
+                            timeOut: 3000,
+                            progressBar: true,
+                            progressAnimation: 'increasing'
+                        });
+                    }
+                });
+            }
             <%--    function countt() {--%>
         <%--// $('.textcd').each(function (){--%>
         <%--        <c:forEach var="i" items="${prods}">--%>
@@ -213,38 +412,7 @@
 
         <%--    };--%>
 
-        // function conuntx(id){
-        //     var countDownDate = new Date();
-        //     //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
-        //     countDownDate.setSeconds(countDownDate.getSeconds() + 20);
-        //
-        //     // Update the count down every 1 second
-        //     var x = setInterval(function() {
-        //         // Get today's date and time
-        //         var now = new Date().getTime();
-        //
-        //         // Khoảng cách từ ngày đău ra - tgian hiện tại
-        //         var distance = countDownDate.getTime() - now;
-        //
-        //         // đổi số thành ngày giờ
-        //         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        //         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        //         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        //         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        //
-        //         // Output thời gian
-        //         document.getElementById("countdown-"+id).innerHTML = days + "d " + hours + "h "
-        //             + minutes + "m " + seconds + "s ";
-        //
-        //         // Hết thời gian thì làm gì
-        //         if (distance < 0) {
-        //             clearInterval(x);
-        //             document.getElementById("cd-"+id).innerHTML = "EXPIRED";
-        //             // $('#btnBidModal').addClass('disabled');
-        //             // $('#btnBidModal').addClass('btn-secondary');
-        //         }
-        //     }, 1000);
-        // }
+
 
         </script>
 

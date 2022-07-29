@@ -249,16 +249,6 @@
                         </thead>
                         <tbody>
 
-                        <c:forEach var="i" begin="1" end="3">
-                        <tr>
-                            <th scope="row">${i}</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>
-                                <button class="btn btn-success btnxm" id="btnx-${i}">Purchase</button></td>
-                        </tr>
-                        </c:forEach>
-
 
                         </tbody>
                     </table>
@@ -334,27 +324,38 @@ $('.btnxm').click(function(){
     var holdid = $(this).attr("id");
     var idx = holdid.split("-")
     console.log(idx[1]);
-   $.fn.ajaxCancel(idx[1]);
+   // $.fn.ajaxCancel(idx[1]);
 
 });
 //Load paid list
-$.fn.loadPaidlist = function idxc(param) {
+$.fn.loadPaidlist = function idxc() {
 
         $.ajax({
             type: "GET",
-            url: "${pageContext.request.contextPath}/api/cancelprod",
-            data: {statuss: param,uidd:${acc.id}},
+            url: "${pageContext.request.contextPath}/api/loadpaid",
+            data: {userID:${acc.id}},
             cache: true,
-            timeOut: 1000,
-            success: function (result) {
+            success: function (data) {
                 // setTimeout(function(){
                 //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
                 // }, 3000);
-                toastr.success(param,'Successfuly Cancel Product ID: ' , {
+                toastr.success(${acc.id},'Successfuly Cancel Product ID: ' , {
                     timeOut: 2900,
                     progressBar: true,
                     progressAnimation: 'increasing'
                 });
+                var cont = "";
+                for (var i = 0; i < data.length; i++) {
+                    var s = new Date(data[i].start_date);
+                    var e = new Date(data[i].end_date);
+
+                    cont += '<tr> <th scope="row">'+data[i].product_id+'</th> ' +
+                        '<td>'+data[i].user_name+'</td> ' +
+                        '<td>Otto</td> ' +
+                        '<td> <button class="btn btn-success btnxm" id="btnx-'+data[i].product_id+'">Purchase</button>' +
+                    '</td> </tr>';
+                }
+                $('#tablePaid tbody').html(cont);
             },
             error:function(){
                 toastr.error('STOP','', {
@@ -550,7 +551,7 @@ $(".bmnx").click(function () {
             $(".popeye").removeClass("show")
             $(".popeye").css("display", "none");
 
-            $.fn.loadPaidlist(4);
+            $.fn.loadPaidlist();
 
 
             $("#paidProd").addClass("show");

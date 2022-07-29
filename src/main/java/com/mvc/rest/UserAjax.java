@@ -8,6 +8,7 @@ import com.mvc.entity.User;
 import com.mvc.enums.ProductStatusEnum;
 import com.mvc.enums.UserStatusEnum;
 import com.mvc.helper.FileHelper;
+import com.mvc.response.ResponseActionProduct;
 import com.mvc.service.GeneralService;
 import com.mvc.service.Product2Service;
 import com.mvc.service.ProductService;
@@ -26,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api")
@@ -160,6 +163,16 @@ public class UserAjax implements ServletContextAware {
         }
     }
 
+    @GetMapping(value = "loadpaid",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<JSONObject>> LoadPaid(@RequestParam("userID") int userID){
+        try {
+
+                return new ResponseEntity<List<JSONObject>>(productService.findPaidProd(userID),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     //Sign in/ up, match user name
     @GetMapping(value = "matchuname")
@@ -234,4 +247,23 @@ public class UserAjax implements ServletContextAware {
             return noti;
     }
 
+    @RequestMapping(value = {"changeprod"},method = RequestMethod.GET,produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Integer> action(@RequestParam int action, @RequestParam int id){
+
+        try {
+            return new ResponseEntity<Integer>(productService.changeBidding(action, id),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping(value = "wallet")
+    public JSONObject wallettransaction(@RequestParam("id") int id) {
+
+        try {
+            System.out.println(id);
+            return uservice.getListHistoryById(id);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
