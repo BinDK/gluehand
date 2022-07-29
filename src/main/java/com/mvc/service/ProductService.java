@@ -1,6 +1,7 @@
 package com.mvc.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.mvc.ajaxentity.ProductJ;
 import com.mvc.entity.Category;
@@ -27,10 +28,15 @@ public interface ProductService {
 	List<Category> findALlCate();
 	Category createCate(String catename);
 	boolean uploadImg(ImgProduct img);
+
+	public Integer changeBidding(int statuss,int idProd);
+
 	public List<JSONObject> listProductFilterStatusxx(ProductStatusEnum status,int uidd);
 
 	public List<JSONObject> findProdJ(int statuss,String datenow);
 	public List<JSONObject> ProdWithCategory(int statuss,String datenow,int cateid);
+
+	public List<JSONObject> findPaidProd(int buyer_id);
 
 	public JSONObject findProd(int statuss);
 

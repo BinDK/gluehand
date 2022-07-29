@@ -20,15 +20,16 @@
             <div class="card mb-3 rounded-5 border-0">
                 <div id="caroItemIMG" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        <c:if test = "${imgxs == null}">
-                        <div class="carousel-item ">
-                            <img class="card-img img-fluid rounded-5" src="https://avatars.dicebear.com/api/pixel-art/null-${i.img}.svg?b=%2375507b" alt="Card image cap">
-                        </div>
+
+
+                        <c:set var = "imgg" value ="${imgxs}"/>
+                        <c:if test = "${empty imgg}">
+                            <img class="card-img img-fluid rounded-5" src="https://avatars.dicebear.com/api/pixel-art/null-${prod.product_id}.svg?b=%2375507b" alt="Card image cap">
                                 </c:if>
 
-                        <c:if test = "${imgxs != null}">
+                        <c:if test = "${imgg != null}">
 
-                                                   <c:forEach var = "i" items= "${imgxs}" varStatus="fElement">
+                                 <c:forEach var = "i" items= "${imgxs}" varStatus="fElement">
 
                         <div class="carousel-item ${fElement.first ? 'active' : ''}">
                             <img class="card-img img-fluid rounded-5" src="${pageContext.request.contextPath}/uploads/images/${i.img}" alt="Card image cap" id="product-detail">
@@ -243,36 +244,86 @@
         else return false;
     }
 
-    var countDownDate = new Date();
-    //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
-    countDownDate.setSeconds(countDownDate.getSeconds() + 20);
+    var startTime = new Date("${start_date}");
+    var eTime = new Date("${end_date}");
 
-    // Update the count down every 1 second
-    var x = setInterval(function() {
-        // Get today's date and time
-        var now = new Date().getTime();
+    if( eTime.getTime() < new Date().getTime() ){
+        $('#cd-${i.product_id}').html("No more bidding");
+    }
+    else if( startTime.getTime() < new Date().getTime() ){
 
-        // Khoảng cách từ ngày đău ra - tgian hiện tại
-        var distance = countDownDate.getTime() - now;
+        $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
+        var endTime${i.product_id} = new Date("${i.end_date}");
+        $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
+            var $this = $(this).html(event.strftime(''
+                + '%D days %H:%M:%S'));
+        })
+            .on('finish.countdown', function (event) {
+                // your code goes here
+                $('.prodlink${i.product_id}').attr("href", "");
+                $('#cd-${i.product_id}').html("No more bidding");
+                <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+            })
+    }
+    else {
 
-        // đổi số thành ngày giờ
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        $('#cd-${i.product_id}').countdown(startTime, function (event) {
+            var $this = $(this).html(event.strftime(''
+                + '%D days %H:%M:%S'));
+        }).on('finish.countdown', function (event) {
 
-        // Output thời gian
-        document.getElementById("timeleft").innerHTML = days + "d " + hours + "h "
-            + minutes + "m " + seconds + "s ";
+            $('#cd-${i.product_id}').html("Timer Finis" +
+                "hed");
 
-        // Hết thời gian thì làm gì
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("timeleft").innerHTML = "EXPIRED";
-            // $('#btnBidModal').addClass('disabled');
-            // $('#btnBidModal').addClass('btn-secondary');
-        }
-    }, 1000);
+            <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+
+
+            setTimeout(function (){
+                $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
+                var endTime${i.product_id} = new Date("${i.end_date}");
+                $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
+                    var $this = $(this).html(event.strftime(''
+                        + '%D days %H:%M:%S'));
+                })
+                    .on('finish.countdown', function (event) {
+                        // your code goes here
+                        $('.prodlink${i.product_id}').attr("href", "");
+                        $('#cd-${i.product_id}').html("No more bidding");
+                        <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+                    })},3000);
+        });
+    }
+
+    // var countDownDate = new Date();
+    // //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
+    // countDownDate.setSeconds(countDownDate.getSeconds() + 20);
+    //
+    // // Update the count down every 1 second
+    // var x = setInterval(function() {
+    //     // Get today's date and time
+    //     var now = new Date().getTime();
+    //
+    //     // Khoảng cách từ ngày đău ra - tgian hiện tại
+    //     var distance = countDownDate.getTime() - now;
+    //
+    //     // đổi số thành ngày giờ
+    //     var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    //     var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //     var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    //
+    //     // Output thời gian
+    //     document.getElementById("timeleft").innerHTML = days + "d " + hours + "h "
+    //         + minutes + "m " + seconds + "s ";
+    //
+    //     // Hết thời gian thì làm gì
+    //     if (distance < 0) {
+    //         clearInterval(x);
+    //         document.getElementById("timeleft").innerHTML = "EXPIRED";
+    //         // $('#btnBidModal').addClass('disabled');
+    //         // $('#btnBidModal').addClass('btn-secondary');
+    //     }
+    // }, 1000);
 </script>
 </jsp:attribute>
 </mt:template>

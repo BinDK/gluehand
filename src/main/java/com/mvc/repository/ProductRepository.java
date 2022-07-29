@@ -6,6 +6,7 @@ import com.mvc.entity.ImgProduct;
 import com.mvc.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.json.simple.JSONObject;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -64,10 +65,19 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
 	//Của BÌnh
+
+//	@Query("from Product where buyer_id = :buyer_id")
+	@Query(value = "" +
+			"SELECT * FROM product p " +
+			"LEFT JOIN user ON user.user_id = p.buyer_id " +
+			"where p.buyer_id = :buyer_id",nativeQuery = true)
+	public List<JSONObject> findPAIDProd(@Param("buyer_id")int buyer_id);
+
+
 	@Query(nativeQuery = true,value = "" +
 			"SELECT * FROM product p " +
 			"LEFT JOIN img_product ON img_product.productx_id 	= p.product_id " +
-			"WHERE p.product_status_id = :statuss and DATE(:datenow) < DATE(p.start_date) " +
+			"WHERE p.product_status_id = :statuss and DATE(:datenow) <= DATE(p.start_date) and DATE(:datenow) <= DATE(p.end_date) " +
 			"AND (0 = :cateid OR p.category_id = :cateid) " +
 			"GROUP BY p.product_id")
 
@@ -75,7 +85,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	@Query(nativeQuery = true,value = "" +
 			"SELECT * FROM product p " +
 			"LEFT JOIN img_product ON img_product.productx_id 	= p.product_id " +
-			"WHERE p.product_status_id = :statuss and DATE(:datenow) < DATE(p.start_date) " +
+			"WHERE p.product_status_id = :statuss and DATE(:datenow) <= DATE(p.end_date) " +
 			"GROUP BY p.product_id")
 	public List<JSONObject> findProdJ(@Param("statuss")int statuss,@Param("datenow")String datenow);
 
@@ -85,6 +95,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 			"WHERE p.product_id = :statuss GROUP BY p.product_id "
 			,nativeQuery = true)
 	public JSONObject findProd(@Param("statuss")int statuss);
+
+	@Query(value = "UPDATE product p SET p.product_status_id = :statuss WHERE p.product_id = :idProd "
+			,nativeQuery = true)
+	public JSONObject changeBidding(@Param("statuss")int statuss,@Param("idProd")int idProd);
 
 //	@Query("from Product left join ImgProduct on ImgProduct.product.id = Product.id where Product.product_status_id = :statuss")
 //	public List<JSONObject> findProdJ(@Param("statuss")int statuss);

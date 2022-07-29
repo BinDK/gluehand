@@ -1,5 +1,6 @@
 package com.mvc.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,6 +110,19 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<JSONObject> findPaidProd(int buyer_id) {
+//		List<Product> products = new ArrayList<Product>();
+//		List<JSONObject> prods = productRepository.findPAIDProd(buyer_id);
+//
+//
+//		for (int i=0; i<prods.size(); i++)
+//		{
+//			prods.
+//		}
+		return productRepository.findPAIDProd(buyer_id);
+	}
+
+	@Override
 	public ResponseActionProduct actionProduct(ProductStatusEnum productStatusEnum,int idProduct) {
 		try {
 			Optional<Product> id = productRepository.findById(idProduct);
@@ -179,7 +193,13 @@ public class ProductServiceImpl implements ProductService {
 		} else {return null;}
 	}
 
+	@Override
+	public Integer changeBidding(int statuss, int idProd) {
+		Optional<Product> id = productRepository.findById(idProd);
+		id.get().setProduct_status_id(statuss);
 
+		return productRepository.save(id.get()).getId();
+	}
 
 	@Override
 	public boolean uploadImg(ImgProduct img){
