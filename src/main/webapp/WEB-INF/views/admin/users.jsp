@@ -36,7 +36,7 @@
                                             <th>Action</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="list-user">
                                         <c:forEach var="i" varStatus="loop" items="${users}">
 
                                         <tr>
@@ -230,12 +230,27 @@
                         // setTimeout(function(){
                         //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
                         // }, 3000);
-                        if(result)
-                        toastr.success(param, 'Successfuly get user detail: ', {
-                            timeOut: 2900,
-                            progressBar: true,
-                            progressAnimation: 'increasing'
-                        });
+                        if(!result.error){
+                            toastr.success(param, 'Successfuly ban user', {
+                                timeOut: 3000,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                            setTimeout(function(){
+                                window.location.href =   window.location.href.split('#')[0];
+                            }, 3000);
+                        }
+                        else{
+                            toastr.error('STOP', result.message, {
+                                timeOut: 3000,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                        }  setTimeout(function(){
+
+                            window.location.href =   window.location.href.split('#')[0];
+                        }, 3000);
+
                     },
                     error: function () {
                         toastr.error('STOP', '', {

@@ -213,6 +213,13 @@ $('#btnCate').click(function (){
             $('#cateName').val("");
             $('#cateList').append("<a class='dropdown-item' href=${pageContext.request.contextPath}/admin/index?cateid="+data.id+">"+data.name+"</a>");
 
+        },
+        error: function (data) {
+            toastr.error('STOP', "Name category already existed", {
+                timeOut: 3000,
+                progressBar: true,
+                progressAnimation: 'increasing'
+            });
         }
     });
 });

@@ -225,12 +225,10 @@ public class UserAjax implements ServletContextAware {
         }
     }
 
-    @GetMapping(value = "banUser")
+    @PostMapping(value = "banUser")
     public JSONObject banUser(@RequestParam("id") int id) {
             System.out.println(id);
             JSONObject noti = uservice.banUser(id);
-            List<JSONObject> result = userService.listUserNotBan(UserStatusEnum.ACTIVE);
-            noti.put("users",result);
             return noti;
     }
 
