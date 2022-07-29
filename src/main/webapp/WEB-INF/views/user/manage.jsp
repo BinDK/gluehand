@@ -350,7 +350,7 @@ $.fn.loadPaidlist = function idxc() {
                     var e = new Date(data[i].end_date);
 
                     cont += '<tr> <th scope="row">'+data[i].product_id+'</th> ' +
-                        '<td>'+data[i].user_name+'</td> ' +
+                        '<td>'+data[i].product_name+'</td> ' +
                         '<td>Otto</td> ' +
                         '<td> <button class="btn btn-success btnxm" id="btnx-'+data[i].product_id+'">Purchase</button>' +
                     '</td> </tr>';
