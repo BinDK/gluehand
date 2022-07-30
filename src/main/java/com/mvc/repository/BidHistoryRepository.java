@@ -28,6 +28,10 @@ public interface BidHistoryRepository extends CrudRepository<BidHistory, Integer
     @Query(value = "insert into bid_history (product_id,buyer_id,bidding_money) VALUES (?1, ?2, ?3)", nativeQuery = true)
     void nativeInserBID(int prodID, int userID,double money);
 
+    @Modifying
+    @Query(value = "select max(bidding_money) from product_id = ?!", nativeQuery = true)
+    void checkMaxBid(int prodID);
+
 
     @Query(value = "select MAX(bidding_money) as maxx from bid_history bh where product_id = ?1", nativeQuery = true)
     JSONObject maxMoney(int prodID);

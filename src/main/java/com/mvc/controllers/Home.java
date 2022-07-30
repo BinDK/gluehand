@@ -39,33 +39,84 @@ public class Home {
     public String Index(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());
 //        session.setAttribute("acc",12);
+        if (session.getAttribute("acc") != null){
 
+        User u = (User) session.getAttribute("acc");
+        if(u.getIsAdmin() == false){
+
+            return "user/index";
+
+        } else{
+            return "redirect:/admin";
+        }
+
+    }
         return "user/index";
+
+
+
+
     }
 
     @RequestMapping(value = {"user/home"},method = RequestMethod.GET)
     public String Index2(ModelMap modelMap, HttpSession session, @RequestParam("id") int id){
 //        modelMap.put("prods",productServ.findAll());
-        session.setAttribute("acc",service.findID(id));
-        session.setAttribute("accx","xxx");
+        User u = service.findID(id);
 
-        return "redirect:/index";
+        if (u != null){
+            if(u.getIsAdmin() == false){
+                System.out.println(u.getIsAdmin());
+
+                session.setAttribute("acc",u);
+                session.setAttribute("accx","xxx");
+
+                return "redirect:/index";
+
+            } else{
+                session.setAttribute("acc",u);
+                return "redirect:/admin";
+            }
+
+        }else {
+            return "redirect:/index";
+
+        }
+
+
+
+
 
     }
 
     @RequestMapping(value = {"user/center"},method = RequestMethod.GET)
     public String Center(ModelMap modelMap, HttpSession session,@RequestParam(required = false, defaultValue = "0") int cateid){
+        if (session.getAttribute("acc") != null){
+            User u = (User) session.getAttribute("acc");
+            if(u.getIsAdmin() == false){
+                System.out.println(u.getIsAdmin());
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date(System.currentTimeMillis());
-        System.out.println(formatter.format(date));
-        modelMap.put("cates",prodservice.findALlCate());
-        if(cateid == 0){
-        modelMap.put("prods",prodservice.findProdJ(1,formatter.format(date)));
-        }else{
-            modelMap.put("prods",prodservice.ProdWithCategory(1,formatter.format(date),cateid));
+
+                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(System.currentTimeMillis());
+                System.out.println(formatter.format(date));
+                modelMap.put("cates",prodservice.findALlCate());
+                if(cateid == 0){
+                    modelMap.put("prods",prodservice.findProdJ(1,formatter.format(date)));
+                }else{
+                    modelMap.put("prods",prodservice.ProdWithCategory(1,formatter.format(date),cateid));
+                }
+                return "user/center";
+
+            } else{
+                return "redirect:/admin";
+            }
+
+        }else {
+            return "redirect:/admin";
+
         }
-        return "user/center";
+
+
     }
     @RequestMapping(value = {"user/auction"},method = RequestMethod.GET)
     public String Auction(@RequestParam("id") int prodID, ModelMap modelMap, HttpSession session){

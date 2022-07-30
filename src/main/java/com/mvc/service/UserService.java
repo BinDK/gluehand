@@ -20,6 +20,7 @@ public interface UserService {
 	public User findID(int id);
 	public UserJ signin(String uname, String pass);
 
+	public UserJ signin2(String uname, String pass);
 
 	//Của Đạt
 	public ResponseUser updateUser(User user);

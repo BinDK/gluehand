@@ -23,6 +23,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select new com.mvc.ajaxentity.UserJ(id,userName,password,fullname,address,email,userStatus,phone,isAdmin) from User where userName = :uname and password = :pass")
     public UserJ signin(@Param("uname")String uname, @Param("pass")String pass);
 
+    @Query("select new com.mvc.ajaxentity.UserJ(id,userName,password,fullname,address,email,userStatus,phone,isAdmin) from User where userName = :uname")
+    public UserJ getUserJ(@Param("uname")String uname);
+
     @Query(nativeQuery = true,value = "SELECT  " +
             "user.user_id, user.fullname, user.user_name, wallet.money " +
             "FROM `user` " +

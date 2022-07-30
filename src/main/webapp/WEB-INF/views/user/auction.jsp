@@ -57,9 +57,6 @@
             <div class="row">
                 <div id="col col-md-12 col-auto  ">
                     <div class="card borderani " id="cardListBorder">
-                        <div class="card-header ">
-                            <button class="btn ">Load</button>
-                        </div>
                         <div class="card-body table-responsive p-0" style="height: 300px">
                             <table class="table table-striped" id="listBid">
                                 <thead style="
@@ -234,6 +231,7 @@
     }
 </style>
 <script>
+
     var startTime = new Date("${prod.start_date}");
     var eTime = new Date("${prod.end_date}");
 

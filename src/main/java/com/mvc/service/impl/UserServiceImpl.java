@@ -9,6 +9,7 @@ import com.mvc.enums.MoneyPurposeEnum;
 import com.mvc.repository.HistoryRepository;
 import com.mvc.repository.WalletRepository;
 import org.json.simple.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mvc.entity.User;
@@ -35,6 +36,22 @@ public class UserServiceImpl implements UserService {
         return userRepository.signin(uname,pass);
     }
 
+    public UserJ signin2(String uname, String pass) {
+
+        try {
+            UserJ uj = userRepository.getUserJ(uname);
+            if (BCrypt.checkpw(pass, uj.getPassword()) == true) {
+                return uj;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+            return null;
+        }
+    }
+
+
     @Override
     public ResponseUser createUser(User user) {
         ResponseUser res = new ResponseUser();
@@ -59,6 +76,7 @@ public class UserServiceImpl implements UserService {
             Wallet w = new Wallet();
             w.setUser(u2);
             w.setMoney(0.0);
+            w.setMoneyProcess(0.0);
             walletrepo.save(w);
             return u2.getId();
         } catch (Exception e) {

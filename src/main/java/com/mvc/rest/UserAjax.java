@@ -12,6 +12,7 @@ import com.mvc.helper.FileHelper;
 import com.mvc.response.ResponseActionProduct;
 import com.mvc.service.*;
 import org.json.simple.JSONObject;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -163,8 +164,7 @@ BidHistoryServ bidHistoryServ;
     @GetMapping(value = "loadpaid",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<JSONObject>> LoadPaid(@RequestParam("userID") int userID){
         try {
-
-                return new ResponseEntity<List<JSONObject>>(productService.findPaidProd(userID),HttpStatus.OK);
+            return new ResponseEntity<List<JSONObject>>(productService.findPaidProd(userID),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
         }
@@ -185,7 +185,12 @@ BidHistoryServ bidHistoryServ;
     @GetMapping(value = "signin",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserJ> Signin(@RequestParam("uname") String uname, @RequestParam("pass") String pass,HttpSession session) {
         try {
-            return new ResponseEntity<UserJ>(uservice.signin(uname,pass),HttpStatus.OK);
+            UserJ jj= uservice.signin2(uname,pass);
+            if(jj != null) {
+                return new ResponseEntity<UserJ>(jj, HttpStatus.OK);
+            }else {
+                return new ResponseEntity<UserJ>(HttpStatus.BAD_REQUEST);
+            }
         } catch (Exception e) {
             return new ResponseEntity<UserJ>(HttpStatus.BAD_REQUEST);
         }
@@ -196,7 +201,7 @@ BidHistoryServ bidHistoryServ;
         try {
             User u = new User();
             u.setUserName(uname);
-            u.setPassword(pass);
+            u.setPassword(BCrypt.hashpw(pass,BCrypt.gensalt()));
             return new ResponseEntity<Integer>(uservice.createUser1(u),HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);

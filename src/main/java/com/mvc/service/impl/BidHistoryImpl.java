@@ -16,6 +16,11 @@ public class BidHistoryImpl implements BidHistoryServ {
     BidHistoryRepository repo;
 
     @Override
+    public void checkMax(int prodID) {
+        repo.checkMaxBid(prodID);
+    }
+
+    @Override
 //    public Iterable<BidHistory> getBidHistory(int prodID) {
 //        return repo.getBidHIstory(prodID);
 //    }
