@@ -230,8 +230,9 @@
     .borderani::before {
         top: 0;
         left: 0;
-        border-top-color: #60daaa;
-        border-right-color: #60daaa;
+
+        border-top-color: rgba(47,161,118,0.5);
+        border-right-color: rgba(47,161,118,0.5);
         animation: border 2s infinite;
     }
     .borderani::after {
@@ -260,12 +261,12 @@
     }
     @keyframes borderColor {
         0% {
-            border-bottom-color: #60daaa;
-            border-left-color: #60daaa;
+            border-bottom-color: rgba(72,208,133,1) ;
+            border-left-color: rgba(72,208,133,1) ;
         }
         50% {
-            border-bottom-color: #60daaa;
-            border-left-color: #60daaa;
+            border-bottom-color: rgba(0,212,255,1);
+            border-left-color: rgba(0,212,255,1);
         }
         51% {
             border-bottom-color: transparent;
@@ -297,7 +298,7 @@
                         $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
                         var endTime${i.product_id} = new Date("${i.end_date}");
                         $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
-                            var $this = $(this).html(event.strftime(''
+                            var $this = $(this).html(event.strftime('Ending in '
                                 + '%D days %H:%M:%S'));
                             $('.cardmain${i.product_id}').addClass('borderani');
                         })
@@ -312,7 +313,7 @@
                     else {
 
                     $('#cd-${i.product_id}').countdown(startTime${i.product_id}, function (event) {
-                        var $this = $(this).html(event.strftime(''
+                        var $this = $(this).html(event.strftime('Start in '
                             + '%D days %H:%M:%S'));
                     }).on('finish.countdown', function (event) {
 
@@ -326,7 +327,7 @@
                             $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
                               var endTime${i.product_id} = new Date("${i.end_date}");
                             $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
-                                var $this = $(this).html(event.strftime(''
+                                var $this = $(this).html(event.strftime('Ending in '
                                     + '%D days %H:%M:%S'));
                             })
                                 .on('finish.countdown', function (event) {

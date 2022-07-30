@@ -2,6 +2,7 @@ package com.mvc.rest;
 
 import com.mvc.ajaxentity.ProductJ;
 import com.mvc.ajaxentity.UserJ;
+import com.mvc.entity.BidHistory;
 import com.mvc.entity.ImgProduct;
 import com.mvc.entity.Product;
 import com.mvc.entity.User;
@@ -9,10 +10,7 @@ import com.mvc.enums.ProductStatusEnum;
 import com.mvc.enums.UserStatusEnum;
 import com.mvc.helper.FileHelper;
 import com.mvc.response.ResponseActionProduct;
-import com.mvc.service.GeneralService;
-import com.mvc.service.Product2Service;
-import com.mvc.service.ProductService;
-import com.mvc.service.UserService;
+import com.mvc.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,9 +50,8 @@ public class UserAjax implements ServletContextAware {
     @Autowired
     ProductService productService;
 //
-//    @Autowired
-//    Product2Service productService2;
-
+@Autowired
+BidHistoryServ bidHistoryServ;
 
 //Add , cancel( khi chưa được duyệt), list product theo status chưa duyệt
     @PostMapping(value = "upload")
@@ -206,7 +203,7 @@ public class UserAjax implements ServletContextAware {
         }
     }
 
-    @PutMapping(value = "updateacc",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "updateacc",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
     public ResponseEntity<Integer> Update(
             @RequestParam("accF") String accF,
             @RequestParam("accE") String accE,
@@ -243,6 +240,40 @@ public class UserAjax implements ServletContextAware {
             System.out.println(id);
             JSONObject noti = uservice.banUser(id);
             return noti;
+    }
+
+//    @GetMapping(value = {"bid"},produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Iterable<BidHistory>> bidandlist(@RequestParam("prodID") int prodID, @RequestParam("userID") int userID,@RequestParam("money") String money){
+//        try {
+//            double rubber =  Double.parseDouble(money);
+//            bidHistoryServ.bidAndGetList(prodID,userID,rubber);
+//            return new ResponseEntity<Iterable<BidHistory>>(bidHistoryServ.getBidHistory(prodID),HttpStatus.OK);
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return new ResponseEntity<Iterable<BidHistory>>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    @GetMapping(value = {"bid"},produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JSONObject> bidandlist(@RequestParam("prodID") int prodID, @RequestParam("userID") int userID,@RequestParam("money") String money){
+        try {
+            double rubber =  Double.parseDouble(money);
+
+            return new ResponseEntity<JSONObject>(bidHistoryServ.bidAndGetList2(prodID,userID,rubber),HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping(value = {"getlist"},produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JSONObject> getListBid(@RequestParam("prodID") int prodID){
+        try {
+
+            return new ResponseEntity<JSONObject>(bidHistoryServ.getListandMax(prodID),HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = {"changeprod"},method = RequestMethod.GET,produces = MimeTypeUtils.APPLICATION_JSON_VALUE)

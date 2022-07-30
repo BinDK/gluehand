@@ -523,7 +523,7 @@ $('#btnAccWallet').click(function (){
 
 
             $.ajax({
-                medthod: "PUT",
+                medthod: "GET",
                 url: "${pageContext.request.contextPath}/api/updateacc",
                 data: {
                     accF : $accF.val(),

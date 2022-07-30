@@ -2,10 +2,7 @@ package com.mvc.controllers;
 
 import com.mvc.entity.User;
 import com.mvc.enums.ProductStatusEnum;
-import com.mvc.service.GeneralService;
-import com.mvc.service.Product2Service;
-import com.mvc.service.ProductService;
-import com.mvc.service.UserService;
+import com.mvc.service.*;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +31,9 @@ public class Home {
 
     @Autowired
     GeneralService generalService;
+
+    @Autowired
+    BidHistoryServ bidHistoryServ;
 
     @RequestMapping(value = {"index",""},method = RequestMethod.GET)
     public String Index(ModelMap modelMap, HttpSession session){
@@ -71,6 +71,9 @@ public class Home {
     public String Auction(@RequestParam("id") int prodID, ModelMap modelMap, HttpSession session){
         modelMap.put("imgxs",generalService.ProdIMG(prodID));
         modelMap.put("prod",prodservice.findProd(prodID));
+        modelMap.put("bids",bidHistoryServ.getBidHistory(prodID));
+        modelMap.put("max",bidHistoryServ.getMax(prodID));
+
         return "user/auction";
     }
 

@@ -5,6 +5,8 @@
 
 <mt:template>
     <jsp:attribute name="content">
+            <script src="${pageContext.request.contextPath}/resources/webjar/sockjs.min.js"></script>
+            <script src="${pageContext.request.contextPath}/resources/webjar/stomp.min.js"></script>
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-5 mt-1 d-flex">
@@ -53,35 +55,32 @@
                 </div>
             </div>
             <div class="row">
-                <div id="col col-md-12 col-auto ">
-                    <div class="card rounded-3">
+                <div id="col col-md-12 col-auto  ">
+                    <div class="card borderani " id="cardListBorder">
+                        <div class="card-header ">
+                            <button class="btn ">Load</button>
+                        </div>
                         <div class="card-body table-responsive p-0" style="height: 300px">
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="listBid">
                                 <thead style="
                           position: sticky;
                           top: 0;
-                          background-color: white;
+                          /*background-color: rgba(255,255,255,02);*/
                         ">
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col"><small>Type</small></th>
-                                    <th scope="col"><small>Created</small> on</th>
-                                    <th scope="col"><small>Status</small></th>
-                                    <th scope="col"><small>Total</small></th>
-                                    <th scope="col"><small>Note</small></th>
+                                    <th scope="col"><small>User</small></th>
+                                    <th scope="col"><small>Money</small></th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
+                                <c:forEach var="u" items="${bids}">
 
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@Jim Hulper</td>
-                                    <td>@Dwight</td>
+                                    <th scope="row">${u.fullname}</th>
+                                    <td>${u.bidding_money}</td>
                                 </tr>
+                                </c:forEach>
 
 
 
@@ -93,38 +92,36 @@
             </div>
         </div>
         <!-- col end -->
+
         <div class="col-lg-7 mt-5" style="max-height: 526px;">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="h2">Active Wear</h1>
-                    <p class="h3 py-2">$25.00</p>
+                    <h1 class="h2">${prod.product_name}</h1>
+                    <p class="h3 py-2">${prod.price_minium}</p>
 
                     <ul class="list-inline">
                         <li class="list-inline-item">
                             <h6>Start Date:</h6>
                         </li>
                         <li class="list-inline-item">
-                            <p class="text-muted" id="productSdate"><strong>Easy Wear</strong></p>
+                            <p class="text-muted" id="productSdate"><strong>${prod.start_date}</strong></p>
                         </li>
                     </ul>
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <h6>Start Date</h6>
+                            <h6>End Date</h6>
                         </li>
                         <li class="list-inline-item">
-                            <p class="text-muted" id="productEdate"><strong>End Date</strong></p>
+                            <p class="text-muted" id="productEdate"><strong>${prod.end_date}</strong></p>
                         </li>
                     </ul>
 
-                    <h6>Description:</h6>
-                    <p>Description....</p>
-
                     <ul class="list-inline">
                         <li class="list-inline-item">
-                            <h6>Step:</h6>
+                            <h6>Step Price:</h6>
                         </li>
                         <li class="list-inline-item">
-                            <p class="text-muted" id="productStep"><strong>Step Price: </strong></p>
+                            <p class="text-muted" id="productStep"><strong>${prod.price_step}</strong></p>
 
                         </li>
                     </ul>
@@ -142,10 +139,14 @@
                     <div class="row pb-3">
                         <div class="col d-grid justify-content-center">
 
-                            <div class="input-group mb-3">
-                                <input aria-label="Recipient's username" onkeypress="return isNumberKeyx(event);" aria-describedby="button-addon2" placeholder="Go get it!" class="form-control border border-success" type="number" step="50" min="50.00">
+                            <div class="input-group mb-3 ipBid">
+                                <input aria-label="Go get it!" onkeypress="return isNumberKeyx(event);" aria-describedby="button-addon2" placeholder="Go get it!"
+                                       id="moneyIP" class="form-control border border-success"
+                                       type="number" step="${prod.price_step}" min="${not empty max.maxx ? max.maxx : prod.price_step}">
 
-                                <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" data-bs-toggle="modal" data-bs-target="#notaBotModal" onclick="makeBotcode()">Buy</button>
+<%--                                <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" data-bs-toggle="modal" data-bs-target="#notaBotModal" onclick="makeBotcode()">Buy</button>--%>
+                                <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" >Buy</button>
+
                             </div>
 
                         </div>
@@ -187,37 +188,192 @@
     #btnBid:hover{
         background-color: #f7f7f7 !important;
     }
+    .borderani {
+        position: relative;
+        border-radius: 5px;
+    }
+    .borderani:after {
+        content: '';
+        position: absolute;
+        top: calc(-1 * 5px);
+        left: calc(-1 * 5px);
+        height: calc(100% + 5px * 2);
+        width: calc(100% + 5px * 2);
+        background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+        border-radius: calc(2 * 5px);
+        z-index: -1;
+        -webkit-animation: animatedgradient 3s ease alternate infinite;
+        animation: animatedgradient 3s ease alternate infinite;
+        background-size: 300% 300%;
+    }
 
+
+    @-webkit-keyframes animatedgradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+
+    @keyframes animatedgradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
 </style>
 <script>
+    var startTime = new Date("${prod.start_date}");
+    var eTime = new Date("${prod.end_date}");
+
+    if( eTime.getTime() < new Date().getTime() ){
+        $('#timeleft').html("No more bidding");
+        $('#cardListBorder').removeClass("borderani");
+        $('.ipBid').empty();
+    }
+    else if( startTime.getTime() < new Date().getTime() ){
+
+        <%--$('.prodlink${prod.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");--%>
+
+        var endTime${prod.product_id} = new Date("${prod.end_date}");
+        $('#timeleft').countdown(endTime${prod.product_id}, function (event) {
+            var $this = $(this).html(event.strftime('End in '
+                + '%D days %H:%M:%S'));
+        })
+            .on('finish.countdown', function (event) {
+                $('.ipBid').empty();
+                $('#timeleft').html("No more bidding");
+                $('#cardListBorder').removeClass("borderani");
+
+                <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+            })
+    }
+    else {
+
+        $('#timeleft').countdown(startTime, function (event) {
+            var $this = $(this).html(event.strftime('Start at '
+                + '%D days %H:%M:%S'));
+        }).on('finish.countdown', function (event) {
+
+            $('#cardListBorder').addClass("borderani");
 
 
-    $('#btnBid').on('click',function (){
-        var numb = $("#botCode").html();
-        var numbb = $("#ipBotcode").val();
+            <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
 
-        if(numb === numbb){
-            makeBotcode();
-            $("#ipBotcode").val("");
-            $("#notaBotModal").removeClass("show");
-            $("#notaBotModal").css("display","none");
-            toastr.info("Wait! Something new coming!", {
-                timeOut: 2000,
-                progressBar: true,
-                progressAnimation: 'increasing'
-            });
-            $.fn.blockBid();
-        } else{
-            toastr.warning("Wrong! You a bot!", {
-                timeOut: 2000,
-                progressBar: true,
-                progressAnimation: 'increasing'
-            });
 
-            makeBotcode();
-            $("#ipBotcode").val("");
-        }
+            $('.prodlink${prod.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
+
+            var endTime${prod.product_id} = new Date("${prod.end_date}");
+            $('#timeleft').countdown(endTime${prod.product_id}, function (event) {
+                var $this = $(this).html(event.strftime('End in '
+                    + '%D days %H:%M:%S'));
+            })
+                .on('finish.countdown', function (event) {
+                    // your code goes here
+                    $('.ipBid').empty();
+                    $('#timeleft').html("No more bidding");
+                    $('#cardListBorder').removeClass("borderani");
+
+                    <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+                });
+        });
+    }
+
+
+    function loadd(){
+            $.get("${pageContext.request.contextPath}/api/getlist",
+                {
+                    prodID:${prod.product_id},
+                },function (data){
+                toastr.success("Websocket work","",{
+                    timeOut: 3000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+                    var cont = "";
+                    var x = data['bidhistory'];
+                    for (var i = 0; i < x.length; i++) {
+
+                        cont += '<tr>';
+                        cont += '<th scope="row">' + x[i].fullname+ '</th>';
+                        cont += '<td>' + x[i].bidding_money + '</td>';
+                        cont += '</tr>';
+                    }
+                    $('#listBid tbody').html(cont);
+                    $('#moneyIP').val(data.max.maxx).attr("min",data.max.maxx);
+
+                });
+
+    }
+
+$.fn.bidd = function bidx(){
+    $.get("${pageContext.request.contextPath}/api/bid",
+        {
+            prodID:${prod.product_id},
+            userID: ${not empty acc.id ? acc.id : 0},
+            money:$('#moneyIP').val()
+        },function (data){
+            var cont = "";
+            var x = data['bidhistory'];
+            for (var i = 0; i < x.length; i++) {
+
+                cont += '<tr>';
+                cont += '<th scope="row">' + x[i].fullname+ '</th>';
+                cont += '<td>' + x[i].bidding_money + '</td>';
+                cont += '</tr>';
+            }
+            $('#listBid tbody').html(cont);
+            $('#moneyIP').val("");
+            $('#moneyIP').val(data.max.maxx).attr("min",data.max.maxx);
+            sendSignal();
+            $('#btnBidModal').addClass("disabled");
+            setTimeout(function (){
+                $('#btnBidModal').removeClass("disabled");
+            },5000)
+        });
+
+};
+
+    $('#btnBidModal').on('click',function () {
+        $.fn.bidd();
     });
+    // $('#btnBid').on('click',function (){
+    //     var numb = $("#botCode").html();
+    //     var numbb = $("#ipBotcode").val();
+    //
+    //     if(numb === numbb){
+    //         makeBotcode();
+    //         $("#ipBotcode").val("");
+    //         $("#notaBotModal").removeClass("show");
+    //         $("#notaBotModal").css("display","none");
+    //         toastr.info("Wait! Something new coming!", {
+    //             timeOut: 2000,
+    //             progressBar: true,
+    //             progressAnimation: 'increasing'
+    //         });
+    //         $.fn.blockBid();
+    //     } else{
+    //         toastr.warning("Wrong! You a bot!", {
+    //             timeOut: 2000,
+    //             progressBar: true,
+    //             progressAnimation: 'increasing'
+    //         });
+    //
+    //         makeBotcode();
+    //         $("#ipBotcode").val("");
+    //     }
+    // });
     $('#ipBotcode').keypress(function (e) {
         if($('#ipBotcode').val().length == 4 ){
             return false;
@@ -243,57 +399,35 @@
         else if ((charCode >= 48 && charCode <= 57) || (charCode >= 96 && charCode <= 105)){return false;}
         else return false;
     }
+    var stompClient = null;
 
-    var startTime = new Date("${start_date}");
-    var eTime = new Date("${end_date}");
-
-    if( eTime.getTime() < new Date().getTime() ){
-        $('#cd-${i.product_id}').html("No more bidding");
-    }
-    else if( startTime.getTime() < new Date().getTime() ){
-
-        $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
-        var endTime${i.product_id} = new Date("${i.end_date}");
-        $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
-            var $this = $(this).html(event.strftime(''
-                + '%D days %H:%M:%S'));
-        })
-            .on('finish.countdown', function (event) {
-                // your code goes here
-                $('.prodlink${i.product_id}').attr("href", "");
-                $('#cd-${i.product_id}').html("No more bidding");
-                <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
-            })
-    }
-    else {
-
-        $('#cd-${i.product_id}').countdown(startTime, function (event) {
-            var $this = $(this).html(event.strftime(''
-                + '%D days %H:%M:%S'));
-        }).on('finish.countdown', function (event) {
-
-            $('#cd-${i.product_id}').html("Timer Finis" +
-                "hed");
-
-            <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
-
-
-            setTimeout(function (){
-                $('.prodlink${i.product_id}').attr("href", "${pageContext.request.contextPath}/user/auction?id=${i.product_id}");
-                var endTime${i.product_id} = new Date("${i.end_date}");
-                $('#cd-${i.product_id}').countdown(endTime${i.product_id}, function (event) {
-                    var $this = $(this).html(event.strftime(''
-                        + '%D days %H:%M:%S'));
-                })
-                    .on('finish.countdown', function (event) {
-                        // your code goes here
-                        $('.prodlink${i.product_id}').attr("href", "");
-                        $('#cd-${i.product_id}').html("No more bidding");
-                        <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
-                    })},3000);
+    window.onload = connectx()
+    function connectx() {
+        var socket = new SockJS('/wspath');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            setConnected(true);
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/auction/bidding', function (greeting) {
+                loadd();
+            });
         });
     }
+    function sendSignal() {
+        stompClient.send("/app/wsbid", {}, JSON.stringify({'name': "1"}));
+    }
 
+    function setConnected(connected) {
+        $("#connect").prop("disabled", connected);
+        $("#disconnect").prop("disabled", !connected);
+        if (connected) {
+            $("#conversation").show();
+        }
+        else {
+            $("#conversation").hide();
+        }
+        $("#greetings").html("");
+    }
     // var countDownDate = new Date();
     // //Luôn 20 giây đi trước tgian hiện tại đẻ test gì đó
     // countDownDate.setSeconds(countDownDate.getSeconds() + 20);
