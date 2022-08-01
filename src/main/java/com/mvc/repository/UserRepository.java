@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("select count(id) from User where userName = :uname")
     public int checkuanme(@Param("uname")String uname);
 
+    @Query("select count(id) from User where email like %:email%")
+    public int checkemail(@Param("email")String email);
     @Query("select new com.mvc.ajaxentity.UserJ(id,userName,password,fullname,address,email,userStatus,phone,isAdmin) from User where userName = :uname")
     public UserJ findByUsername(@Param("uname")String uname);
 

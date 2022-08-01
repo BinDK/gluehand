@@ -126,19 +126,7 @@
 
             </div>
 
-            <div div="row">
-                <ul class="pagination pagination-lg justify-content-end">
-                    <li class="page-item disabled">
-                        <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="#" tabindex="-1">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link rounded-0 mr-3 shadow-sm border-top-0 border-left-0 text-dark" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link rounded-0 shadow-sm border-top-0 border-left-0 text-dark" href="#">3</a>
-                    </li>
-                </ul>
-            </div>
+
         </div>
         <!-- End Product -->
 
@@ -307,6 +295,8 @@
                                 $('.prodlink${i.product_id}').attr("href", "");
                                 $('.cardmain${i.product_id}').removeClass('borderani');
                                 $('#cd-${i.product_id}').html("No more bidding");
+                                $.fn.updateXX(${i.product_id});
+
                                 <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
                             })
                     }
@@ -336,6 +326,7 @@
                                     $('.cardmain${i.product_id}').removeClass('borderani');
                                     $('#cd-${i.product_id}').html("No more bidding");
                                     <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+                                    $.fn.updateXX(${i.product_id});
                                 });
                         });
                     }
@@ -343,7 +334,35 @@
                 };
 
 
+            $.fn.updateXX = function funk(param){
+                $.ajax({
+                    type: "GET",
+                    url: "${pageContext.request.contextPath}/api/updateAuction",
+                    data: {
+                        prodID: param
+                    },
+                    cache: true,
+                    success: function (result) {
+                        // setTimeout(function(){
+                        //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
+                        // }, 3000);
 
+                        if(result.user != undefined) {
+                            toastr.success("Is the winner", result.user, {
+                                timeOut: 5000,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                        } else{
+                            toastr.error("No one win this product", {
+                                timeOut: 5000,
+                                progressBar: true,
+                                progressAnimation: 'increasing'
+                            });
+                        }
+                    }
+                });
+            }
             $.fn.productLive = function xxc(param,prodname) {
 
                 $.ajax({

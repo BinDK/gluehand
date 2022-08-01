@@ -137,12 +137,16 @@
                         <div class="col d-grid justify-content-center">
 
                             <div class="input-group mb-3 ipBid">
+                             <c:if test="${not empty sessionScope.acc}">
                                 <input aria-label="Go get it!" onkeypress="return isNumberKeyx(event);" aria-describedby="button-addon2" placeholder="Go get it!"
                                        id="moneyIP" class="form-control border border-success"
                                        type="number" step="${prod.price_step}" min="${not empty max.maxx ? max.maxx : prod.price_step}">
 
-<%--                                <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" data-bs-toggle="modal" data-bs-target="#notaBotModal" onclick="makeBotcode()">Buy</button>--%>
+                                    <%--                                <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" data-bs-toggle="modal" data-bs-target="#notaBotModal" onclick="makeBotcode()">Buy</button>--%>
                                 <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" >Buy</button>
+                            </c:if>
+
+
 
                             </div>
 
@@ -253,6 +257,7 @@
                 $('.ipBid').empty();
                 $('#timeleft').html("No more bidding");
                 $('#cardListBorder').removeClass("borderani");
+                $.fn.updateXX(${prod.product_id});
 
                 <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
             })
@@ -283,12 +288,38 @@
                     $('#timeleft').html("No more bidding");
                     $('#cardListBorder').removeClass("borderani");
 
-                    <%--$.fn.productLive(${i.product_id},"${i.product_name}");--%>
+                    $.fn.updateXX(${prod.product_id});
                 });
         });
     }
 
 
+    $.fn.updateXX = function funk(param){
+        $.ajax({
+            type: "GET",
+            url: "${pageContext.request.contextPath}/api/updateAuction",
+            data: {
+                prodID: param
+            },
+            cache: true,
+            success: function (result) {
+                // setTimeout(function(){
+                //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
+                // }, 3000);
+                toastr.success("Is the winner", result.user, {
+                    timeOut: 5000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+            }, error: function () {
+                toastr.error('STOP', '', {
+                    timeOut: 3000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+            }
+        });
+    }
     function loadd(){
             $.get("${pageContext.request.contextPath}/api/getlist",
                 {
@@ -332,7 +363,6 @@ $.fn.bidd = function bidx(){
                 cont += '</tr>';
             }
             $('#listBid tbody').html(cont);
-            $('#moneyIP').val("");
             $('#moneyIP').val(data.max.maxx).attr("min",data.max.maxx);
             sendSignal();
             $('#btnBidModal').addClass("disabled");

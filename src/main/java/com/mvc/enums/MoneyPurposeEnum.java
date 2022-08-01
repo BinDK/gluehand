@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum MoneyPurposeEnum {
 	RECHARGE(1,"Recharge"),
 	WITHDRAW(2,"Withdraw"),
-	PAYED(3,"Payed")
+	PAYED(3,"Paid")
 	;
 
 

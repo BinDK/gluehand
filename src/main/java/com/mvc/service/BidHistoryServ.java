@@ -10,7 +10,8 @@ public interface BidHistoryServ {
     public List<JSONObject> getBidHistory(int prodID);
     public JSONObject bidAndGetList2(int prodID,int userID,double money);
     public JSONObject getListandMax(int prodID);
-    public void checkMax(int prodID);
+    public JSONObject getWinnerx(int prodID);
+    public JSONObject upWinnergetList(int prodID);
 
 
     public JSONObject getMax(int prodID);

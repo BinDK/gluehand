@@ -10,6 +10,8 @@ import java.util.List;
 public interface GeneralService {
     public ResponseUser login(User admin);
     public int matchuname(String uname);
+    public int matchemail(String email);
+
     public ResponseUser signup(User admin);
 
     public List<JSONObject> ProdIMG(int id);

@@ -54,6 +54,16 @@ public class GeneralServiceImpl implements GeneralService {
 		}
 	}
 
+	@Override
+	public int matchemail(String email) {
+		try {
+			return repo.checkemail(email);
+		} catch (Exception e){
+			System.out.println(e.getMessage());
+			return 0;
+		}
+	}
+
 	/*
 	 * Check error
 	 */

@@ -54,6 +54,10 @@ public class UserAjax implements ServletContextAware {
 @Autowired
 BidHistoryServ bidHistoryServ;
 
+@Autowired
+HistoryWalletServ hwServ;
+
+
 //Add , cancel( khi chưa được duyệt), list product theo status chưa duyệt
     @PostMapping(value = "upload")
     public ResponseEntity<Boolean> handleFileUpload(@RequestParam(value = "files",required = false) MultipartFile[] files, @RequestParam("prodID") int prodID) {
@@ -182,6 +186,16 @@ BidHistoryServ bidHistoryServ;
         }
     }
 
+    @GetMapping(value = "matchemail")
+    public ResponseEntity<Integer> MatchEmail(@RequestParam("email") String email) {
+        try {
+            int hold = service.matchemail(email);
+            return new ResponseEntity<Integer>(hold,HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping(value = "signin",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserJ> Signin(@RequestParam("uname") String uname, @RequestParam("pass") String pass,HttpSession session) {
         try {
@@ -197,10 +211,16 @@ BidHistoryServ bidHistoryServ;
     }
 
     @PostMapping(value = "createuser",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Integer> Signup(@RequestParam("uname") String uname,@RequestParam("pass") String pass) {
+    public ResponseEntity<Integer> Signup(
+            @RequestParam("uname") String uname,
+            @RequestParam("fname") String fname,
+            @RequestParam("email") String email,
+            @RequestParam("pass") String pass) {
         try {
             User u = new User();
             u.setUserName(uname);
+            u.setFullname(fname);
+            u.setEmail(email);
             u.setPassword(BCrypt.hashpw(pass,BCrypt.gensalt()));
             return new ResponseEntity<Integer>(uservice.createUser1(u),HttpStatus.OK);
         } catch (Exception e) {
@@ -265,6 +285,29 @@ BidHistoryServ bidHistoryServ;
             double rubber =  Double.parseDouble(money);
 
             return new ResponseEntity<JSONObject>(bidHistoryServ.bidAndGetList2(prodID,userID,rubber),HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = {"topup"},produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JSONObject> TopUp(@RequestParam("userID") int userID,@RequestParam("money") String money){
+        try {
+            double rubber =  Double.parseDouble(money);
+
+            return new ResponseEntity<JSONObject>(hwServ.topUp(userID,rubber),HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping(value = {"updateAuction"},produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JSONObject> updateAuction(@RequestParam("prodID") int prodID){
+        try {
+
+            return new ResponseEntity<JSONObject>(bidHistoryServ.upWinnergetList(prodID),HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);

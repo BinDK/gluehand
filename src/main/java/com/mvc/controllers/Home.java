@@ -112,7 +112,17 @@ public class Home {
             }
 
         }else {
-            return "redirect:/admin";
+
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date(System.currentTimeMillis());
+            System.out.println(formatter.format(date));
+            modelMap.put("cates",prodservice.findALlCate());
+            if(cateid == 0){
+                modelMap.put("prods",prodservice.findProdJ(1,formatter.format(date)));
+            }else{
+                modelMap.put("prods",prodservice.ProdWithCategory(1,formatter.format(date),cateid));
+            }
+            return "user/center";
 
         }
 
@@ -120,12 +130,34 @@ public class Home {
     }
     @RequestMapping(value = {"user/auction"},method = RequestMethod.GET)
     public String Auction(@RequestParam("id") int prodID, ModelMap modelMap, HttpSession session){
-        modelMap.put("imgxs",generalService.ProdIMG(prodID));
-        modelMap.put("prod",prodservice.findProd(prodID));
-        modelMap.put("bids",bidHistoryServ.getBidHistory(prodID));
-        modelMap.put("max",bidHistoryServ.getMax(prodID));
+        if (session.getAttribute("acc") != null){
+            User u = (User) session.getAttribute("acc");
+            if(u.getIsAdmin() == false){
+                System.out.println(u.getIsAdmin());
+                modelMap.put("imgxs",generalService.ProdIMG(prodID));
+                modelMap.put("prod",prodservice.findProd(prodID));
+                modelMap.put("bids",bidHistoryServ.getBidHistory(prodID));
+                modelMap.put("max",bidHistoryServ.getMax(prodID));
+                JSONObject json = bidHistoryServ.getWinnerx(prodID);
 
-        return "user/auction";
+
+                return "user/auction";
+
+            } else{
+                return "redirect:/admin";
+            }
+
+        }else {
+            modelMap.put("imgxs",generalService.ProdIMG(prodID));
+            modelMap.put("prod",prodservice.findProd(prodID));
+            modelMap.put("bids",bidHistoryServ.getBidHistory(prodID));
+            modelMap.put("max",bidHistoryServ.getMax(prodID));
+            JSONObject json = bidHistoryServ.getWinnerx(prodID);
+
+            return "user/auction";
+
+        }
+
     }
 
     @RequestMapping(value = {"user/manage"},method = RequestMethod.GET)

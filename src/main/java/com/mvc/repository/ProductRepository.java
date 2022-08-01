@@ -77,7 +77,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	@Query(nativeQuery = true,value = "" +
 			"SELECT * FROM product p " +
 			"LEFT JOIN img_product ON img_product.productx_id 	= p.product_id " +
-			"WHERE p.product_status_id = :statuss and DATE(:datenow) <= DATE(p.start_date) and DATE(:datenow) <= DATE(p.end_date) " +
+			"WHERE p.product_status_id = :statuss and DATE(:datenow) <= DATE(p.end_date) " +
 			"AND (0 = :cateid OR p.category_id = :cateid) " +
 			"GROUP BY p.product_id")
 

@@ -52,7 +52,7 @@
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/auction">Auction Center</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/user/center">Product Center</a>
                 </li>
                 <li>
                     <a class="nav-link text-bold" href="#" data-bs-toggle="modal" data-bs-target="#sisuModal">Join Us</a>
@@ -61,6 +61,7 @@
 
             <% } else {%>
             <c:set var="acc" value="${sessionScope.acc}"></c:set>
+            <a href="${pageContext.request.contextPath}/user/center" style="color: #6ab04c;" class=" text-success logo h4 text-decoration-none ms-5">Product Center</a>
             <div id="navbarNavDropdown" class="collapse navbar-collapse justify-content-end">
                 <ul class="navbar-nav mb-2 mb-lg-0 ">
                     <li class="nav-item dropdown">
@@ -123,6 +124,16 @@
                     <div class="form-floating mb-3">
                         <input class="form-control shadow bg-body rounded" id="suUname" type="text" placeholder="Username">
                         <label for="suUname">Username</label>
+
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="suFname" type="text" placeholder="Full Name">
+                        <label for="suFname">Full Name</label>
+
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input class="form-control shadow bg-body rounded" id="suEmail" type="text" placeholder="Email">
+                        <label for="suEmail">Email</label>
 
                     </div>
                     <div class="form-floating mb-3">
@@ -319,12 +330,10 @@
                           background-color: white;
                         ">
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col"><small>Type</small></th>
                                         <th scope="col"><small>Created</small> on</th>
-                                        <th scope="col"><small>Status</small></th>
-                                        <th scope="col"><small>Total</small></th>
-                                        <th scope="col"><small>Note</small></th>
+                                        <th ><small>Status</small></th>
+                                        <th ><small>If paid, what product</small></th>
+                                        <th ><small>Total</small></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -339,7 +348,7 @@
                 <div class="row mt-3">
                     <c:forEach var="i" begin="1" end="3">
 
-                    <div class="col-md-3">
+                    <div class="col-md-3 btn border-0 blk" role="button">
                         <div class="card text-center border-success mb-3" style="max-width: 18rem">
                             <div class="card-header">Top up Tier</div>
                             <div class="card-body text-success">
@@ -355,7 +364,7 @@
                             <div class="card-header">Top up Tier</div>
                             <div class="card-body text-success">
                                 <div class="input-group mb-0 mt-0">
-                                    <input type="text" class="form-control" placeholder="Custom" aria-label="Custom" aria-describedby="customTbtn">
+                                    <input type="text" id="customTinp" onkeypress="return isNumberKey(event)" class="form-control" placeholder="Custom" aria-label="Custom" aria-describedby="customTbtn">
                                     <button class="btn btn-sm btn-outline-info text-dark" type="button" id="customTbtn"
                                             style="--bs-btn-padding-y: 0;
                 --bs-btn-padding-x: 0.5rem;
@@ -416,7 +425,7 @@
 
     }
     $(document).ready(function () {
-        var $input = $('#sisuModal :input,#accModal :input');
+        var $input = $('#sisuModal :input,#accModal :input, #customTinp');
         $input.bind('keyup change paste propertychange', function() {
             var key = $(this).val();
 
@@ -438,13 +447,14 @@ $('#btnAccWallet').click(function (){
                 var html = "";
                 var index = 0;
                 data["histories"].forEach(x => {
+                    var name;
+                    if(x.status_name == "Recharge") name = "Topup";
+                    else name = "Paid";
                     html+= `
                              <tr>
-                                <th scope="row">`+(++index)+`</th>
-                                <td>`+x.created +`</td>
+                                <td>`+new Date(x.created).toLocaleString("en-GB") +`</td>
                                 <td>`+x.total+`</td>
-                                <td>`+x.status_name+`</td>
-                                <td>@Jim Hulper</td>
+                                <td>`+name+`</td>
                              </tr>
                             `;
                 })
@@ -587,6 +597,28 @@ $('#btnAccWallet').click(function (){
 
 
         });
+
+        $("#suEmail").keyup(function (){
+            $.get('${pageContext.request.contextPath}/api/matchemail?email='+$(this).val(), function( data ) {
+                // alert( data );
+                console.log(data);
+                $("#suEmail").addClass("border border-2 border-success");
+                if(data == 1){
+                    $("#suEmail").addClass("border border-2 border-danger");
+
+                    $("label[for='suEmail']").text("Someone using this").addClass("fw-bolder text-danger");
+                }else{
+                    $("#suEmail").removeClass("border-danger");
+                    $("#suEmail").addClass("border-success");
+                    $("label[for='suEmail']").text("Email").removeClass("fw-bolder text-danger");
+
+
+                }
+            });
+
+
+        });
+
         $('#suPass').keyup(function () {
             var pass = $('#suPass').val();
             var test1 = new RegExp(patter1);
@@ -666,14 +698,16 @@ $('#btnAccWallet').click(function (){
             // });
         });
         $('#su').click(function () {
-            var uname = $('#suUname').val();
-            var pass = $('#suPass').val();
+            var unamex = $('#suUname').val();
+            var fnamex = $('#suFname').val();
+            var emailx = $('#suEmail').val();
+            var passx = $('#suPass').val();
             var passCF = $('#suCPass').val();
 
             var test1 = new RegExp(patter1);
 
-            if (test1.test(pass) == test1.test(passCF) ) {
-                $.get('${pageContext.request.contextPath}/api/matchuname?uname='+uname, function( data ) {
+            if (test1.test(passx) == test1.test(passCF) ) {
+                $.get('${pageContext.request.contextPath}/api/matchuname?uname='+unamex, function( data ) {
                 if(data == 1){
                     toastr.error("Username has been taken!!", {
                         timeOut: 2000,
@@ -681,8 +715,13 @@ $('#btnAccWallet').click(function (){
                         progressAnimation: 'increasing'
                     });
                 }else{
-                    $.post('${pageContext.request.contextPath}/api/createuser?uname='+uname+'&pass='+passCF, function( data ) {
-                        toastr.success("You are all set, let vid", {
+                    $.post('${pageContext.request.contextPath}/api/createuser',{
+                        uname :unamex,
+                        fname :fnamex,
+                        email :emailx,
+                        pass : passx
+                    }, function( data ) {
+                        toastr.success("You are all set, let bid", {
                             timeOut: 3000,
                             progressBar: true,
                             progressAnimation: 'increasing'
@@ -702,6 +741,61 @@ $('#btnAccWallet').click(function (){
                 });
             }
         });
+
+        $('.blk').click(function(){
+           var holdid = $( this).find('.card-title').html();
+
+            $.fn.toptop(holdid.split('$')[0]);
+        });
+
+        $('#customTbtn').click(function(){
+
+            $.fn.toptop($('#customTinp').val());
+        });
+        $.fn.toptop = function topp(param){
+            $.get("${pageContext.request.contextPath}/api/topup",{
+                userID : ${not empty acc.id ? acc.id : 0},
+                money : param
+            },function (data) {
+                console.log(data);
+                toastr.success("Top-up successfully",data,{
+                    timeOut: 3000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+
+                var cont = "";
+                var x = data['histories'];
+                console.log(x);
+                for (var i = 0; i < x.length; i++) {
+                    var stat,prod;
+                    if(x[i].money_purpose == 1) stat = "Topup";
+                    else if(x[i].money_purpose == 3) stat = "Paid";
+                    if(x[i].product_name == null) prod = "NOPE";
+                    else prod = x[i].product_name;
+
+
+
+                    cont += '<tr>'+
+                      '<td scope="row">' + new Date(x[i].created).toLocaleString("en-GB") + '</td>' +
+                        '<td>' + stat + '</td>' +
+                        '<td>' + prod + '</td>' +
+                        '<td>' + prod + '</td>' +
+
+                        '<td>' + x[i].money + '</td>' +
+
+                        '</tr>';
+                }
+                $('#tableTrans tbody').html(cont);
+
+                $('#wTTopup').val(data.topup.sumt);
+                var paiddd = data.paid;
+                if(paiddd == null) paiddd = 0;
+                else paiddd = data.paid.sump;
+                $('#wTSpent').val(paiddd);
+                $('#wTBalance').val(data.topup.sumt - paiddd);
+            });
+        }
 
     });
 
