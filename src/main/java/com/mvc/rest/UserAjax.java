@@ -343,4 +343,16 @@ HistoryWalletServ hwServ;
             return null;
         }
     }
+
+    @GetMapping(value = "purchase")
+    public JSONObject purchase(@RequestParam("product_id") int productId) {
+        try {
+            return productService.purchase(productId);
+        } catch (Exception e) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("exception", e.getCause());
+            return jsonObject;
+
+        }
+    }
 }

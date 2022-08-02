@@ -3,24 +3,28 @@ package com.mvc.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
 import com.mvc.ajaxentity.ProductJ;
-import com.mvc.entity.Category;
-import com.mvc.entity.ImgProduct;
+import com.mvc.entity.*;
 import com.mvc.enums.ErrorEnum;
-import com.mvc.repository.CategoryRepository;
-import com.mvc.repository.ImgProductRepository;
+import com.mvc.repository.*;
+import com.mvc.request.EmailDetails;
 import com.mvc.response.ResponseActionProduct;
+import com.mvc.service.EmailService;
+import com.mvc.service.UserService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.mvc.entity.Product;
 import com.mvc.enums.ProductStatusEnum;
-import com.mvc.repository.ProductRepository;
 import com.mvc.service.ProductService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
@@ -32,6 +36,14 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	ImgProductRepository imgRepo;
 
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	WalletRepository walletRepository;
+
+	@Autowired
+	EmailService emailServiceImpl;
 
 
 	@Override
@@ -162,6 +174,80 @@ public class ProductServiceImpl implements ProductService {
 				break;
 		}
 		return null;
+	}
+
+	@Override
+	public JSONObject purchase(int productId) {
+		JSONObject result = new JSONObject();
+		try {
+			Optional<Product> product = productRepository.findById(productId);
+			if(!product.isPresent()) {
+				result.put("error", "product not exist");
+				return result;
+			}
+			// kiem tra san pham co nguoi dau gia khong
+			Optional<User> user = userRepository.findById(product.get().getBuyer_id());
+
+			if(!user.isPresent()) {
+				result.put("error", "product have not buyer");
+				return result;
+			}
+			// kiem tra vi tien nguoi thang
+			Optional<Wallet> wallet = walletRepository.findByIdUser(user.get().getId());
+			if(!wallet.isPresent()) {
+				result.put("error", "Buyer have not wallet");
+				return result;
+			}
+				if(wallet.get().getMoney()< product.get().getPrice_minium()) {
+					result.put("error", "Buyer have not money in wallet, please add money in wallet!");
+					return result;
+				}
+			CompletableFuture<String> completableFuture = new CompletableFuture<>();
+
+			System.out.println("Manually complete 1");
+
+			// gui email cho nguoi thang
+			EmailDetails BuyerEmailDetail = EmailDetails.builder()
+							.recipient(user.get().getEmail())
+									.subject("Purchase "+product.get().getProduct_name())
+											.msgBody("You purchased success").build();
+			;
+			completableFuture.complete(emailServiceImpl.sendSimpleMail(BuyerEmailDetail));
+
+			// kiem tra san pham co nguoi dau gia khong
+			CompletableFuture<String> completableFuture2 = new CompletableFuture<>();
+			// gui email cho nguoi ban
+			EmailDetails SellerEmailDetail = EmailDetails.builder()
+					.recipient(product.get().getSeller().getEmail())
+					.subject("Purchase "+product.get().getProduct_name())
+					.msgBody(user.get().getFullname() +" purchased success "+product.get().getProduct_name()).build();
+
+			completableFuture2.complete(emailServiceImpl.sendSimpleMail(SellerEmailDetail))
+			;
+			System.out.println("Manually complete 2");
+
+			product.get().setProduct_status_id(ProductStatusEnum.PAID.getId());
+			productRepository.save(product.get());
+
+			wallet.get().setMoney(wallet.get().getMoney()-product.get().getPrice_minium());
+			walletRepository.save(wallet.get());
+
+			Optional<Wallet> walletSeller = walletRepository.findByIdUser(product.get().getSeller().getId());
+			try {
+				walletSeller.ifPresent(wallet1 -> {
+					wallet1.setMoney(wallet1.getMoney()+product.get().getPrice_minium());
+				});
+			} catch (Exception e) {
+				result.put("error","Seller have not wallet");
+				return result;
+			}
+			result.put("products",productRepository.findPAIDProd(user.get().getId()));
+			result.put("success","okay");
+		} catch (Exception e) {
+			result.put("error", e.getMessage());
+		}
+		return  result;
+
 	}
 
 	private ResponseActionProduct actionApproveProduct(ProductStatusEnum productStatusEnum, Product product) {
