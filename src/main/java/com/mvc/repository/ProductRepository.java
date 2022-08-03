@@ -68,8 +68,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 //	@Query("from Product where buyer_id = :buyer_id")
 	@Query(value = "" +
-			"SELECT * FROM product p " +
+			"SELECT p.*, user.* , MAX(bid_history.bidding_money) as max_bid FROM product p " +
 			"LEFT JOIN user ON user.user_id = p.buyer_id " +
+			"LEFT JOIN bid_history ON bid_history.product_id = p.product_id " +
 			"where p.buyer_id = :buyer_id",nativeQuery = true)
 	public List<JSONObject> findPAIDProd(@Param("buyer_id")int buyer_id);
 

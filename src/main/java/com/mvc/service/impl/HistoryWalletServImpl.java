@@ -27,7 +27,7 @@ public class HistoryWalletServImpl implements HistoryWalletServ {
             Date date = new Date(System.currentTimeMillis());
 
             repo.topUP(userID,money);
-            repo.createHistory(formatter.format(date),walletID,money,1);
+            repo.createHistory(formatter.format(date),money,1, null,walletID);
 
             res.put("histories", (List<JSONObject>)repo.getPersonHistory(walletID));
             res.put("topup",repo.sumTopup(walletID,1));

@@ -320,13 +320,64 @@ $('input').bind('keyup change paste propertychange', function() {
         $(this).val('');
     }
 });
-$('.btnxm').click(function(){
-    var holdid = $(this).attr("id");
-    var idx = holdid.split("-")
-    console.log(idx[1]);
-   // $.fn.ajaxCancel(idx[1]);
 
-});
+
+
+
+function purchase(param) {
+
+    $.ajax({
+        type: "GET",
+        url: "${pageContext.request.contextPath}/api/purchase",
+        data: {product_id:param},
+        cache: true,
+        success: function (data) {
+
+            // if(data.successx !=""){
+            //     toastr.error(data.successx, {
+            //         timeOut: 3000,
+            //         progressBar: true,
+            //         progressAnimation: 'increasing'
+            //     });
+            // }
+            console.log(data);
+            if(data.errorx == null || data.errorx == ""){
+                toastr.success(data.successx, {
+                    timeOut: 3000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+
+                var cont = "";
+                var x = data['products'];
+                console.log(x);
+                for (var i = 0; i < x.length; i++) {
+                    cont += '<tr> <th scope="row">'+x[i].product_id+'</th> ';
+                    cont += '<td>'+x[i].product_name+'</td> ';
+                    cont +='<td>'+x[i].max_bid+'</td> ';
+                    if (x[i].product_status_id == 5)
+                    cont += '<td> <button class="btn btn-secondary disabled">Purchased</button> </td> ';
+                    else{
+                        cont += '<td> <button onclick="purchase('+x[i].product_id+')" class="btn btn-success btnxm" id="btnx-'+x[i].product_id+'">Purchase</button> </td> ';
+                    }
+                        cont +='</tr>';
+                }
+                $('#tablePaid tbody').html(cont);
+
+            } else {
+                toastr.error(data.errorx, {
+                    timeOut: 3000,
+                    progressBar: true,
+                    progressAnimation: 'increasing'
+                });
+
+            }
+        }
+    });
+
+
+}
+
 //Load paid list
 $.fn.loadPaidlist = function idxc() {
 
@@ -346,14 +397,15 @@ $.fn.loadPaidlist = function idxc() {
                 });
                 var cont = "";
                 for (var i = 0; i < data.length; i++) {
-                    var s = new Date(data[i].start_date);
-                    var e = new Date(data[i].end_date);
-
-                    cont += '<tr> <th scope="row">'+data[i].product_id+'</th> ' +
-                        '<td>'+data[i].product_name+'</td> ' +
-                        '<td>Otto</td> ' +
-                        '<td> <button class="btn btn-success btnxm" id="btnx-'+data[i].product_id+'">Purchase</button>' +
-                    '</td> </tr>';
+                    cont += '<tr> <th scope="row">'+data[i].product_id+'</th> ';
+                    cont += '<td>'+data[i].product_name+'</td> ';
+                    cont +='<td>'+data[i].max_bid+'</td> ';
+                    if (data[i].product_status_id == 5)
+                        cont += '<td> <button class="btn btn-secondary disabled">Purchased</button> </td> ';
+                    else{
+                        cont += '<td> <button onclick="purchase('+data[i].product_id+')" class="btn btn-success btnxm" id="btnx-'+data[i].product_id+'">Purchase</button> </td> ';
+                    }
+                    cont +='</tr>';
                 }
                 $('#tablePaid tbody').html(cont);
             },

@@ -77,6 +77,27 @@ public class AdminHome {
 
     }
 
+
+    @RequestMapping(value = {"logout"},method = RequestMethod.GET)
+    public String Logout(ModelMap modelMap, HttpSession session){
+        if (session.getAttribute("acc") != null){
+            User u = (User) session.getAttribute("acc");
+            if(u.getIsAdmin() == true){
+
+                session.removeAttribute("acc");
+                return "redirect:/index";
+
+            } else{
+                return "redirect:/index";
+            }
+
+        }else {
+            return "redirect:/index";
+
+        }
+
+    }
+
     @RequestMapping(value = {"register"},method = RequestMethod.GET)
     public String register(ModelMap modelMap, HttpSession session){
 //        modelMap.put("prods",productServ.findAll());

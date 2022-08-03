@@ -47,4 +47,6 @@ public interface ProductService {
     List<JSONObject> listProductFilterStatusHaveCateGory(ProductStatusEnum notApprove, int cateid);
 
 	JSONObject purchase(int productId);
+	JSONObject purchase1(int productId);
+
 }

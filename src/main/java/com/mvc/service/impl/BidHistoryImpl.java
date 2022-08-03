@@ -65,9 +65,7 @@ public class BidHistoryImpl implements BidHistoryServ {
     }
 
     @Override
-//    public Iterable<BidHistory> getBidHistory(int prodID) {
-//        return repo.getBidHIstory(prodID);
-//    }
+
     public List<JSONObject> getBidHistory(int prodID) {
         return repo.getBidHIstory(prodID);
     }

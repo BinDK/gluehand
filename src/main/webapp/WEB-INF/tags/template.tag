@@ -256,7 +256,7 @@
                         </div>
                     </div>
                 </div>
-                <button id="btnacUpdate" class="btn btn-primary">
+                <button id="btnacUpdate" class="btn btn-primary" data-bs-dismiss="modal">
                     Update Profile
                 </button>
             </div>
@@ -438,6 +438,17 @@
                 $(this).val('');
             }
         });
+
+        $('#accModal').click(function (){
+            var acc = ${not empty acc.id ? acc.id : 0};
+            $.get( "${pageContext.request.contextPath}/api/getpersonal?accID="+acc, function( data ) {
+                $('#accFname').val(data.fname);
+                $('#accPhone').val(data.phone);
+                $('#accEmail').val(data.email);
+
+            });
+
+        });
 $('#btnAccWallet').click(function (){
     $.fn.userwallet(${acc.id});
 });
@@ -611,12 +622,8 @@ $('#btnAccWallet').click(function (){
                     $("#suEmail").removeClass("border-danger");
                     $("#suEmail").addClass("border-success");
                     $("label[for='suEmail']").text("Email").removeClass("fw-bolder text-danger");
-
-
                 }
             });
-
-
         });
 
         $('#suPass').keyup(function () {
@@ -771,19 +778,15 @@ $('#btnAccWallet').click(function (){
                     var stat,prod;
                     if(x[i].money_purpose == 1) stat = "Topup";
                     else if(x[i].money_purpose == 3) stat = "Paid";
+                    else if(x[i].money_purpose == 4) stat = "Money from Buyer";
                     if(x[i].product_name == null) prod = "NOPE";
                     else prod = x[i].product_name;
-
-
 
                     cont += '<tr>'+
                       '<td scope="row">' + new Date(x[i].created).toLocaleString("en-GB") + '</td>' +
                         '<td>' + stat + '</td>' +
                         '<td>' + prod + '</td>' +
-                        '<td>' + prod + '</td>' +
-
                         '<td>' + x[i].money + '</td>' +
-
                         '</tr>';
                 }
                 $('#tableTrans tbody').html(cont);

@@ -247,6 +247,22 @@ HistoryWalletServ hwServ;
         }
     }
 
+    @GetMapping(value = "getpersonal",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<JSONObject> GetPerson(
+            @RequestParam("accID") int accID, HttpSession session){
+        try {
+            User u2 = uservice.findID(accID);
+            JSONObject json = new JSONObject();
+            json.put("email",u2.getEmail());
+            json.put("phone",u2.getPhone());
+            json.put("fname",u2.getFullname());
+
+            return new ResponseEntity<JSONObject>(json,HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PutMapping(value = "changepass",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> Update(
             @RequestParam("pass") String pass, HttpSession session){
@@ -352,6 +368,18 @@ HistoryWalletServ hwServ;
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("exception", e.getCause());
             return jsonObject;
+
+        }
+    }
+
+    @GetMapping(value = "purchase1")
+    public ResponseEntity<JSONObject> purchase1(@RequestParam("product_id") int productId) {
+        try {
+            JSONObject jsonObject = productService.purchase1(productId);
+//            System.out.println(jsonObject.get("bidding_money") + "impl");
+            return new ResponseEntity<JSONObject>(jsonObject,HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<JSONObject>(HttpStatus.BAD_REQUEST);
 
         }
     }

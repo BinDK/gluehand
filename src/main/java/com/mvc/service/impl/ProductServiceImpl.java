@@ -1,6 +1,8 @@
 package com.mvc.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -45,7 +47,15 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	EmailService emailServiceImpl;
 
+	//của Bình ddẻ làm nút purchase
+	@Autowired
+	HistoryWalletRepo hwRepo;
+	@Autowired
+	BidHistoryRepository bhRepo;
+	@Autowired
+	UserService uss;
 
+	//Hết của bình
 	@Override
 	public List<JSONObject> listProductFilterStatus(ProductStatusEnum status) {
 		switch (status) {
@@ -182,24 +192,24 @@ public class ProductServiceImpl implements ProductService {
 		try {
 			Optional<Product> product = productRepository.findById(productId);
 			if(!product.isPresent()) {
-				result.put("error", "product not exist");
+				result.put("errorx", "product not exist");
 				return result;
 			}
 			// kiem tra san pham co nguoi dau gia khong
 			Optional<User> user = userRepository.findById(product.get().getBuyer_id());
 
 			if(!user.isPresent()) {
-				result.put("error", "product have not buyer");
+				result.put("errorx", "product have not buyer");
 				return result;
 			}
 			// kiem tra vi tien nguoi thang
 			Optional<Wallet> wallet = walletRepository.findByIdUser(user.get().getId());
 			if(!wallet.isPresent()) {
-				result.put("error", "Buyer have not wallet");
+				result.put("errorx", "Buyer have not wallet");
 				return result;
 			}
 				if(wallet.get().getMoney()< product.get().getPrice_minium()) {
-					result.put("error", "Buyer have not money in wallet, please add money in wallet!");
+					result.put("errorx", "Buyer have not money in wallet, please add money in wallet!");
 					return result;
 				}
 			CompletableFuture<String> completableFuture = new CompletableFuture<>();
@@ -238,17 +248,104 @@ public class ProductServiceImpl implements ProductService {
 					wallet1.setMoney(wallet1.getMoney()+product.get().getPrice_minium());
 				});
 			} catch (Exception e) {
-				result.put("error","Seller have not wallet");
+				result.put("errorx","Seller have not wallet");
 				return result;
 			}
 			result.put("products",productRepository.findPAIDProd(user.get().getId()));
-			result.put("success","okay");
+			result.put("successx","Successfully Purchased");
 		} catch (Exception e) {
-			result.put("error", e.getMessage());
+			result.put("errorx", e.getMessage());
 		}
 		return  result;
 
 	}
+
+
+
+
+	@Override
+	public JSONObject purchase1(int productId) {
+		JSONObject result;
+		try {
+				result = new JSONObject();
+//			Optional<Wallet> wallet = walletRepository.findByIdUser(user.get().getId());
+			Optional<Product> product = productRepository.findById(productId);
+
+			JSONObject buyerWallet = hwRepo.getWallet(product.get().getBuyer_id());
+			JSONObject sellerWallet = hwRepo.getWallet(product.get().getSeller().getId());
+			int sellerID = product.get().getSeller().getId();
+			int buyerID = product.get().getBuyer_id();
+			Optional<User> seller = userRepository.findById(sellerID);
+			Optional<User> buyer = userRepository.findById(buyerID);
+
+
+			Integer buyerWalletID = (Integer) buyerWallet.get("wallet_id");
+			Integer sellerWalletID = (Integer) sellerWallet.get("wallet_id");
+			Double bmoney = (Double)buyerWallet.get("money");
+			Double smoney = (Double)sellerWallet.get("money");
+
+
+
+			//		Integer winnerWallet = (Integer) wallet.get("wallet_id");
+//			JSONObject json = new JSONObject(bhRepo.maxMoney(productId));
+			Double max_bidx = (Double) bhRepo.maxMoney(productId).get("maxx");
+			System.out.println(max_bidx);
+			if((max_bidx + 50.0) >= bmoney){
+				result.put("errorx", "Dont have enough money, you should consider topup!");
+			}
+			else{
+				System.out.println(1111);
+				SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date date = new Date(System.currentTimeMillis());
+
+//				hwRepo.buyerPurchase(product.get().getBuyer_id(),max_bidx - 50.0);
+				hwRepo.buyerPurchase(max_bidx,buyerWalletID);
+				hwRepo.createHistory(formatter.format(date),max_bidx,3,productId,buyerWalletID);
+
+
+				hwRepo.sellerPurchase(max_bidx,sellerWalletID);
+				hwRepo.createHistory(formatter.format(date),max_bidx,4,productId,sellerWalletID);
+//
+				//admin topup 50.0
+//				hwRepo.topUP(1,50.0);
+
+				hwRepo.changeBidding(5,productId);
+
+			result.put("successx","Successfully Purchased");
+			result.put("products",findPaidProd(product.get().getBuyer_id()));
+
+			}
+
+			CompletableFuture<String> completableFuture = new CompletableFuture<>();
+
+
+			// gui email cho nguoi thang
+			EmailDetails BuyerEmailDetail = EmailDetails.builder()
+					.recipient(buyer.get().getEmail())
+					.subject("Purchase "+product.get().getProduct_name())
+					.msgBody("Your product from auction succesfully bought.").build();
+			;
+			completableFuture.complete(emailServiceImpl.sendSimpleMail(BuyerEmailDetail));
+
+			// kiem tra san pham co nguoi dau gia khong
+			CompletableFuture<String> completableFuture2 = new CompletableFuture<>();
+			// gui email cho nguoi ban
+			EmailDetails SellerEmailDetail = EmailDetails.builder()
+					.recipient(seller.get().getEmail())
+					.subject("Your product been bought "+product.get().getProduct_name())
+					.msgBody("User "+buyer.get().getFullname() +" succesfully bought your product name: "+product.get().getProduct_name()).build();
+			completableFuture2.complete(emailServiceImpl.sendSimpleMail(SellerEmailDetail))
+			;
+			System.out.println("Manually complete 2");
+
+			return result;
+		} catch (Exception e) {
+
+			return  null;
+		}
+
+	}
+
 
 	private ResponseActionProduct actionApproveProduct(ProductStatusEnum productStatusEnum, Product product) {
 		product.setProduct_status_id(ProductStatusEnum.APPROVED.getId());
