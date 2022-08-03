@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import com.mvc.ajaxentity.ProductJ;
 import com.mvc.entity.*;
 import com.mvc.enums.ErrorEnum;
+import com.mvc.enums.MoneyPurposeEnum;
 import com.mvc.repository.*;
 import com.mvc.request.EmailDetails;
 import com.mvc.response.ResponseActionProduct;
@@ -54,6 +55,15 @@ public class ProductServiceImpl implements ProductService {
 	BidHistoryRepository bhRepo;
 	@Autowired
 	UserService uss;
+
+	@Autowired
+	MoneyPurposeRepository moneyPurposeRepository;
+
+	@Autowired
+	HistoryRepository historyRepository;
+
+	@Autowired
+	BidHistoryRepository bidHistoryRepository;
 
 	//Hết của bình
 	@Override
@@ -208,49 +218,78 @@ public class ProductServiceImpl implements ProductService {
 				result.put("errorx", "Buyer have not wallet");
 				return result;
 			}
-				if(wallet.get().getMoney()< product.get().getPrice_minium()) {
+
+
+			// tien dau gia cua nguoi choi
+				Double bidMoney = (Double) bidHistoryRepository.maxMoney(productId).getOrDefault("maxx",0);
+				if(wallet.get().getMoney()< bidMoney) {
 					result.put("errorx", "Buyer have not money in wallet, please add money in wallet!");
 					return result;
 				}
-			CompletableFuture<String> completableFuture = new CompletableFuture<>();
+			// kiem tra san pham co nguoi dau gia khong
+			CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(()->{
+
+				// gui email cho nguoi thang
+				EmailDetails BuyerEmailDetail = EmailDetails.builder()
+						.recipient(user.get().getEmail())
+						.subject("Purchase "+product.get().getProduct_name())
+						.msgBody("You purchased success").build();
+				;
+				emailServiceImpl.sendSimpleMail(BuyerEmailDetail);
+
+			}) ;
 
 			System.out.println("Manually complete 1");
 
-			// gui email cho nguoi thang
-			EmailDetails BuyerEmailDetail = EmailDetails.builder()
-							.recipient(user.get().getEmail())
-									.subject("Purchase "+product.get().getProduct_name())
-											.msgBody("You purchased success").build();
-			;
-			completableFuture.complete(emailServiceImpl.sendSimpleMail(BuyerEmailDetail));
-
 			// kiem tra san pham co nguoi dau gia khong
-			CompletableFuture<String> completableFuture2 = new CompletableFuture<>();
-			// gui email cho nguoi ban
-			EmailDetails SellerEmailDetail = EmailDetails.builder()
-					.recipient(product.get().getSeller().getEmail())
-					.subject("Purchase "+product.get().getProduct_name())
-					.msgBody(user.get().getFullname() +" purchased success "+product.get().getProduct_name()).build();
+			CompletableFuture<Void> completableFuture2 = CompletableFuture.runAsync(()->{
+				EmailDetails SellerEmailDetail = EmailDetails.builder()
+						.recipient(product.get().getSeller().getEmail())
+						.subject("Purchase "+product.get().getProduct_name())
+						.msgBody(user.get().getFullname() +" purchased success "+product.get().getProduct_name()).build();
+				// gui 	email cho nguoi ban
+				emailServiceImpl.sendSimpleMail(SellerEmailDetail);
+			}) ;
 
-			completableFuture2.complete(emailServiceImpl.sendSimpleMail(SellerEmailDetail))
+
 			;
 			System.out.println("Manually complete 2");
 
 			product.get().setProduct_status_id(ProductStatusEnum.PAID.getId());
 			productRepository.save(product.get());
-
-			wallet.get().setMoney(wallet.get().getMoney()-product.get().getPrice_minium());
+			Double money1 = wallet.get().getMoney()- bidMoney;
+			wallet.get().setMoney(money1);
 			walletRepository.save(wallet.get());
 
+			//Tao lich su thanh toan
+			History history = new History();
+			history.setMoney(bidMoney);
+			history.setProduct(product.get());
+			history.setWallet(wallet.get());
+			history.setMoneyPurpose(moneyPurposeRepository.
+					findById(MoneyPurposeEnum.PAYED.getId()).get());
+			historyRepository.save(history);
 			Optional<Wallet> walletSeller = walletRepository.findByIdUser(product.get().getSeller().getId());
 			try {
 				walletSeller.ifPresent(wallet1 -> {
-					wallet1.setMoney(wallet1.getMoney()+product.get().getPrice_minium());
+					wallet1.setMoney(wallet1.getMoney()+bidMoney);
 				});
+
+				walletRepository.save(walletSeller.get());
+
+				//Tao lich su thanh toan
+				History history2 = new History();
+				history2.setMoney(bidMoney);
+				history2.setProduct(product.get());
+				history2.setWallet(walletSeller.get());
+				history2.setMoneyPurpose(moneyPurposeRepository.
+						findById(MoneyPurposeEnum.RECHARGE.getId()).get());
+				historyRepository.save(history2);
 			} catch (Exception e) {
 				result.put("errorx","Seller have not wallet");
 				return result;
 			}
+
 			result.put("products",productRepository.findPAIDProd(user.get().getId()));
 			result.put("successx","Successfully Purchased");
 		} catch (Exception e) {
