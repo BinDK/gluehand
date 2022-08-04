@@ -65,7 +65,7 @@
     <div class="row text-center pt-3">
         <div class="col-lg-6 m-auto">
             <h1 class="h1" style="color: #4796cf !important;font-weight: 500 !important;">We're only focus on elctronic product</h1>
-            <p style="color: antiquewhite; font-size: 25px !important;">
+            <p style="color: #f6dcb9; font-size: 25px !important;">
                 We got a massive category on our platform, from Television to Smartphone even Tech stuff for kitchen...
             </p>
         </div>
@@ -78,18 +78,18 @@
                         <div class="row p-5">
                             <div class="col col-md-4 p-5 mt-3">
                                 <a href="#"><img alt="peacock" src="${pageContext.request.contextPath}/resources/assets/img/category_img_01.jpg" class="rounded-circle img-fluid border"></a>
-                                <h5 class="text-center mt-3 mb-3 text-white text-bold">Watches</h5>
-                                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+                                <h5 class="text-center mt-3 mb-3 text-white text-bold">Smart Watches</h5>
+                                <p class="text-center"><a class="btn btn-success" href="${pageContext.request.contextPath}/user/center">Go Shop</a></p>
                             </div>
                             <div class="col col-md-4 p-5 mt-3">
                                 <a href="#"><img alt="peacock" src="${pageContext.request.contextPath}/resources/assets/img/category_img_02.jpg" class="rounded-circle img-fluid border"></a>
-                                <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Shoes</h2>
-                                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+                                <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Smart Shoes</h2>
+                                <p class="text-center"><a class="btn btn-success" href="${pageContext.request.contextPath}/user/center">Go Shop</a></p>
                             </div>
                             <div class="col col-md-4 p-5 mt-3">
                                 <a href="#"><img alt="peacock" src="${pageContext.request.contextPath}/resources/assets/img/category_img_03.jpg" class="rounded-circle img-fluid border"></a>
-                                <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Accessories</h2>
-                                <p class="text-center"><a class="btn btn-success">Go Shop</a></p>
+                                <h2 class="h5 text-center mt-3 mb-3 text-white text-bold">Smart Stuff</h2>
+                                <p class="text-center"><a class="btn btn-success" href="${pageContext.request.contextPath}/user/center">Go Shop</a></p>
                             </div>
                         </div>
                     </div>
@@ -97,14 +97,7 @@
 
 
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#catecaro" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#catecaro" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+
 
         </div>
     </div>

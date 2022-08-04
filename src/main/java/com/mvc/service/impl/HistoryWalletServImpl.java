@@ -17,12 +17,34 @@ public class HistoryWalletServImpl implements HistoryWalletServ {
     HistoryWalletRepo repo;
 
     @Override
+    public JSONObject getW(int userID) {
+        JSONObject res;
+        try {
+            res = new JSONObject();
+            JSONObject wallet = repo.getWallet(userID);
+            Integer walletID = (Integer) wallet.get("wallet_id");
+            Double balance = (Double) wallet.get("money");
+            res.put("histories", (List<JSONObject>)repo.getPersonHistory(walletID));
+            res.put("topup",repo.sumTopup(walletID,1));
+            res.put("paid",repo.sumPaid(walletID,3));
+            res.put("balance",balance);
+
+
+            return  res;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public JSONObject topUp(int userID, double money) {
             JSONObject res;
         try {
             res = new JSONObject();
             JSONObject wallet = repo.getWallet(userID);
             Integer walletID = (Integer) wallet.get("wallet_id");
+
+
             SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date(System.currentTimeMillis());
 
@@ -32,7 +54,9 @@ public class HistoryWalletServImpl implements HistoryWalletServ {
             res.put("histories", (List<JSONObject>)repo.getPersonHistory(walletID));
             res.put("topup",repo.sumTopup(walletID,1));
             res.put("paid",repo.sumPaid(walletID,3));
-
+            JSONObject wallet2 = repo.getWallet(userID);
+            Double balance = (Double) wallet2.get("money");
+            res.put("balance",balance);
             return  res;
         } catch (Exception e) {
             throw new RuntimeException(e);

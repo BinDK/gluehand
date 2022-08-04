@@ -219,7 +219,7 @@
                                     onkeypress="return isNumberKey(event)"
                                     type="text"
                                     placeholder="Phone Number"
-                                    value="${acc.phone}"
+                                    value=""
                             />
                             <label for="accPhone">Phone Number</label>
                         </div>
@@ -289,7 +289,7 @@
                             <input
                                     class="form-control bg-white border-bottom
                                         border-top-0 border-start-0 border-end-0 border-danger"
-                                    value="12" id="wTTopup"
+                                    value="0" id="wTTopup"
                                     disabled type="text" placeholder="Total Top up"/>
                             <label for="wTTopup">Total Top up</label>
                         </div>
@@ -300,7 +300,7 @@
                             <input
                                     class=" form-control bg-white border-bottom
                                     border-top-0 border-start-0 border-end-0 border-danger"
-                                    value="12" id="wTSpent" disabled
+                                    value="0" id="wTSpent" disabled
                                     type="text" placeholder="Spent"
                             />
                             <label for="wTSpent">Spent</label>
@@ -311,7 +311,7 @@
                             <input
                                     class="form-control bg-white border-bottom border-top-0
                                      border-start-0 border-end-0 border-danger "
-                                    value="12" id="wTBalance"
+                                    value="0" id="wTBalance"
                                     disabled type="text" placeholder="Fullname"
                             />
                             <label for="wTBalance">Balance</label>
@@ -455,24 +455,32 @@ $('#btnAccWallet').click(function (){
         $.fn.userwallet = function id(param){
             $.get( "${pageContext.request.contextPath}/api/wallet?id="+param, function( data ) {
 
-                var html = "";
-                var index = 0;
-                data["histories"].forEach(x => {
-                    var name;
-                    if(x.status_name == "Recharge") name = "Topup";
-                    else name = "Paid";
-                    html+= `
-                             <tr>
-                                <td>`+new Date(x.created).toLocaleString("en-GB") +`</td>
-                                <td>`+x.total+`</td>
-                                <td>`+name+`</td>
-                             </tr>
-                            `;
-                })
-                $('#tableTrans tbody').html(html);
+                var cont = "";
+                var x = data['histories'];
+                console.log(x);
+                for (var i = 0; i < x.length; i++) {
+                    var stat,prod;
+                    if(x[i].money_purpose == 1) stat = "Topup";
+                    else if(x[i].money_purpose == 3) stat = "Paid";
+                    else if(x[i].money_purpose == 4) stat = "Money from Buyer";
+                    if(x[i].product_name == null) prod = "NOPE";
+                    else prod = x[i].product_name;
+
+                    cont += '<tr>'+
+                        '<td scope="row">' + new Date(x[i].created).toLocaleString("en-GB") + '</td>' +
+                        '<td>' + stat + '</td>' +
+                        '<td>' + prod + '</td>' +
+                        '<td>' + x[i].money + '</td>' +
+                        '</tr>';
+                }
+                $('#tableTrans tbody').html(cont);
+
                 // if()
-                $('#wTTopup').val(data.total_top_up);
-                $('#wTSpent').val(data.spent);
+                $('#wTTopup').val(data.topup.sumt);
+                var paiddd = data.paid;
+                if(paiddd == null) paiddd = 0;
+                else paiddd = data.paid.sump;
+                $('#wTSpent').val(paiddd);
                 $('#wTBalance').val(data.balance);
 
             });
@@ -553,6 +561,7 @@ $('#btnAccWallet').click(function (){
                 },
                 done: function(res){
                     console.log(res ? "true" : "false");
+                    $('#accPhone').val($accP.val())
                 }
             });
 
@@ -796,7 +805,7 @@ $('#btnAccWallet').click(function (){
                 if(paiddd == null) paiddd = 0;
                 else paiddd = data.paid.sump;
                 $('#wTSpent').val(paiddd);
-                $('#wTBalance').val(data.topup.sumt - paiddd);
+                $('#wTBalance').val(data.balance);
             });
         }
 

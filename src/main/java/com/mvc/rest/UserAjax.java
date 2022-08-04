@@ -173,6 +173,14 @@ HistoryWalletServ hwServ;
             return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping(value = "loadfail",produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<JSONObject>> LoadFail(@RequestParam("userID") int userID){
+        try {
+            return new ResponseEntity<List<JSONObject>>(productService.findFailProd(userID),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<List<JSONObject>>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
     //Sign in/ up, match user name
@@ -350,27 +358,28 @@ HistoryWalletServ hwServ;
         }
     }
     @GetMapping(value = "wallet")
-    public JSONObject wallettransaction(@RequestParam("id") int id) {
+    public ResponseEntity<JSONObject> wallettransaction(@RequestParam("id") int id) {
 
         try {
             System.out.println(id);
-            return uservice.getListHistoryById(id);
+            return new ResponseEntity<JSONObject> (hwServ.getW(id),HttpStatus.OK);
+//                    .getListHistoryById(id);
         } catch (Exception e) {
             return null;
         }
     }
 
-    @GetMapping(value = "purchase")
-    public JSONObject purchase(@RequestParam("product_id") int productId) {
-        try {
-            return productService.purchase(productId);
-        } catch (Exception e) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("exception", e.getCause());
-            return jsonObject;
-
-        }
-    }
+//    @GetMapping(value = "purchase")
+//    public JSONObject purchase(@RequestParam("product_id") int productId) {
+//        try {
+//            return productService.purchase(productId);
+//        } catch (Exception e) {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("exception", e.getCause());
+//            return jsonObject;
+//
+//        }
+//    }
 
     @GetMapping(value = "purchase1")
     public ResponseEntity<JSONObject> purchase1(@RequestParam("product_id") int productId) {

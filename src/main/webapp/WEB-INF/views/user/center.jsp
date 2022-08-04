@@ -51,16 +51,7 @@
         <div class="col-lg-12">
             <div class="row">
                 <div class="col-md-6">
-                    <ul class="list-inline shop-top-menu pb-3 pt-1">
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="#">Almost There</a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a class="h3 text-dark text-decoration-none mr-3" href="#">Live</a>
-                        </li>
-                        <li class="list-inline-item">
-                        </li>
-                    </ul>
+
                 </div>
                 <div class="col-md-6 pb-4">
                     <div class="d-flex">
@@ -136,74 +127,6 @@
 </div>
 <style>
     body{background-color: #AAD4D9;}
-
-
-
-    /*.ribbon {*/
-    /*    position: absolute;*/
-    /*    right: -5px;*/
-    /*    top: -5px;*/
-    /*    z-index: 1;*/
-    /*    overflow: hidden;*/
-    /*    width: 93px;*/
-    /*    height: 93px;*/
-    /*    text-align: right;*/
-    /*}*/
-    /*.ribbon span {*/
-    /*    font-size: 0.8rem;*/
-    /*    color: #fff;*/
-    /*    text-transform: uppercase;*/
-    /*    text-align: center;*/
-    /*    font-weight: bold;*/
-    /*    line-height: 32px;*/
-    /*    transform: rotate(45deg);*/
-    /*    width: 125px;*/
-    /*    display: block;*/
-    /*    background: #79a70a;*/
-    /*    background: linear-gradient(#9bc90d 0%, #79a70a 100%);*/
-    /*    box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);*/
-    /*    position: absolute;*/
-    /*    top: 17px; // change this, if no border*/
-    /*right: -29px; // change this, if no border*/
-    /*}*/
-
-    /*.ribbon span::before {*/
-    /*    content: '';*/
-    /*    position: absolute;*/
-    /*    left: 0px; top: 100%;*/
-    /*    z-index: -1;*/
-    /*    border-left: 3px solid #79A70A;*/
-    /*    border-right: 3px solid transparent;*/
-    /*    border-bottom: 3px solid transparent;*/
-    /*    border-top: 3px solid #79A70A;*/
-    /*}*/
-    /*.ribbon span::after {*/
-    /*    content: '';*/
-    /*    position: absolute;*/
-    /*    right: 0%; top: 100%;*/
-    /*    z-index: -1;*/
-    /*    border-right: 3px solid #79A70A;*/
-    /*    border-left: 3px solid transparent;*/
-    /*    border-bottom: 3px solid transparent;*/
-    /*    border-top: 3px solid #79A70A;*/
-    /*}*/
-
-    /*.red span {*/
-    /*    background: linear-gradient(#f70505 0%, #8f0808 100%);*/
-    /*}*/
-    /*.red span::before {*/
-    /*    border-left-color: #8f0808;*/
-    /*    border-top-color: #8f0808;*/
-    /*}*/
-    /*.red span::after {*/
-    /*    border-right-color: #8f0808;*/
-    /*    border-top-color: #8f0808;*/
-    /*}*/
-    /*.borderani {*/
-    /*    border:10px solid black;*/
-    /*    !*background: #ffd73e33;*!*/
-    /*    border-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E %3Cstyle%3Epath%7Banimation:stroke 5s infinite linear%3B%7D%40keyframes stroke%7Bto%7Bstroke-dashoffset:776%3B%7D%7D%3C/style%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='0%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232d3561' /%3E%3Cstop offset='25%25' stop-color='%23c05c7e' /%3E%3Cstop offset='50%25' stop-color='%23f3826f' /%3E%3Cstop offset='100%25' stop-color='%23ffb961' /%3E%3C/linearGradient%3E %3Cpath d='M1.5 1.5 l97 0l0 97l-97 0 l0 -97' stroke-linecap='square' stroke='url(%23g)' stroke-width='3' stroke-dasharray='388'/%3E %3C/svg%3E") 1;*/
-    /*}*/
     .borderani {
         position: relative;
     }
@@ -346,7 +269,7 @@
                         // setTimeout(function(){
                         //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
                         // }, 3000);
-
+                        console.log(result);
                         if(result.user != undefined) {
                             toastr.success("Is the winner", result.user, {
                                 timeOut: 5000,

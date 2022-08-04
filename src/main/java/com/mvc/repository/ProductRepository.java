@@ -75,6 +75,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 	public List<JSONObject> findPAIDProd(@Param("buyer_id")int buyer_id);
 
 
+	@Query(value = "" +
+			"SELECT * FROM product p " +
+			"where p.buyer_id = 0 and convert_tz(now(),@@session.time_zone,'+07:00') > p.end_date " +
+			"and p.seller_id = :seller_idx",nativeQuery = true)
+	public List<JSONObject> findFAILProd(@Param("seller_idx")int seller_idx);
+
 	@Query(nativeQuery = true,value = "" +
 			"SELECT * FROM product p " +
 			"LEFT JOIN img_product ON img_product.productx_id 	= p.product_id " +

@@ -230,9 +230,33 @@
             </div>
         </div>
 
-        <div id="paidProd" class="col-md-12 popeye fade">
+        <div id="failProd" class="col-md-3 popeye fade">
             <div class="card">
-                <div class="card-header text-center">Approved List</div>
+                <div class="card-header text-center">Your product list been auction but nobody won</div>
+                <div class="card-body table-responsive p-0" style="height: 300px">
+                    <table class="table table-striped" id="tableFail">
+                        <thead style="
+                          position: sticky;
+                          top: 0;
+                          background-color: white;
+                        ">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th ><small>Product Name</small></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="paidProd" class="col-md-9 popeye fade">
+            <div class="card">
+                <div class="card-header text-center">Your winning Product List</div>
                 <div class="card-body table-responsive p-0" style="height: 300px">
                     <table class="table table-striped" id="tablePaid">
                         <thead style="
@@ -255,6 +279,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </div>
         
@@ -328,7 +353,7 @@ function purchase(param) {
 
     $.ajax({
         type: "GET",
-        url: "${pageContext.request.contextPath}/api/purchase",
+        url: "${pageContext.request.contextPath}/api/purchase1",
         data: {product_id:param},
         cache: true,
         success: function (data) {
@@ -395,19 +420,25 @@ $.fn.loadPaidlist = function idxc() {
                     progressBar: true,
                     progressAnimation: 'increasing'
                 });
+                console.log(data);
                 var cont = "";
-                for (var i = 0; i < data.length; i++) {
-                    cont += '<tr> <th scope="row">'+data[i].product_id+'</th> ';
-                    cont += '<td>'+data[i].product_name+'</td> ';
-                    cont +='<td>'+data[i].max_bid+'</td> ';
-                    if (data[i].product_status_id == 5)
-                        cont += '<td> <button class="btn btn-secondary disabled">Purchased</button> </td> ';
-                    else{
-                        cont += '<td> <button onclick="purchase('+data[i].product_id+')" class="btn btn-success btnxm" id="btnx-'+data[i].product_id+'">Purchase</button> </td> ';
+                    for (var i = 0; i < data.length; i++) {
+                if(data[i].password == null) {
+                    break;
+                } else {
+
+                        cont += '<tr> <th scope="row">' + data[i].product_id + '</th> ';
+                        cont += '<td>' + data[i].product_name + '</td> ';
+                        cont += '<td>' + data[i].max_bid + '</td> ';
+                        if (data[i].product_status_id == 5)
+                            cont += '<td> <button class="btn btn-secondary disabled">Purchased</button> </td> ';
+                        else {
+                            cont += '<td> <button onclick="purchase(' + data[i].product_id + ')" class="btn btn-success btnxm" id="btnx-' + data[i].product_id + '">Purchase</button> </td> ';
+                        }
+                        cont += '</tr>';
                     }
-                    cont +='</tr>';
+                    $('#tablePaid tbody').html(cont);
                 }
-                $('#tablePaid tbody').html(cont);
             },
             error:function(){
                 toastr.error('STOP','', {
@@ -420,6 +451,42 @@ $.fn.loadPaidlist = function idxc() {
 
 
 }
+
+$.fn.loadFaillist = function idxcxx() {
+
+    $.ajax({
+        type: "GET",
+        url: "${pageContext.request.contextPath}/api/loadfail",
+        data: {userID:${acc.id}},
+        cache: true,
+        success: function (data) {
+            // setTimeout(function(){
+            //     //window.location.href = "< ?//= site_url("admin/subscription/change/") ?>//" + param;
+            // }, 3000);
+
+            console.log(data);
+            var cont = "";
+            for (var i = 0; i < data.length; i++) {
+
+                    cont += '<tr> <th scope="row">' + data[i].product_id + '</th> ';
+                    cont += '<td>' + data[i].product_name + '</td> ';
+                    cont += '</tr>';
+            }
+                $('#tableFail tbody').html(cont);
+        },
+        error:function(){
+            toastr.error('STOP','', {
+                timeOut: 3000,
+                progressBar: true,
+                progressAnimation: 'increasing'
+            });
+        }
+    });
+
+
+}
+
+
 
 //Add product
 $("#addProdBtn").click(function (e){
@@ -511,7 +578,7 @@ $("#addProdBtn").click(function (e){
 
                         },
                         error:function(){
-                            toastr.error('Something went wrong', '', {
+                            toastr.warning('Product do not have images', '', {
                                 timeOut: 3000,
                                 progressBar: true,
                                 progressAnimation: 'increasing'
@@ -604,10 +671,13 @@ $(".bmnx").click(function () {
             $(".popeye").css("display", "none");
 
             $.fn.loadPaidlist();
+            $.fn.loadFaillist();
 
 
             $("#paidProd").addClass("show");
             $("#paidProd").css("display", "block");
+            $("#failProd").addClass("show");
+            $("#failProd").css("display", "block");
         }
     });
     function isNumberKeyx(evt){

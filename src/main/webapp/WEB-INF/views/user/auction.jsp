@@ -137,15 +137,22 @@
                         <div class="col d-grid justify-content-center">
 
                             <div class="input-group mb-3 ipBid">
-                             <c:if test="${not empty sessionScope.acc}">
+                                <c:set var="xx" value="${prod.seller_id}"></c:set>
+
+                                <c:choose>
+
+                                <c:when test="${xx == sessionScope.accII}">
+                                        <p>Cannot bid cause you're auction this product</p>
+                            </c:when>
+                             <c:when test="${not empty sessionScope.acc}">
                                 <input aria-label="Go get it!" onkeypress="return isNumberKeyx(event);" aria-describedby="button-addon2" placeholder="Go get it!"
                                        id="moneyIP" class="form-control border border-success"
                                        type="number" step="${prod.price_step}" min="${not empty max.maxx ? max.maxx : prod.price_step}">
 
                                     <%--                                <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" data-bs-toggle="modal" data-bs-target="#notaBotModal" onclick="makeBotcode()">Buy</button>--%>
                                 <button type="submit" class="btn btn-success btn-lg" id="btnBidModal" >Buy</button>
-                            </c:if>
-
+                            </c:when>
+                                </c:choose>
 
 
                             </div>
@@ -325,7 +332,7 @@
                 {
                     prodID:${prod.product_id},
                 },function (data){
-                toastr.success("Websocket work","",{
+                toastr.success("Incoming Bid","",{
                     timeOut: 3000,
                     progressBar: true,
                     progressAnimation: 'increasing'
@@ -347,6 +354,16 @@
     }
 
 $.fn.bidd = function bidx(){
+    var moneyIPP =  $('#moneyIP').val();
+    var moneyRef = $('#moneyIP').attr("min");
+        if(moneyIPP <= moneyRef || moneyIPP == ""){
+                    toastr.info("Cannot bidding the same price as highest user on the list!", {
+                        timeOut: 3000,
+                        progressBar: true,
+                        progressAnimation: 'increasing'
+                    });
+        }else{
+
     $.get("${pageContext.request.contextPath}/api/bid",
         {
             prodID:${prod.product_id},
@@ -370,6 +387,7 @@ $.fn.bidd = function bidx(){
                 $('#btnBidModal').removeClass("disabled");
             },5000)
         });
+        }
 
 };
 

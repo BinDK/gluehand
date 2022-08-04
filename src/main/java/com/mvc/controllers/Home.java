@@ -68,7 +68,7 @@ public class Home {
                 System.out.println(u.getIsAdmin());
 
                 session.setAttribute("acc",u);
-                session.setAttribute("accx","xxx");
+                session.setAttribute("accII",u.getId());
 
                 return "redirect:/index";
 

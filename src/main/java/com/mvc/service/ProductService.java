@@ -37,6 +37,7 @@ public interface ProductService {
 	public List<JSONObject> ProdWithCategory(int statuss,String datenow,int cateid);
 
 	public List<JSONObject> findPaidProd(int buyer_id);
+	public List<JSONObject> findFailProd(int seller_id);
 
 	public JSONObject findProd(int statuss);
 

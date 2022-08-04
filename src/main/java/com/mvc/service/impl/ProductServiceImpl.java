@@ -121,9 +121,9 @@ public class ProductServiceImpl implements ProductService {
 //			case ALL:
 //				return productRepository.findAllProduct(ProductStatusEnum.APPROVED.getId(),ProductStatusEnum.BIDDING.getName());
 			case NOT_APPROVE:
-				return productRepository.findProductNotApprovexx(status.getId(),uidd);
+				return productRepository.findProductNotApprovexx(0,uidd);
 			case APPROVED:
-				return productRepository.findProductApprovexx(status.getId(),uidd);
+				return productRepository.findProductApprovexx(1,uidd);
 //			case BIDDING:
 //				return productRepository.findProductBiddingxx(ProductStatusEnum.APPROVED.getId(),uidd);
 //			case BIDED:
@@ -152,6 +152,12 @@ public class ProductServiceImpl implements ProductService {
 //			prods.
 //		}
 		return productRepository.findPAIDProd(buyer_id);
+	}
+
+	@Override
+	public List<JSONObject> findFailProd(int seller_id) {
+		return productRepository.findFAILProd(seller_id);
+
 	}
 
 	@Override
@@ -307,7 +313,6 @@ public class ProductServiceImpl implements ProductService {
 		JSONObject result;
 		try {
 				result = new JSONObject();
-//			Optional<Wallet> wallet = walletRepository.findByIdUser(user.get().getId());
 			Optional<Product> product = productRepository.findById(productId);
 
 			JSONObject buyerWallet = hwRepo.getWallet(product.get().getBuyer_id());
@@ -320,13 +325,10 @@ public class ProductServiceImpl implements ProductService {
 
 			Integer buyerWalletID = (Integer) buyerWallet.get("wallet_id");
 			Integer sellerWalletID = (Integer) sellerWallet.get("wallet_id");
+
 			Double bmoney = (Double)buyerWallet.get("money");
 			Double smoney = (Double)sellerWallet.get("money");
 
-
-
-			//		Integer winnerWallet = (Integer) wallet.get("wallet_id");
-//			JSONObject json = new JSONObject(bhRepo.maxMoney(productId));
 			Double max_bidx = (Double) bhRepo.maxMoney(productId).get("maxx");
 			System.out.println(max_bidx);
 			if((max_bidx + 50.0) >= bmoney){
@@ -337,7 +339,7 @@ public class ProductServiceImpl implements ProductService {
 				SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date date = new Date(System.currentTimeMillis());
 
-//				hwRepo.buyerPurchase(product.get().getBuyer_id(),max_bidx - 50.0);
+
 				hwRepo.buyerPurchase(max_bidx,buyerWalletID);
 				hwRepo.createHistory(formatter.format(date),max_bidx,3,productId,buyerWalletID);
 
@@ -352,31 +354,19 @@ public class ProductServiceImpl implements ProductService {
 
 			result.put("successx","Successfully Purchased");
 			result.put("products",findPaidProd(product.get().getBuyer_id()));
-
+				CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(()-> {
+					EmailDetails BuyerEmailDetail = EmailDetails.builder().recipient(buyer.get().getEmail())
+							.subject("Purchase " + product.get().getProduct_name())
+							.msgBody("Your product from auction succesfully bought.").build();
+					emailServiceImpl.sendSimpleMail(BuyerEmailDetail);
+				});
+				CompletableFuture<Void> completableFuture2 = CompletableFuture.runAsync(() -> {
+					EmailDetails SellerEmailDetail = EmailDetails.builder().recipient(seller.get().getEmail())
+							.subject("Your product been bought " + product.get().getProduct_name())
+							.msgBody("User " + buyer.get().getFullname() + " succesfully bought your product name: " + product.get().getProduct_name()).build();
+					emailServiceImpl.sendSimpleMail(SellerEmailDetail);
+				});
 			}
-
-			CompletableFuture<String> completableFuture = new CompletableFuture<>();
-
-
-			// gui email cho nguoi thang
-			EmailDetails BuyerEmailDetail = EmailDetails.builder()
-					.recipient(buyer.get().getEmail())
-					.subject("Purchase "+product.get().getProduct_name())
-					.msgBody("Your product from auction succesfully bought.").build();
-			;
-			completableFuture.complete(emailServiceImpl.sendSimpleMail(BuyerEmailDetail));
-
-			// kiem tra san pham co nguoi dau gia khong
-			CompletableFuture<String> completableFuture2 = new CompletableFuture<>();
-			// gui email cho nguoi ban
-			EmailDetails SellerEmailDetail = EmailDetails.builder()
-					.recipient(seller.get().getEmail())
-					.subject("Your product been bought "+product.get().getProduct_name())
-					.msgBody("User "+buyer.get().getFullname() +" succesfully bought your product name: "+product.get().getProduct_name()).build();
-			completableFuture2.complete(emailServiceImpl.sendSimpleMail(SellerEmailDetail))
-			;
-			System.out.println("Manually complete 2");
-
 			return result;
 		} catch (Exception e) {
 
