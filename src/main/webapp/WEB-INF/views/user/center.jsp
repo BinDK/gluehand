@@ -96,7 +96,7 @@
                         </div>
                             </a>
                         <div class="card-body cardpd">
-                            <a href="shop-single.html" class="h3 text-decoration-none">${i.product_name}</a>
+                            <a href="#" class="h3 text-decoration-none">${i.product_name}</a>
 
                             <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
                                 <li>M/L/X/XL</li>

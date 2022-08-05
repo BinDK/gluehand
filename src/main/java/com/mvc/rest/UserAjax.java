@@ -304,7 +304,7 @@ HistoryWalletServ hwServ;
 //    }
 
     @GetMapping(value = {"bid"},produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JSONObject> bidandlist(@RequestParam("prodID") int prodID, @RequestParam("userID") int userID,@RequestParam("money") String money){
+    public  ResponseEntity<JSONObject> bidandlist(@RequestParam("prodID") int prodID, @RequestParam("userID") int userID,@RequestParam("money") String money){
         try {
             double rubber =  Double.parseDouble(money);
 

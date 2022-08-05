@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input
+                                <input onkeypress="return isNumberKey(event)"
                                         class="form-control shadow rounded" id="prodPrice" type="text" placeholder="Price" maxlength="11"/>
                                 <label for="prodPrice">Price</label>
                             </div>
@@ -571,9 +571,9 @@ $("#addProdBtn").click(function (e){
                                 progressAnimation: 'increasing'
                             });
                                 $('#prodName, #prodPrice').val("");
-                                $('#sHour, #sMin, #eHour, #eMin').val("0")
-                                $('#prodStep').val("50")
-
+                                $('#sHour, #sMin, #eHour, #eMin').val("0");
+                                $('#prodStep').val("50");
+                                $('#prodImg').val('');
                             $('.rowxs .col-md-12').empty();
 
                         },
@@ -583,6 +583,8 @@ $("#addProdBtn").click(function (e){
                                 progressBar: true,
                                 progressAnimation: 'increasing'
                             });
+                            $('#prodImg').val('');
+
                         }
                     });
                     // }

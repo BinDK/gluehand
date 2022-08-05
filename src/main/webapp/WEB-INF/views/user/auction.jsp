@@ -356,7 +356,7 @@
 $.fn.bidd = function bidx(){
     var moneyIPP =  $('#moneyIP').val();
     var moneyRef = $('#moneyIP').attr("min");
-        if(moneyIPP <= moneyRef || moneyIPP == ""){
+        if(moneyIPP == moneyRef || moneyIPP == ''){
                     toastr.info("Cannot bidding the same price as highest user on the list!", {
                         timeOut: 3000,
                         progressBar: true,
